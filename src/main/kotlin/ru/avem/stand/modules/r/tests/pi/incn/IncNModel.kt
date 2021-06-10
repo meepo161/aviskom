@@ -4,7 +4,6 @@ import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleStringProperty
 import ru.avem.stand.modules.i.TestModel
-import ru.avem.stand.modules.r.tests.AmperageStage
 import tornadofx.*
 import kotlin.math.abs
 

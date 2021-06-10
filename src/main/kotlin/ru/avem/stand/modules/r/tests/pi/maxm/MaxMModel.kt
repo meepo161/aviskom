@@ -2,7 +2,6 @@ package ru.avem.stand.modules.r.tests.pi.maxm
 
 import javafx.beans.property.SimpleStringProperty
 import ru.avem.stand.modules.i.TestModel
-import ru.avem.stand.modules.r.tests.AmperageStage
 import ru.avem.stand.utils.ThinningBlob
 
 object MaxMModel : TestModel() {

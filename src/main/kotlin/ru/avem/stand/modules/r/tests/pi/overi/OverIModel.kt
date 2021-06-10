@@ -2,7 +2,7 @@ package ru.avem.stand.modules.r.tests.pi.overi
 
 import javafx.beans.property.SimpleStringProperty
 import ru.avem.stand.modules.i.TestModel
-import ru.avem.stand.modules.r.tests.AmperageStage
+
 
 object OverIModel : TestModel() {
     val specifiedData = OverIData(descriptor = SimpleStringProperty("Заданные"))

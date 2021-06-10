@@ -7,7 +7,7 @@ import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
-import ru.avem.stand.modules.r.tests.AmperageStage
+
 import ru.avem.stand.modules.r.tests.KSPADTest
 import ru.avem.stand.utils.autoformat
 import ru.avem.stand.utils.toDoubleOrDefault
@@ -99,19 +99,19 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
                 }
 
                 CM.startPoll(this, PM130Model.I_A_REGISTER) { value ->
-                    testModel.measuredIA = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIA = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IA.value = testModel.measuredIA.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
                 CM.startPoll(this, PM130Model.I_B_REGISTER) { value ->
-                    testModel.measuredIB = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIB = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IB.value = testModel.measuredIB.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
                 CM.startPoll(this, PM130Model.I_C_REGISTER) { value ->
-                    testModel.measuredIC = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIC = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IC.value = testModel.measuredIC.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
@@ -144,7 +144,7 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
         CM.device<PR>(CM.DeviceID.DD2).onIkasKM61()
         sleep(200)
 //        CM.device<PR>(CM.DeviceID.DD2).onMaxAmperageStage()
-        testModel.amperageStage = AmperageStage.FROM_150_TO_5
+        
         sleep(200)
 //        CM.device<PR>(CM.DeviceID.DD2).fromFI()
         sleep(200)

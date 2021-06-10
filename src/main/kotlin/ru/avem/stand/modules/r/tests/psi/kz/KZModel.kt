@@ -2,7 +2,7 @@ package ru.avem.stand.modules.r.tests.psi.kz
 
 import javafx.beans.property.SimpleStringProperty
 import ru.avem.stand.modules.i.TestModel
-import ru.avem.stand.modules.r.tests.AmperageStage
+
 
 object KZModel : TestModel() {
     val specifiedData = KZData(descriptor = SimpleStringProperty("Заданные"))

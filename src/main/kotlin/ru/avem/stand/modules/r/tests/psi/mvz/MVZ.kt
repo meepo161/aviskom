@@ -7,7 +7,7 @@ import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
 import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
-import ru.avem.stand.modules.r.tests.AmperageStage
+
 import ru.avem.stand.modules.r.tests.KSPADTest
 import ru.avem.stand.utils.autoformat
 import ru.avem.stand.utils.toDoubleOrDefault
@@ -145,7 +145,7 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
                 }
 
                 CM.startPoll(this, PM130Model.I_A_REGISTER) { value ->
-                    testModel.measuredIA = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIA = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     when (testModel.stage) {
                         MVZModel.Stage.BEFORE -> {
@@ -163,7 +163,7 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
                     }
                 }
                 CM.startPoll(this, PM130Model.I_B_REGISTER) { value ->
-                    testModel.measuredIB = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIB = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     when (testModel.stage) {
                         MVZModel.Stage.BEFORE -> {
@@ -181,7 +181,7 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
                     }
                 }
                 CM.startPoll(this, PM130Model.I_C_REGISTER) { value ->
-                    testModel.measuredIC = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIC = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     when (testModel.stage) {
                         MVZModel.Stage.BEFORE -> {
@@ -275,7 +275,7 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
         CM.device<PR>(DD2).onIkasKM61()
         sleep(200)
 //        CM.device<PR>(DD2).onMaxAmperageStage()
-        testModel.amperageStage = AmperageStage.FROM_150_TO_5
+        
         sleep(200)
 //        CM.device<PR>(DD2).onVoltageBoost()
         sleep(200)
@@ -328,13 +328,13 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
             appendMessageToLog(LogTag.INFO, "Переключение на 30/5")
 //            CM.device<PR>(DD2).on30To5AmperageStage()
 //            CM.device<PR>(DD2).offMaxAmperageStage()
-            testModel.amperageStage = AmperageStage.FROM_30_TO_5
+            
             sleepWhileRun(3)
             if (isRunning && testModel.measuredI < 4) {
                 appendMessageToLog(LogTag.INFO, "Переключение на 5/5")
 //                CM.device<PR>(DD2).onMinAmperageStage()
 //                CM.device<PR>(DD2).off30To5AmperageStage()
-                testModel.amperageStage = AmperageStage.FROM_5_TO_5
+                
             }
         }
     }
@@ -342,7 +342,7 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
     private fun returnAmperageStage() {
         appendMessageToLog(LogTag.INFO, "Возврат токовой ступени...")
 //        CM.device<PR>(DD2).onMaxAmperageStage()
-        testModel.amperageStage = AmperageStage.FROM_150_TO_5
+        
 //        CM.device<PR>(DD2).offOtherAmperageStages()
     }
 

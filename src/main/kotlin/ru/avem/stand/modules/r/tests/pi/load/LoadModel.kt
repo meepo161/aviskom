@@ -2,7 +2,6 @@ package ru.avem.stand.modules.r.tests.pi.load
 
 import javafx.beans.property.SimpleStringProperty
 import ru.avem.stand.modules.i.TestModel
-import ru.avem.stand.modules.r.tests.AmperageStage
 
 object LoadModel : TestModel() {
     val specifiedData = LoadData(descriptor = SimpleStringProperty("Заданные"))

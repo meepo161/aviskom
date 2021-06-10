@@ -10,7 +10,6 @@ import ru.avem.stand.modules.r.communication.model.devices.owen.th01.TH01Model
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202Model
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 import ru.avem.stand.modules.r.communication.model.devices.tilkom.T42Model
-import ru.avem.stand.modules.r.tests.AmperageStage
 import ru.avem.stand.modules.r.tests.KSPADTest
 import ru.avem.stand.modules.r.tests.calcSyncRPM
 import ru.avem.stand.modules.r.tests.calcZs
@@ -117,19 +116,19 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
                 }
 
                 CM.startPoll(this, PM130Model.I_A_REGISTER) { value ->
-                    testModel.measuredIA = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIA = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IA.value = testModel.measuredIA.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
                 CM.startPoll(this, PM130Model.I_B_REGISTER) { value ->
-                    testModel.measuredIB = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIB = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IB.value = testModel.measuredIB.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
                 CM.startPoll(this, PM130Model.I_C_REGISTER) { value ->
-                    testModel.measuredIC = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIC = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IC.value = testModel.measuredIC.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
@@ -139,7 +138,7 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
                     testModel.measuredData.cos.value = value.toDouble().autoformat()
                 }
                 CM.startPoll(this, PM130Model.P_REGISTER) { value ->
-                    testModel.measuredP1 = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredP1 = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.P1.value = testModel.measuredP1.autoformat()
                 }
             }
@@ -238,8 +237,6 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         CM.device<PR>(CM.DeviceID.DD2).onIkasKM61()
         sleep(200)
 //        CM.device<PR>(CM.DeviceID.DD2).onMaxAmperageStage()
-        testModel.amperageStage = AmperageStage.FROM_150_TO_5
-        sleep(200)
 //        CM.device<PR>(CM.DeviceID.DD2).fromFI()
         sleep(200)
             CM.device<PR>(CM.DeviceID.DD2).onShuntirGB30()
@@ -383,13 +380,11 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             appendMessageToLog(LogTag.INFO, "Переключение на 30/5")
 //            CM.device<PR>(CM.DeviceID.DD2).on30To5AmperageStage()
 //            CM.device<PR>(CM.DeviceID.DD2).offMaxAmperageStage()
-            testModel.amperageStage = AmperageStage.FROM_30_TO_5
             sleepWhileRun(3)
             if (isRunning && testModel.measuredI < 4) {
                 appendMessageToLog(LogTag.INFO, "Переключение на 5/5")
 //                CM.device<PR>(CM.DeviceID.DD2).onMinAmperageStage()
 //                CM.device<PR>(CM.DeviceID.DD2).off30To5AmperageStage()
-                testModel.amperageStage = AmperageStage.FROM_5_TO_5
             }
         }
     }
@@ -433,7 +428,6 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
     private fun returnAmperageStage() {
         appendMessageToLog(LogTag.INFO, "Возврат токовой ступени...")
 //        CM.device<PR>(CM.DeviceID.DD2).onMaxAmperageStage()
-        testModel.amperageStage = AmperageStage.FROM_150_TO_5
 //        CM.device<PR>(CM.DeviceID.DD2).offOtherAmperageStages()
     }
 

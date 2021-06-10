@@ -9,7 +9,6 @@ import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 import ru.avem.stand.modules.r.communication.model.devices.tilkom.T42
 import ru.avem.stand.modules.r.communication.model.devices.tilkom.T42Model
-import ru.avem.stand.modules.r.tests.AmperageStage
 import ru.avem.stand.modules.r.tests.KSPADTest
 import ru.avem.stand.modules.r.tests.calcSyncRPM
 import ru.avem.stand.modules.r.tests.calcZs
@@ -108,19 +107,19 @@ class MaxM : KSPADTest(view = MaxMView::class, reportTemplate = "maxm.xlsx") {
                 }
 
                 CM.startPoll(this, PM130Model.I_A_REGISTER) { value ->
-                    testModel.measuredIA = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIA = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IA.value = testModel.measuredIA.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
                 CM.startPoll(this, PM130Model.I_B_REGISTER) { value ->
-                    testModel.measuredIB = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIB = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IB.value = testModel.measuredIB.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
                 CM.startPoll(this, PM130Model.I_C_REGISTER) { value ->
-                    testModel.measuredIC = abs(value.toDouble() * testModel.amperageStage.ratio)
+                    testModel.measuredIC = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.IC.value = testModel.measuredIC.autoformat()
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
@@ -131,7 +130,7 @@ class MaxM : KSPADTest(view = MaxMView::class, reportTemplate = "maxm.xlsx") {
                 }
                 CM.startPoll(this, PM130Model.P_REGISTER) { value ->
                     testModel.measuredData.P1.value =
-                        abs(value.toDouble() * testModel.amperageStage.ratio).autoformat()
+                        abs(value.toDouble() * CURRENT_STAGE_PM130).autoformat()
                     testModel.measuredP1 = testModel.measuredData.P1.value.toDouble()
                 }
             }
@@ -207,7 +206,7 @@ class MaxM : KSPADTest(view = MaxMView::class, reportTemplate = "maxm.xlsx") {
         CM.device<PR>(CM.DeviceID.DD2).onIkasKM61()
         sleep(200)
 //        CM.device<PR>(CM.DeviceID.DD2).onMaxAmperageStage()
-        testModel.amperageStage = AmperageStage.FROM_150_TO_5
+        
         sleep(200)
 //        CM.device<PR>(CM.DeviceID.DD2).fromFI()
         sleep(200)

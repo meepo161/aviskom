@@ -2,7 +2,7 @@ package ru.avem.stand.modules.r.tests.pi.minm
 
 import javafx.beans.property.SimpleStringProperty
 import ru.avem.stand.modules.i.TestModel
-import ru.avem.stand.modules.r.tests.AmperageStage
+
 
 object MinMModel : TestModel() {
     val specifiedData = MinMData(descriptor = SimpleStringProperty("Заданные"))
