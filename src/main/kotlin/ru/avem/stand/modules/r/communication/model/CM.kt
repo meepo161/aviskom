@@ -7,7 +7,7 @@ import ru.avem.stand.modules.r.communication.adapters.serial.SerialAdapter
 import ru.avem.stand.modules.r.communication.model.devices.avem.avem3.AVEM3
 import ru.avem.stand.modules.r.communication.model.devices.avem.ikas.IKAS8
 import ru.avem.stand.modules.r.communication.model.devices.avem.latr.AvemLatrController
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.megaohmmeter.cs02021.CS02021
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202
@@ -45,7 +45,7 @@ object CM {
     }
 
     private val danfossConnection = Connection(
-        adapterName = "CP2103 USB to RS-485-1",
+        adapterName = "CP2103 USB to CP2000",
         serialParameters = SerialParameters(8, 0, 1, 38400),
         timeoutRead = 100,
         timeoutWrite = 100
@@ -68,9 +68,9 @@ object CM {
         DeviceID.PV28 to AVEM3(DeviceID.PV28.toString(), modbusAdapter, 28),
         DeviceID.PAV41 to PM130(DeviceID.PAV41.toString(), modbusAdapter, 41),
         DeviceID.PR61 to IKAS8(DeviceID.PR61.toString(), modbusAdapter, 61),
-        DeviceID.PR65 to CS02021(DeviceID.PR65.toString(), meggerAdapter, 65),
+        DeviceID.PR65 to CS02021(DeviceID.PR65.toString(), meggerAdapter, 1),
         DeviceID.PS81 to TRM202(DeviceID.PS81.toString(), modbusAdapter, 81),
-        DeviceID.UZ91 to C2000(DeviceID.UZ91.toString(), danfossAdapter, 91),
+        DeviceID.UZ91 to Danfoss(DeviceID.UZ91.toString(), danfossAdapter, 91),
         DeviceID.GV240 to AvemLatrController(DeviceID.GV240.toString(), modbusAdapter, 240.toByte())
     )
 

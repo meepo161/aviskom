@@ -1,4 +1,4 @@
-package ru.avem.stand.modules.r.communication.model.devices.delta.c2000
+package ru.avem.stand.modules.r.communication.model.devices.delta.danfoss
 
 import ru.avem.kserialpooler.communication.adapters.modbusrtu.ModbusRTUAdapter
 import ru.avem.kserialpooler.communication.adapters.utils.ModbusRegister
@@ -7,24 +7,19 @@ import ru.avem.kserialpooler.communication.utils.TypeByteOrder
 import ru.avem.kserialpooler.communication.utils.allocateOrderedByteBuffer
 import ru.avem.stand.modules.r.communication.model.DeviceController
 import ru.avem.stand.modules.r.communication.model.DeviceRegister
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.CONTROL_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.CURRENT_FREQUENCY_OUTPUT_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.MAX_FREQUENCY_OUT_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.MAX_FREQUENCY_TI_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.MAX_VOLTAGE_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.POINT_1_FREQUENCY_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.POINT_1_VOLTAGE_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.POINT_2_FREQUENCY_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000Model.Companion.POINT_2_VOLTAGE_REGISTER
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.DanfossModel.Companion.CONTROL_REGISTER
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.DanfossModel.Companion.FREQ
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.DanfossModel.Companion.FREQ_PERCENT
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.DanfossModel.Companion.MAX_VOLTAGE
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class C2000(
+class Danfoss(
     override val name: String,
     override val protocolAdapter: ModbusRTUAdapter,
     override val id: Byte
 ) : DeviceController() {
-    private val model = C2000Model()
+    private val model = DanfossModel()
     override var requestTotalCount = 0
     override var requestSuccessCount = 0
     override val pollingRegisters = mutableListOf<DeviceRegister>()
@@ -126,32 +121,18 @@ class C2000(
         REVERSE
     }
 
-    fun startObject(direction: Direction = Direction.FORWARD) {
-        if (direction == Direction.FORWARD) {
-            writeRegister(getRegisterById(CONTROL_REGISTER), (0b010010).toShort())
-        }
-        if (direction == Direction.REVERSE) {
-            writeRegister(getRegisterById(CONTROL_REGISTER), (0b100010).toShort())
-        }
+    fun startObject() {
+        protocolAdapter.forceSingleCoil(id,getRegisterById(CONTROL_REGISTER).value.toShort(),true)
     }
 
     fun stopObject() {
-        writeRegister(getRegisterById(CONTROL_REGISTER), (0b1).toShort())
+        protocolAdapter.forceSingleCoil(id,getRegisterById(CONTROL_REGISTER).value.toShort(),false)
     }
 
-    fun setObjectParams(fOut: Number, voltageP1: Number, fP1: Number, voltageP2: Number, fP2: Number) {
+    fun setObjectParams(voltage: Number, percentF: Number) {
         try {
-            writeRegister(getRegisterById(MAX_VOLTAGE_REGISTER), (420.v() + 1).toShort())
-            writeRegister(getRegisterById(MAX_FREQUENCY_OUT_REGISTER), (65.hz() + 1).toShort())
-            writeRegister(getRegisterById(MAX_FREQUENCY_TI_REGISTER), (65.hz() + 1).toShort())
-
-            writeRegister(getRegisterById(POINT_1_VOLTAGE_REGISTER), voltageP1.v())
-            writeRegister(getRegisterById(POINT_1_FREQUENCY_REGISTER), fP1.hz())
-
-            writeRegister(getRegisterById(POINT_2_VOLTAGE_REGISTER), voltageP2.v())
-            writeRegister(getRegisterById(POINT_2_FREQUENCY_REGISTER), fP2.hz())
-
-            writeRegister(getRegisterById(CURRENT_FREQUENCY_OUTPUT_REGISTER), fOut.hz())
+            writeRegister(getRegisterById(MAX_VOLTAGE), (voltage).toShort())
+            writeRegister(getRegisterById(FREQ_PERCENT), (percentF.toInt()*100).toShort())
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -161,10 +142,10 @@ class C2000(
     private fun Number.v(): Short = (this.toDouble() * 10).toInt().toShort()
 
     fun setObjectUMax(voltageMax: Number) {
-        writeRegister(getRegisterById(POINT_1_VOLTAGE_REGISTER), voltageMax.v())
+        writeRegister(getRegisterById(MAX_VOLTAGE), voltageMax.v())
     }
 
     fun setObjectFOut(fOut: Double) {
-        writeRegister(getRegisterById(CURRENT_FREQUENCY_OUTPUT_REGISTER), fOut.hz())
+        writeRegister(getRegisterById(FREQ), fOut.hz())
     }
 }

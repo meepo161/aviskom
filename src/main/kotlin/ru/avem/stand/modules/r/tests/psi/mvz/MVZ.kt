@@ -4,7 +4,7 @@ import ru.avem.stand.modules.i.tests.LogTag
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 
@@ -251,7 +251,7 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
         }
         if (isRunning) {
             testModel.lastFIP1U = testModel.beforeFIP1U
-            CM.device<C2000>(UZ91).setObjectUMax(testModel.lastFIP1U)
+            CM.device<Danfoss>(UZ91).setObjectUMax(testModel.lastFIP1U)
             sleepWhileRun(3)
         }
         if (isRunning) {
@@ -288,16 +288,11 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
     private fun startFI() {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
         testModel.lastFIP1U = (testModel.specifiedU / ((220.0 + 80.0) * sqrt(3.0) / 380.0)) * 0.95 //%
-        CM.device<C2000>(UZ91).setObjectParams(
-            fOut = testModel.specifiedF,
-
-            voltageP1 = testModel.lastFIP1U,
-            fP1 = testModel.specifiedF,
-
-            voltageP2 = 1,
-            fP2 = 1
+        CM.device<Danfoss>(UZ91).setObjectParams(
+            voltage = 100,
+            percentF = 100,
         )
-        CM.device<C2000>(UZ91).startObject()
+        CM.device<Danfoss>(UZ91).startObject()
     }
 
     private fun regulateVoltage(
@@ -317,7 +312,7 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
             if (testModel.measuredU > max) {
                 testModel.lastFIP1U -= step
             }
-            CM.device<C2000>(UZ91).setObjectUMax(testModel.lastFIP1U)
+            CM.device<Danfoss>(UZ91).setObjectUMax(testModel.lastFIP1U)
             sleep(wait)
         }
     }

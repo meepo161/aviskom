@@ -6,7 +6,7 @@ import ru.avem.stand.modules.i.views.TestViewModule
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.DD2
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PRModel
 import tornadofx.controlsfx.warningNotification
@@ -63,7 +63,7 @@ abstract class KSPADTest(
             }
             CM.startPoll(DD2, PRModel.DI_01_16_TRIG_INV) { value ->
                 if (value.toShort() and 0b100 != 0.toShort()) {
-                    cause = "открыта дверь ШСО"
+//                    cause = "открыта дверь ШСО"
                     testModel.protections.doorsPEC.set()
                 }
                 if (value.toShort() and 0b1000 != 0.toShort()) {
@@ -75,15 +75,15 @@ abstract class KSPADTest(
                     testModel.protections.overcurrentHV.set()
                 }
                 if (value.toShort() and 0b100000 != 0.toShort()) {
-                    cause = "открыта дверь зоны"
+//                    cause = "открыта дверь зоны"
                     testModel.protections.doorZone.set()
                 }
                 if (value.toShort() and 0b1000000 != 0.toShort()) {
-                    cause = "Замкнут PE"
+//                    cause = "Замкнут PE"
                     testModel.protections.PE.set()
                 }
                 if (value.toShort() and 0b10000000 == 0.toShort()) {
-                    cause = "PE не снят"
+//                    cause = "PE не снят"
                     testModel.protections.notPE.set()
                 }
             }
@@ -128,7 +128,7 @@ abstract class KSPADTest(
         sleepWhileRun(8)
     }
 
-    protected fun startFI(fi: C2000, accTime: Int = 10) {
+    protected fun startFI(fi: Danfoss, accTime: Int = 10) {
         appendMessageToLog(LogTag.INFO, "Запуск ЧП...")
         fi.startObject()
         waitUntilFIToRun(accTime)
@@ -139,7 +139,7 @@ abstract class KSPADTest(
         sleepWhileRun(accTime)
     }
 
-    protected fun stopFI(fi: C2000, stopTime: Int = 7) {
+    protected fun stopFI(fi: Danfoss, stopTime: Int = 7) {
         appendMessageToLog(LogTag.INFO, "Останов...")
         fi.stopObject()
         waitUntilFIToStop(stopTime)

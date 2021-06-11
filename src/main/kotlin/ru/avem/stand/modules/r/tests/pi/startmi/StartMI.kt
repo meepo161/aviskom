@@ -4,11 +4,9 @@ import ru.avem.stand.modules.i.tests.LogTag
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
-import ru.avem.stand.modules.r.communication.model.devices.tilkom.T42
-import ru.avem.stand.modules.r.communication.model.devices.tilkom.T42Model
 
 import ru.avem.stand.modules.r.tests.KSPADTest
 import ru.avem.stand.utils.autoformat
@@ -131,7 +129,7 @@ class StartMI : KSPADTest(view = StartMIView::class, reportTemplate = "startmi.x
         if (isRunning) {
             var u = 2
             while (isRunning && u <= 380) {
-                CM.device<C2000>(UZ91).setObjectUMax(u)
+                CM.device<Danfoss>(UZ91).setObjectUMax(u)
                 u += 63
             }
         }
@@ -157,16 +155,11 @@ class StartMI : KSPADTest(view = StartMIView::class, reportTemplate = "startmi.x
 
     private fun startFI() {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
-        CM.device<C2000>(UZ91).setObjectParams(
-            fOut = testModel.specifiedF,
-
-            voltageP1 = 2,
-            fP1 = testModel.specifiedF,
-
-            voltageP2 = 1,
-            fP2 = 1
+        CM.device<Danfoss>(UZ91).setObjectParams(
+            voltage = 100,
+            percentF = 100,
         )
-        CM.device<C2000>(UZ91).startObject()
+        CM.device<Danfoss>(UZ91).startObject()
     }
 
     private fun storeTestValues() {

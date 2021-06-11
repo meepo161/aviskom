@@ -4,8 +4,7 @@ import ru.avem.stand.modules.i.tests.LogTag
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
-import ru.avem.stand.modules.r.communication.model.devices.avem.avem3.AVEM3Model
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202Model
@@ -156,16 +155,11 @@ class KZ : KSPADTest(view = KZView::class, reportTemplate = "kz.xlsx") {
 
     private fun startFI() {
         if (isRunning) {
-            CM.device<C2000>(UZ91).setObjectParams(
-                fOut = testModel.specifiedF,
-
-                voltageP1 = testModel.specifiedU / 3.8,
-                fP1 = testModel.specifiedF,
-
-                voltageP2 = 1,
-                fP2 = 1
+            CM.device<Danfoss>(UZ91).setObjectParams(
+                voltage = 100,
+                percentF = 100,
             )
-            CM.device<C2000>(UZ91).startObject()
+            CM.device<Danfoss>(UZ91).startObject()
             sleepWhileRun(5)
         }
     }

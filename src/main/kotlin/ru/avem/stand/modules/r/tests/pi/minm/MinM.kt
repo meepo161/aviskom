@@ -4,7 +4,7 @@ import ru.avem.stand.modules.i.tests.LogTag
 import ru.avem.stand.modules.i.views.showTwoWayDialog
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 
@@ -187,14 +187,9 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
 
         CM.device<PR>(CM.DeviceID.DD2).onPEQV3()
 
-        CM.device<C2000>(CM.DeviceID.UZ91).setObjectParams(
-            fOut = 50,
-
-            voltageP1 = 380,
-            fP1 = 50,
-
-            voltageP2 = 1,
-            fP2 = 1
+        CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
+            voltage = 100,
+            percentF = 100,
         )
         startFI(CM.device(CM.DeviceID.UZ91), 5) // TODO остальные checkDir
         testModel.isTIDirectionRight = testModel.measuredData.torque.value.toDouble() < 0.0
@@ -251,9 +246,9 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
 
         val lmDirection = if (!(!testModel.isLMDirectionRight xor !testModel.isTIDirectionRight)) {
             appendMessageToLog(LogTag.INFO, "Реверс НМ")
-            C2000.Direction.REVERSE
+            Danfoss.Direction.REVERSE
         } else {
-            C2000.Direction.FORWARD
+            Danfoss.Direction.FORWARD
         }
 //        CM.device<C2000>(CM.DeviceID.UZ92).startObject(lmDirection)
         waitUntilFIToRun()
@@ -282,14 +277,10 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
 
     private fun startTIFI() {
         appendMessageToLog(LogTag.INFO, "Разгон ОИ...")
-        CM.device<C2000>(CM.DeviceID.UZ91).setObjectParams(
-            fOut = testModel.specifiedF,
 
-            voltageP1 = testModel.specifiedU,
-            fP1 = testModel.specifiedF,
-
-            voltageP2 = 1,
-            fP2 = 1
+        CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
+            voltage = 100,
+            percentF = 100,
         )
         startFI(CM.device(CM.DeviceID.UZ91))
     }

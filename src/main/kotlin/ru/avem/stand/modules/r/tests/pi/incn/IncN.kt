@@ -4,9 +4,8 @@ import ru.avem.stand.modules.i.tests.LogTag
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
-import ru.avem.stand.modules.r.communication.model.devices.owen.th01.TH01Model
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 import ru.avem.stand.modules.r.tests.KSPADTest
 import ru.avem.stand.utils.autoformat
@@ -153,16 +152,11 @@ class IncN : KSPADTest(view = IncNView::class, reportTemplate = "incn.xlsx") {
 
     private fun startFI() {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
-        CM.device<C2000>(UZ91).setObjectParams(
-            fOut = testModel.specifiedF * 1.2,
-
-            voltageP1 = testModel.specifiedU,
-            fP1 = testModel.specifiedF * 1.2,
-
-            voltageP2 = 1,
-            fP2 = 1
+        CM.device<Danfoss>(UZ91).setObjectParams(
+            voltage = 100,
+            percentF = 100,
         )
-        CM.device<C2000>(UZ91).startObject()
+        CM.device<Danfoss>(UZ91).startObject()
     }
 
     private fun selectAmperageStage() {

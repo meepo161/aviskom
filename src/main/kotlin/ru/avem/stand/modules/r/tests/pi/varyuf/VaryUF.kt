@@ -4,9 +4,8 @@ import ru.avem.stand.modules.i.tests.LogTag
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
-import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
+import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
-import ru.avem.stand.modules.r.communication.model.devices.owen.th01.TH01Model
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 
 import ru.avem.stand.modules.r.tests.KSPADTest
@@ -136,7 +135,7 @@ class VaryUF : KSPADTest(view = VaryUFView::class, reportTemplate = "varyuf.xlsx
             returnAmperageStage()
         }
         if (isRunning) {
-            CM.device<C2000>(UZ91).setObjectFOut(testModel.specifiedF * 1.03)
+            CM.device<Danfoss>(UZ91).setObjectFOut(testModel.specifiedF * 1.03)
             sleepWhileRun(7)
         }
         if (isRunning) {
@@ -169,16 +168,12 @@ class VaryUF : KSPADTest(view = VaryUFView::class, reportTemplate = "varyuf.xlsx
 
     private fun startFI() {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
-        CM.device<C2000>(UZ91).setObjectParams(
-            fOut = testModel.specifiedF * 0.94,
 
-            voltageP1 = testModel.specifiedU * 1.1 / ((220.0 + 80.0) * sqrt(3.0) / 380.0),
-            fP1 = testModel.specifiedF * 1.03,
-
-            voltageP2 = testModel.specifiedU * 0.8 / ((220.0 + 80.0) * sqrt(3.0) / 380.0),
-            fP2 = testModel.specifiedF * 0.94
+        CM.device<Danfoss>(UZ91).setObjectParams(
+            voltage = 100,
+            percentF = 100,
         )
-        CM.device<C2000>(UZ91).startObject()
+        CM.device<Danfoss>(UZ91).startObject()
     }
 
     private fun selectAmperageStage() {
