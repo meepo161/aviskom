@@ -64,10 +64,10 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
         startPollControlUnit()
 
         if (isRunning) {
-            with(PV23) {
+            with(PV25) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredData.U.value = (value.toDouble() * COEF_SHUNT).autoformat()
+                    testModel.measuredData.U.value = (value.toDouble() * COEF_TR_AVEM).autoformat()
                     testModel.measuredU = testModel.measuredData.U.value.toDoubleOrDefault(0.0)
                 }
             }
@@ -138,13 +138,12 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
         }
         storeTestValues()
 
-        stopFI(CM.device(UZ91))
+        stopFI(CM.device(UZ91)) //ЛАТР В 0
         CM.device<PR>(DD2).offPEQV3()
         sleep(200)
         CM.device<PR>(DD2).offVIUQV1()
         sleep(200)
         //TODO Проверить заземление
-        CM.device<PR>(DD2).offShuntirGB30()
     }
 
     private fun turnOnCircuit() {

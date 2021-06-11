@@ -34,18 +34,18 @@ class AggregateView(title: String = Properties.standData.titleShort) :
         prefWidth = Properties.standData.width
         prefHeight = Properties.standData.height
 
-        background = Background(
-            BackgroundImage(
-                Image("background.png"),
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                BackgroundSize(
-                    BackgroundSize.AUTO, BackgroundSize.AUTO,
-                    true, true, true, false
-                )
-            )
-        )
+//        background = Background(
+//            BackgroundImage(
+//                Image("background.png"),
+//                BackgroundRepeat.NO_REPEAT,
+//                BackgroundRepeat.NO_REPEAT,
+//                BackgroundPosition.CENTER,
+//                BackgroundSize(
+//                    BackgroundSize.AUTO, BackgroundSize.AUTO,
+//                    true, true, true, false
+//                )
+//            )
+//        )
 
         tab("Испытания") {
             content = find(PreFillTab::class).root

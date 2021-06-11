@@ -28,18 +28,18 @@ class AuthorizationView(title: String = "Авторизация") : ViewModule(t
         prefWidth = Properties.standData.width
         prefHeight = Properties.standData.height
 
-        background = Background(
-            BackgroundImage(
-                Image("background.png"),
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                BackgroundSize(
-                    BackgroundSize.AUTO, BackgroundSize.AUTO,
-                    true, true, true, false
-                )
-            )
-        )
+//        background = Background(
+//            BackgroundImage(
+//                Image("background.png"),
+//                BackgroundRepeat.NO_REPEAT,
+//                BackgroundRepeat.NO_REPEAT,
+//                BackgroundPosition.CENTER,
+//                BackgroundSize(
+//                    BackgroundSize.AUTO, BackgroundSize.AUTO,
+//                    true, true, true, false
+//                )
+//            )
+//        )
 
         vbox(spacing = 32.0) {
             anchorpaneConstraints {

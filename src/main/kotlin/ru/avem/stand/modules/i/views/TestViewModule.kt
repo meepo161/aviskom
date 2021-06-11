@@ -40,7 +40,7 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
         injectTest()
         padding = insets(16)
 
-        background = TFXViewManager.mainBackground
+//        background = TFXViewManager.mainBackground
 
         label(test.name) {
             alignment = Pos.CENTER

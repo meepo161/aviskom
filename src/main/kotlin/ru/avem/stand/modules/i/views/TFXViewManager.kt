@@ -17,7 +17,7 @@ object TFXViewManager {
         }
     }
 
-    lateinit var mainBackground: Background
+//    lateinit var mainBackground: Background
 
     fun openModal(view: KClass<out View>) {
         runLater {
@@ -41,18 +41,18 @@ object TFXViewManager {
 
             stage.opacity = 0.0
 
-            mainBackground = Background(
-                BackgroundImage(
-                    Image("background.png"),
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.CENTER,
-                    BackgroundSize(
-                        BackgroundSize.AUTO, BackgroundSize.AUTO,
-                        true, true, true, false
-                    )
-                )
-            )
+//            mainBackground = Background(
+//                BackgroundImage(
+//                    Image("background.png"),
+//                    BackgroundRepeat.NO_REPEAT,
+//                    BackgroundRepeat.NO_REPEAT,
+//                    BackgroundPosition.CENTER,
+//                    BackgroundSize(
+//                        BackgroundSize.AUTO, BackgroundSize.AUTO,
+//                        true, true, true, false
+//                    )
+//                )
+//            )
         }
     }
 
