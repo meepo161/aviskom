@@ -4,7 +4,10 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.event.EventTarget
 import javafx.geometry.Pos
-import javafx.scene.control.*
+import javafx.scene.control.Button
+import javafx.scene.control.ContentDisplay
+import javafx.scene.control.TableRow
+import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.scene.text.TextAlignment
@@ -14,6 +17,14 @@ import ru.avem.stand.modules.r.common.prefill.isTestRunning
 import ru.avem.stand.modules.r.tests.Protection
 import ru.avem.stand.modules.r.tests.TestItemData
 import tornadofx.*
+import java.awt.Rectangle
+import java.awt.Robot
+import java.awt.Toolkit
+import java.awt.image.BufferedImage
+import java.io.File
+import java.lang.Thread.sleep
+import javax.imageio.ImageIO
+
 
 abstract class TestViewModule(title: String, showOnStart: Boolean = false) : ViewModule(title, showOnStart) {
     abstract val test: Test

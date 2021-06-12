@@ -1,7 +1,13 @@
 package ru.avem.stand.utils
 
+import java.awt.Rectangle
+import java.awt.Robot
+import java.awt.Toolkit
+import java.awt.image.BufferedImage
+import java.io.File
 import java.lang.Thread.sleep
 import java.security.MessageDigest
+import javax.imageio.ImageIO
 import kotlin.experimental.and
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
@@ -104,5 +110,15 @@ fun smartSleep(
                 (plusErrorNanos % 1_000_000).toInt()
             )
         }
+    }
+}
+
+fun createScreenShot(name: String) {
+    val screenRect = Rectangle(Toolkit.getDefaultToolkit().screenSize)
+    val capture: BufferedImage = Robot().createScreenCapture(screenRect)
+    val imageFile = File("screen - $name.bmp")
+    try {
+        ImageIO.write(capture, "bmp", imageFile)
+    } catch (e: Exception) {
     }
 }

@@ -9,11 +9,21 @@ import ru.avem.stand.modules.r.communication.model.CM.DeviceID.DD2
 import ru.avem.stand.modules.r.communication.model.devices.delta.c2000.C2000
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PRModel
+import ru.avem.stand.modules.r.storage.database.entities.TestItems.name
 import tornadofx.controlsfx.warningNotification
 import tornadofx.runLater
+import java.awt.Rectangle
+import java.awt.Robot
+import java.awt.Toolkit
+import java.awt.image.BufferedImage
+import java.io.File
 import java.lang.Thread.sleep
+import java.text.SimpleDateFormat
+import java.util.*
+import javax.imageio.ImageIO
 import kotlin.experimental.and
 import kotlin.reflect.KClass
+
 
 abstract class KSPADTest(
     view: KClass<out TestViewModule>,

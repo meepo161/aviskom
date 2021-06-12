@@ -13,6 +13,7 @@ import ru.avem.stand.modules.r.communication.model.CM.device
 import ru.avem.stand.modules.r.communication.model.IDeviceController
 import ru.avem.stand.modules.r.storage.Properties
 import ru.avem.stand.modules.r.storage.database.saveProtocol
+import ru.avem.stand.utils.createScreenShot
 import tornadofx.*
 import java.io.File
 import java.lang.Thread.sleep
@@ -127,6 +128,7 @@ abstract class Test(
             initView()
             initDevices()
         }
+        createScreenShot(name)
     }
 
     protected open fun initVars() {
