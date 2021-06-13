@@ -142,6 +142,7 @@ class PR(
     fun setUOnTM1(voltage: Float) {
         writeRegister(getRegisterById(PRModel.AO_01), voltage)
     }
+
     fun setUOnTM2(voltage: Float) {
         writeRegister(getRegisterById(PRModel.AO_02), voltage)
     }

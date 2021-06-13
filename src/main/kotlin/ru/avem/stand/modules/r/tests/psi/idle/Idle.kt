@@ -5,7 +5,7 @@ import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
 import ru.avem.stand.modules.r.communication.model.devices.avem.avem3.AVEM3Model
-import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202Model
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
@@ -81,66 +81,6 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         startPollControlUnit()
 
         if (isRunning) {
-            with(PAV41) {
-                addCheckableDevice(this)
-                CM.startPoll(this, PM130Model.U_AB_REGISTER) { value ->
-                    testModel.measuredData.UAB.value = value.toDouble().autoformat()
-                    testModel.measuredU =
-                        (testModel.measuredData.UAB.value.toDoubleOrDefault(0.0)
-                                + testModel.measuredData.UBC.value.toDoubleOrDefault(0.0)
-                                + testModel.measuredData.UCA.value.toDoubleOrDefault(0.0)) / 3.0
-                    testModel.measuredData.U.value = testModel.measuredU.autoformat()
-                }
-                CM.startPoll(this, PM130Model.U_BC_REGISTER) { value ->
-                    testModel.measuredData.UBC.value = value.toDouble().autoformat()
-                    testModel.measuredU =
-                        (testModel.measuredData.UAB.value.toDoubleOrDefault(0.0)
-                                + testModel.measuredData.UBC.value.toDoubleOrDefault(0.0)
-                                + testModel.measuredData.UCA.value.toDoubleOrDefault(0.0)) / 3.0
-                    testModel.measuredData.U.value = testModel.measuredU.autoformat()
-                }
-                CM.startPoll(this, PM130Model.U_CA_REGISTER) { value ->
-                    testModel.measuredData.UCA.value = value.toDouble().autoformat()
-                    testModel.measuredU =
-                        (testModel.measuredData.UAB.value.toDoubleOrDefault(0.0)
-                                + testModel.measuredData.UBC.value.toDoubleOrDefault(0.0)
-                                + testModel.measuredData.UCA.value.toDoubleOrDefault(0.0)) / 3.0
-                    testModel.measuredData.U.value = testModel.measuredU.autoformat()
-                }
-
-                CM.startPoll(this, PM130Model.I_A_REGISTER) { value ->
-                    testModel.measuredIA = abs(value.toDouble() * CURRENT_STAGE_PM130)
-                    testModel.measuredData.IA.value = testModel.measuredIA.autoformat()
-                    testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
-                    testModel.measuredData.I.value = testModel.measuredI.autoformat()
-                }
-                CM.startPoll(this, PM130Model.I_B_REGISTER) { value ->
-                    testModel.measuredIB = abs(value.toDouble() * CURRENT_STAGE_PM130)
-                    testModel.measuredData.IB.value = testModel.measuredIB.autoformat()
-                    testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
-                    testModel.measuredData.I.value = testModel.measuredI.autoformat()
-                }
-                CM.startPoll(this, PM130Model.I_C_REGISTER) { value ->
-                    testModel.measuredIC = abs(value.toDouble() * CURRENT_STAGE_PM130)
-                    testModel.measuredData.IC.value = testModel.measuredIC.autoformat()
-                    testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
-                    testModel.measuredData.I.value = testModel.measuredI.autoformat()
-                }
-
-                CM.startPoll(this, PM130Model.COS_REGISTER) { value ->
-                    testModel.measuredData.cos.value = value.toDouble().autoformat()
-                }
-                CM.startPoll(this, PM130Model.P_REGISTER) { value ->
-                    testModel.measuredData.P1.value =
-                        abs(value.toDouble() * CURRENT_STAGE_PM130).autoformat()
-                }
-                CM.startPoll(this, PM130Model.F_REGISTER) { value ->
-                    testModel.measuredData.F.value = value.toDouble().autoformat()
-                }
-            }
-        }
-
-        if (isRunning) {
             with(PV23) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
@@ -149,7 +89,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
                 }
             }
         }
-
+// 10% = 0,02
         if (isRunning) {
             with(PV25) {
                 addCheckableDevice(this)
@@ -164,7 +104,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV24) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIA = value.toDouble() * COEF_SHUNT
+                    testModel.measuredIA = value.toDouble()
                     testModel.measuredData.IA.value = testModel.measuredIA.autoformat()
                 }
             }
@@ -174,7 +114,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV27) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIB = value.toDouble() * COEF_SHUNT
+                    testModel.measuredIB = value.toDouble()
                     testModel.measuredData.IB.value = testModel.measuredIB.autoformat()
                 }
             }
@@ -197,16 +137,18 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         if (isRunning) {
             turnOnCircuit()
             turnOnTM1()
+            sleep(20000)
+            turnOffTM1()
         }
-        if (isRunning) {
-            waitUntilFIToLoad()
-            startFI()
-            waitUntilFIToRun()
-
-        }
-        if (isRunning) {
-            waiting()
-        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//            startFI()
+//            waitUntilFIToRun()
+//
+//        }
+//        if (isRunning) {
+//            waiting()
+//        }
         storeTestValues()
         if (isRunning) {
             stopFI(CM.device(UZ91))
@@ -214,7 +156,11 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
     }
 
     private fun turnOnTM1() {
-        CM.device<PR>(DD2).setUOnTM1(9.8f)
+        CM.device<PR>(DD2).setUOnTM1(0.2f)
+    }
+
+    private fun turnOffTM1() {
+        CM.device<PR>(DD2).setUOnTM1(0f)
     }
 
     private fun turnOnCircuit() {

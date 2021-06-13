@@ -1,4 +1,4 @@
-package ru.avem.stand.modules.r.communication.model.devices.delta.danfoss
+package ru.avem.stand.modules.r.communication.model.devices.danfoss
 
 import ru.avem.kserialpooler.communication.adapters.modbusrtu.ModbusRTUAdapter
 import ru.avem.kserialpooler.communication.adapters.utils.ModbusRegister
@@ -7,10 +7,10 @@ import ru.avem.kserialpooler.communication.utils.TypeByteOrder
 import ru.avem.kserialpooler.communication.utils.allocateOrderedByteBuffer
 import ru.avem.stand.modules.r.communication.model.DeviceController
 import ru.avem.stand.modules.r.communication.model.DeviceRegister
-import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.DanfossModel.Companion.CONTROL_REGISTER
-import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.DanfossModel.Companion.FREQ
-import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.DanfossModel.Companion.FREQ_PERCENT
-import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.DanfossModel.Companion.MAX_VOLTAGE
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.CONTROL_REGISTER
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.FREQ
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.FREQ_PERCENT
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.MAX_VOLTAGE
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

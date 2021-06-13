@@ -78,7 +78,7 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
                 addCheckableDevice(this)
                 CM.startPoll(this, PM130Model.I_A_REGISTER) { value ->
                     testModel.measuredData.I.value =
-                        "%.2f".format(Locale.ENGLISH, value.toDouble() * CURRENT_STAGE_PM130)
+                        "%.2f".format(Locale.ENGLISH, value.toDouble()/* * CURRENT_STAGE_PM130_VIU*/)
                     testModel.measuredI = testModel.measuredData.I.value.toDoubleOrDefault(0.0)
                     if (testModel.measuredI > testModel.specifiedIHV) {
                         cause = "ток утечки превысил заданный"
@@ -108,7 +108,7 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
                             cause = "Время регулирования превысило заданное"
                         }
                         0x85 -> {
-                            cause = "Застревание АРН"
+//                            cause = "Застревание АРН"
                         }
                     }
                 }
@@ -121,14 +121,11 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
             turnOnCircuit()
         }
         if (isRunning) {
-            initLatr(CM.device(GV240))
+            resetLatr(CM.device(GV240))
             configLatr(CM.device(GV240))
         }
         if (isRunning) {
-            startLatr(CM.device(GV240))
-        }
-        if (isRunning) {
-            regulateVoltage()
+            regulateVoltage(CM.device(GV240))
         }
         if (isRunning) {
             accurateRegulate(CM.device(GV240))
@@ -138,7 +135,10 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
         }
         storeTestValues()
 
-        stopFI(CM.device(UZ91)) //ЛАТР В 0
+        resetLatr(CM.device(GV240))
+        while (testModel.measuredU > 50) {
+            sleep(100)
+        }
         CM.device<PR>(DD2).offPEQV3()
         sleep(200)
         CM.device<PR>(DD2).offVIUQV1()
@@ -165,7 +165,8 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
         sleep(200)
     }
 
-    private fun initLatr(latrDevice: AvemLatrController1) {
+    private fun resetLatr(latrDevice: AvemLatrController1) {
+        CM.device<AvemLatrController1>(GV240).stop()
         try {
             latrDevice.reset({}, GV240)
         } catch (e: LatrStuckException) {
@@ -177,8 +178,8 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
         appendMessageToLog(LogTag.INFO, "Конфигурирование и запуск АРН")
         latrDevice.presetParameters(
             LatrControllerConfiguration(
-                minDuttyPercent = 35f,
-                maxDuttyPercent = 35f,
+                minDuttyPercent = 85f,
+                maxDuttyPercent = 85f,
                 corridor = 0.2f,
                 delta = 0.03f,
                 timePulseMin = 100,
@@ -187,13 +188,10 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
         )
     }
 
-    private fun startLatr(latrDevice: AvemLatrController1) {
-        latrDevice.start((220f))
-    }
-
-    private fun regulateVoltage() {
+    private fun regulateVoltage(latrDevice: AvemLatrController1) {
         appendMessageToLog(LogTag.INFO, "Грубое регулирование напряжения...")
-        while (isRunning && testModel.measuredU < testModel.specifiedUHV * 0.9) {
+        while (isRunning && testModel.measuredU < testModel.specifiedUHV - 300) {
+            latrDevice.start((220f))
             sleep(10)
         }
     }
@@ -212,10 +210,10 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
             )
             appendMessageToLog(LogTag.INFO, "Точное регулирование напряжения...")
             while (isRunning &&
-                (testModel.measuredU <= testModel.specifiedUHV * 0.97f ||
+                (testModel.measuredU <= testModel.specifiedUHV ||
                         testModel.measuredU >= testModel.specifiedUHV * 1.03f)
             ) {
-                if (testModel.measuredU <= testModel.specifiedUHV * 0.97f) {
+                if (testModel.measuredU <= testModel.specifiedUHV) {
                     latrDevice.plusVoltage()
                     sleep(200)
                 }

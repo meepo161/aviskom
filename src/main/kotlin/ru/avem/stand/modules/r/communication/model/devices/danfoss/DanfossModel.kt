@@ -1,4 +1,4 @@
-package ru.avem.stand.modules.r.communication.model.devices.delta.danfoss
+package ru.avem.stand.modules.r.communication.model.devices.danfoss
 
 import ru.avem.stand.modules.r.communication.model.DeviceRegister
 import ru.avem.stand.modules.r.communication.model.IDeviceModel

@@ -2,6 +2,7 @@ package ru.avem.stand.modules.r.tests.psi.idle
 
 import javafx.event.EventTarget
 import javafx.geometry.Pos
+import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
@@ -46,64 +47,19 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
                     maxHeight = 64.0
                     minWidth = 400.0
                     prefWidth = 400.0
-                    columnResizePolicy = SmartResize.POLICY
+                    columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
                     alignment = Pos.CENTER_LEFT
 
-                    column("U AB, В", IdleData::UAB.getter)
-                    column("U BC, В", IdleData::UBC.getter)
-                    column("U CA, В", IdleData::UCA.getter)
-                    column("I A, А", IdleData::IA.getter)
-                    column("I B, А", IdleData::IB.getter)
-                    column("I C, А", IdleData::IC.getter)
-                }
-            }
-            hbox {
-                hboxConstraints {
-                    hGrow = Priority.ALWAYS
-                }
-                tableview(observableList(test.testModel.measuredData)) {
-                    minHeight = 64.0
-                    maxHeight = 64.0
-                    minWidth = 200.0
-                    prefWidth = 200.0
-                    columnResizePolicy = SmartResize.POLICY
-                    mouseTransparentProperty().set(true)
-
-                    alignment = Pos.CENTER_LEFT
-
-                    column("P1, кВт", IdleData::P1.getter)
-                    column("f, Гц", IdleData::F.getter)
-                    column("cos φ", IdleData::cos.getter)
+                    column("PV23, В", IdleData::UA.getter)
+                    column("PV25, В", IdleData::UB.getter)
+                    column("PV24, А", IdleData::IA.getter)
+                    column("PV27, А", IdleData::IB.getter)
                 }
             }
         }
         hbox {
-            hbox {
-                minWidth = 820.0
-                prefWidth = 820.0
-                hboxConstraints {
-                    hGrow = Priority.ALWAYS
-                }
-                tableview(observableList(test.testModel.measuredData)) {
-                    minHeight = 64.0
-                    maxHeight = 64.0
-                    minWidth = 590.0
-                    prefWidth = 590.0
-                    columnResizePolicy = SmartResize.POLICY
-                    mouseTransparentProperty().set(true)
-
-                    alignment = Pos.CENTER_LEFT
-
-                    column("Ось Y, мм/с", IdleData::v1y.getter)
-                    column("Ось X, мм/с", IdleData::v1x.getter)
-                    column("Ось Z, мм/с", IdleData::v1z.getter)
-                    column("Ось Y, мм/с", IdleData::v2y.getter)
-                    column("Ось X, мм/с", IdleData::v2x.getter)
-                    column("Ось Z, мм/с", IdleData::v2z.getter)
-                }
-            }
             hbox {
                 hboxConstraints {
                     hGrow = Priority.ALWAYS
@@ -113,12 +69,11 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
                     maxHeight = 64.0
                     minWidth = 220.0
                     prefWidth = 220.0
-                    columnResizePolicy = SmartResize.POLICY
+                    columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
                     alignment = Pos.CENTER_LEFT
 
-                    column("n об/мин", IdleData::RPM.getter)
                     column("t BK1, °C", IdleData::tempAmb.getter)
                     column("t BK2, °C", IdleData::tempTI.getter)
                 }
@@ -133,7 +88,7 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
                 maxHeight = 64.0
                 minWidth = 220.0
                 prefWidth = 220.0
-                columnResizePolicy = SmartResize.POLICY
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
                 alignment = Pos.BOTTOM_RIGHT

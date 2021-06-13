@@ -6,7 +6,7 @@ import ru.avem.stand.modules.i.views.TestViewModule
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.DD2
-import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PRModel
 import ru.avem.stand.modules.r.storage.database.entities.TestItems.name
@@ -34,6 +34,7 @@ abstract class KSPADTest(
     protected var isStartPressed: Boolean = false
 
     val CURRENT_STAGE_PM130 = 200 / 5
+    val CURRENT_STAGE_PM130_VIU = 1 / 5
     val COEF_TR_AVEM = 10000 / 100
     val COEF_SHUNT = 1000 / 150
 

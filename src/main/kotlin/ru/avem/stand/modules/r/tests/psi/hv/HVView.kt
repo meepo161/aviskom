@@ -2,6 +2,7 @@ package ru.avem.stand.modules.r.tests.psi.hv
 
 import javafx.event.EventTarget
 import javafx.geometry.Pos
+import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
@@ -35,11 +36,11 @@ class HVView(title: String = "ВИУ", showOnStart: Boolean = true) : TestViewMo
         }
         hbox {
             tableview(observableList(test.testModel.measuredData)) {
-                minHeight = 64.0
-                maxHeight = 64.0
-                minWidth = 150.0
-                prefWidth = 150.0
-                columnResizePolicy = SmartResize.POLICY
+                minWidth = 600.0
+                prefWidth = 600.0
+                minHeight = 104.0
+                maxHeight = 104.0
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
                 alignment = Pos.CENTER
@@ -47,25 +48,25 @@ class HVView(title: String = "ВИУ", showOnStart: Boolean = true) : TestViewMo
                 column("U, В", HVData::U.getter)
                 column("I, А", HVData::I.getter)
                 column("f, Гц", HVData::F.getter)
-            }
+            }.addClass(Styles.measuringTable)
         }
         hbox {
             vboxConstraints {
                 vGrow = Priority.ALWAYS
             }
             tableview(observableList(test.testModel.measuredData)) {
-                minHeight = 64.0
-                maxHeight = 64.0
-                minWidth = 200.0
-                prefWidth = 200.0
-                columnResizePolicy = SmartResize.POLICY
+                minWidth = 600.0
+                prefWidth = 600.0
+                minHeight = 104.0
+                maxHeight = 104.0
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
                 alignment = Pos.BOTTOM_RIGHT
 
                 column("Время, с", HVData::time.getter)
                 column("Результат", HVData::result.getter)
-            }
+            }.addClass(Styles.measuringTable)
         }
     }.addClass(Styles.paneBorders)
 }

@@ -4,7 +4,7 @@ import ru.avem.stand.modules.i.tests.LogTag
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
-import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202Model

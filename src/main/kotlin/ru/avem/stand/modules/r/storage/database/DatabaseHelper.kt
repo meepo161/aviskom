@@ -195,7 +195,7 @@ private fun createAsyncEngineTemplateSmall() = listOf(
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "1000",
-        maxValue = "3000",
+        maxValue = "10000",
         unit = "В",
         blockName = "Параметры испытания"
     ),
@@ -444,7 +444,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "1000",
-        maxValue = "3000",
+        maxValue = "10000",
         unit = "В",
         blockName = "Параметры испытания"
     ),
@@ -820,7 +820,7 @@ fun createAsyncEngineScheme() = listOf(
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "1000",
-        maxValue = "3000",
+        maxValue = "10000",
         unit = "В",
         blockName = "Параметры испытания"
     ),

@@ -7,7 +7,7 @@ import ru.avem.stand.modules.r.communication.adapters.serial.SerialAdapter
 import ru.avem.stand.modules.r.communication.model.devices.avem.avem3.AVEM3
 import ru.avem.stand.modules.r.communication.model.devices.avem.ikas.IKAS8
 import ru.avem.stand.modules.r.communication.model.devices.avem.latr.AvemLatrController
-import ru.avem.stand.modules.r.communication.model.devices.delta.danfoss.Danfoss
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.megaohmmeter.cs02021.CS02021
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202

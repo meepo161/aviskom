@@ -37,6 +37,7 @@ class Styles : Stylesheet() {
         val tableRowCell by cssclass()
         val vboxTextArea by cssclass()
         val alert by cssclass()
+        val measuringTable by cssclass()
 
         private var fontMultiplier = 0.0
         var regularFontSize = 0.0
@@ -256,6 +257,18 @@ class Styles : Stylesheet() {
 
         tableRowCell {
             cellSize = 50.px / 1.5
+        }
+
+        measuringTable {
+            tableColumn {
+                alignment = Pos.CENTER
+                fontWeight = FontWeight.BOLD
+                fontSize = 22.px
+            }
+
+            tableRowCell {
+                cellSize = 50.px
+            }
         }
 
         checkBox {
