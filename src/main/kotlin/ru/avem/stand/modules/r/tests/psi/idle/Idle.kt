@@ -196,11 +196,13 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
     override fun logic() {
         if (isRunning) {
             turnOnCircuit()
+            turnOnTM1()
         }
         if (isRunning) {
             waitUntilFIToLoad()
             startFI()
             waitUntilFIToRun()
+
         }
         if (isRunning) {
             waiting()
@@ -211,9 +213,13 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         }
     }
 
+    private fun turnOnTM1() {
+        CM.device<PR>(DD2).setUOnTM1(9.8f)
+    }
+
     private fun turnOnCircuit() {
         appendMessageToLog(LogTag.INFO, "Сбор схемы")
-        CM.device<PR>(DD2).onIkasKM61()
+        CM.device<PR>(DD2).onKM1()
         sleep(200)
     }
 

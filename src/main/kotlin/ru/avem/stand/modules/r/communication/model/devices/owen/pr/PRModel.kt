@@ -79,7 +79,7 @@ class PRModel : IDeviceModel {
         AO_01_F to DeviceRegister(539, DeviceRegister.RegisterValueType.FLOAT), // CDAB
 
         AO_01 to DeviceRegister(534, DeviceRegister.RegisterValueType.FLOAT), // Тиристор 1 0,02..0,98
-        AO_01 to DeviceRegister(536, DeviceRegister.RegisterValueType.FLOAT), // Тиристор 2 0,02..0,98
+        AO_02 to DeviceRegister(536, DeviceRegister.RegisterValueType.FLOAT), // Тиристор 2 0,02..0,98
     )
 
     override fun getRegisterById(idRegister: String) =

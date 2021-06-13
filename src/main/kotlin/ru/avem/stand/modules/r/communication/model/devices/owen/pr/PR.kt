@@ -139,6 +139,13 @@ class PR(
 
     override fun getRegisterById(idRegister: String) = model.getRegisterById(idRegister)
 
+    fun setUOnTM1(voltage: Float) {
+        writeRegister(getRegisterById(PRModel.AO_01), voltage)
+    }
+    fun setUOnTM2(voltage: Float) {
+        writeRegister(getRegisterById(PRModel.AO_02), voltage)
+    }
+
     fun onIkasKM61() {
         onOutput01To16(1)
     }
