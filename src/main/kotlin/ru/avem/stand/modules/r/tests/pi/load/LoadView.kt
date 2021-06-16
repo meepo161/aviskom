@@ -2,6 +2,7 @@ package ru.avem.stand.modules.r.tests.pi.load
 
 import javafx.event.EventTarget
 import javafx.geometry.Pos
+import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
@@ -33,12 +34,14 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             useMaxWidth = true
             isWrapText = true
         }
-        hbox(spacing = 16) {
+        vbox(spacing = 16) {
             tableview(observableList(test.testModel.measuredData)) {
                 minHeight = 64.0
                 maxHeight = 64.0
-                minWidth = 500.0
-                columnResizePolicy = SmartResize.POLICY
+                minWidth = 900.0
+                maxWidth = 900.0
+
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
                 column("U AB, В", LoadData::UAB.getter)
                 column("U BC, В", LoadData::UBC.getter)
@@ -53,8 +56,10 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             tableview(observableList(test.testModel.specifiedData)) {
                 minHeight = 64.0
                 maxHeight = 64.0
-                minWidth = 500.0
-                columnResizePolicy = SmartResize.POLICY
+                minWidth = 900.0
+                maxWidth = 900.0
+
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
                 column("U, В", LoadData::U.getter)
                 column("I, А", LoadData::I.getter)
@@ -65,24 +70,29 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
         tableview(observableList(test.testModel.measuredData)) {
             minHeight = 64.0
             maxHeight = 64.0
-            minWidth = 500.0
-            maxWidth = 785.0
-            columnResizePolicy = SmartResize.POLICY
+            minWidth = 900.0
+            maxWidth = 900.0
+
+            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
             mouseTransparentProperty().set(true)
 //            alignment = Pos.CENTER_LEFT // TODO
             column("Uср., В", LoadData::U.getter)
             column("Iср., А", LoadData::I.getter)
-            column("Результат", LoadData::result.getter).also {
-                it.minWidth = 80.0
-            }
+            column("PV23, В", LoadData::UA.getter)
+            column("PV25, В", LoadData::UB.getter)
+            column("PV24, А", LoadData::I2A.getter)
+            column("PV27, А", LoadData::I2B.getter)
+            column("Результат", LoadData::result.getter)
         }
         tableview(observableList(test.testModel.measuredData)) {
             minHeight = 64.0
             maxHeight = 64.0
             minWidth = 500.0
-            columnResizePolicy = SmartResize.POLICY
+
+            columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
             mouseTransparentProperty().set(true)
-            column("t, °C", LoadData::T.getter)
+            column("tAmb, °C", LoadData::tempAmb.getter)
+            column("tempTI, °C", LoadData::tempTI.getter)
             column("M, Н⋅м", LoadData::torque.getter)
             column("rpm, об/мин", LoadData::RPM.getter)
             column("КПД, о.е.", LoadData::efficiency.getter)

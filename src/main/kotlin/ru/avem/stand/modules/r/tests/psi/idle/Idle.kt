@@ -6,6 +6,8 @@ import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
 import ru.avem.stand.modules.r.communication.model.devices.avem.avem3.AVEM3Model
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.Danfoss
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.FREQ_PERCENT
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.MAX_VOLTAGE
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202Model
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
@@ -15,6 +17,7 @@ import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.runLater
 import java.lang.Thread.sleep
 import kotlin.collections.set
+import kotlin.concurrent.thread
 import kotlin.math.abs
 
 class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
@@ -104,7 +107,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV24) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIA = value.toDouble()
+                    testModel.measuredIA = value.toDouble() * COEF_SHUNT_PV24
                     testModel.measuredData.IA.value = testModel.measuredIA.autoformat()
                 }
             }
@@ -114,7 +117,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV27) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIB = value.toDouble()
+                    testModel.measuredIB = value.toDouble()* COEF_SHUNT_PV27_PV28
                     testModel.measuredData.IB.value = testModel.measuredIB.autoformat()
                 }
             }
@@ -136,27 +139,26 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
     override fun logic() {
         if (isRunning) {
             turnOnCircuit()
-            turnOnTM1()
-            sleep(20000)
-            turnOffTM1()
+//            sleep(20000)
+//            turnOffTM1()
         }
-//        if (isRunning) {
-//            waitUntilFIToLoad()
-//            startFI()
-//            waitUntilFIToRun()
-//
-//        }
-//        if (isRunning) {
-//            waiting()
-//        }
-        storeTestValues()
         if (isRunning) {
-            stopFI(CM.device(UZ91))
+            waitUntilFIToLoad()
+
+            turnOnTM1()
+            startFI()
+            waitUntilFIToRun()
         }
+        if (isRunning) {
+            waiting()
+        }
+        storeTestValues()
+        stopFI(CM.device(UZ91))
+        turnOffTM1()
     }
 
     private fun turnOnTM1() {
-        CM.device<PR>(DD2).setUOnTM1(0.2f)
+        CM.device<PR>(DD2).setUOnTM1(0.25f)
     }
 
     private fun turnOffTM1() {
@@ -169,15 +171,6 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         sleep(200)
     }
 
-    private fun startFI() {
-        appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
-        CM.device<Danfoss>(UZ91).setObjectParams(
-            voltage = 100,
-            percentF = 100,
-        )
-        CM.device<Danfoss>(UZ91).startObject()
-    }
-
     private fun waiting() {
         appendMessageToLog(LogTag.INFO, "Ожидание...")
         sleepWhileRun(testModel.specifiedIdleTestTime.toInt(), progressProperty = testModel.progressProperty)
@@ -186,6 +179,8 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
     private fun storeTestValues() {
         testModel.storedData.U.value =
             testModel.measuredData.U.value // TODO проверить здесь и в остальных местах всё ли я сохраняю
+        testModel.storedData.UA.value = testModel.measuredData.UA.value
+        testModel.storedData.UB.value = testModel.measuredData.UB.value
         testModel.storedData.UAB.value = testModel.measuredData.UAB.value
         testModel.storedData.UBC.value = testModel.measuredData.UBC.value
         testModel.storedData.UCA.value = testModel.measuredData.UCA.value

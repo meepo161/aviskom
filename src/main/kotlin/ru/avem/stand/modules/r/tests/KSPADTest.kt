@@ -9,18 +9,9 @@ import ru.avem.stand.modules.r.communication.model.CM.DeviceID.DD2
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PRModel
-import ru.avem.stand.modules.r.storage.database.entities.TestItems.name
 import tornadofx.controlsfx.warningNotification
 import tornadofx.runLater
-import java.awt.Rectangle
-import java.awt.Robot
-import java.awt.Toolkit
-import java.awt.image.BufferedImage
-import java.io.File
 import java.lang.Thread.sleep
-import java.text.SimpleDateFormat
-import java.util.*
-import javax.imageio.ImageIO
 import kotlin.experimental.and
 import kotlin.reflect.KClass
 
@@ -36,7 +27,11 @@ abstract class KSPADTest(
     val CURRENT_STAGE_PM130 = 200 / 5
     val CURRENT_STAGE_PM130_VIU = 1 / 5
     val COEF_TR_AVEM = 10000 / 100
-    val COEF_SHUNT = 1000 / 150
+    val COEF_SHUNT_PV27_PV28 = 1000 / 150
+
+
+    val COEF_SHUNT_PV24 = 1000 / 1
+
 
     override fun initVars() {
         super.initVars()
@@ -139,10 +134,14 @@ abstract class KSPADTest(
         sleepWhileRun(8)
     }
 
-    protected fun startFI(fi: Danfoss, accTime: Int = 10) {
-        appendMessageToLog(LogTag.INFO, "Запуск ЧП...")
-        fi.startObject()
-        waitUntilFIToRun(accTime)
+    fun startFI() {
+        appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
+        CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
+            voltage = 200 / 1.4,
+            percentF = 100
+        )
+        sleep(1000)
+        CM.device<Danfoss>(CM.DeviceID.UZ91).startObject()
     }
 
     protected fun waitUntilFIToRun(accTime: Int = 10) {
@@ -150,15 +149,15 @@ abstract class KSPADTest(
         sleepWhileRun(accTime)
     }
 
-    protected fun stopFI(fi: Danfoss, stopTime: Int = 7) {
+    protected fun stopFI(fi: Danfoss, stopTime: Int = 10) {
         appendMessageToLog(LogTag.INFO, "Останов...")
         fi.stopObject()
-        waitUntilFIToStop(stopTime)
+        sleep(1000.toLong() * stopTime)
     }
 
-    private fun waitUntilFIToStop(stopTime: Int = 7) {
+    private fun waitUntilFIToStop(stopTime: Int = 10) {
         appendMessageToLog(LogTag.INFO, "Ожидание останова...")
-        sleepWhileRun(stopTime)
+        sleep(stopTime * 1000.toLong())
     }
 
     override fun finalizeDevices() {

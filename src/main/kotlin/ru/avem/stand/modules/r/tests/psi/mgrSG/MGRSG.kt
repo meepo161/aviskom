@@ -18,26 +18,25 @@ import java.lang.Thread.sleep
 class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
     override val name = "СГ. Измерение сопротивления изоляции обмоток и встроенных термодатчиков относительно корпуса и " +
             "между обмотками в практически холодном состоянии"
-
-    override val testModel = MGRModel
+    override val testModel = MGRModelSG
 
     override fun initVars() {
         super.initVars()
 
-        MGRModel.specifiedU = PreFillModel.testTypeProp.value.fields["U"]?.value.toDoubleOrDefault(0.0)
-        MGRModel.specifiedI = PreFillModel.testTypeProp.value.fields["I"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU = PreFillModel.testTypeProp.value.fields["U"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI = PreFillModel.testTypeProp.value.fields["I"]?.value.toDoubleOrDefault(0.0)
 
-        MGRModel.specifiedCos = PreFillModel.testTypeProp.value.fields["COS"]?.value.toDoubleOrDefault(0.0)
-        MGRModel.specifiedEfficiency =
+        testModel.specifiedCos = PreFillModel.testTypeProp.value.fields["COS"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedEfficiency =
             PreFillModel.testTypeProp.value.fields["EFFICIENCY"]?.value.toDoubleOrDefault(0.0)
-        MGRModel.specifiedP = PreFillModel.testTypeProp.value.fields["P"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedP = PreFillModel.testTypeProp.value.fields["P"]?.value.toDoubleOrDefault(0.0)
 
-        MGRModel.specifiedRPM = PreFillModel.testTypeProp.value.fields["RPM"]?.value.toDoubleOrDefault(0.0)
-        MGRModel.specifiedF = PreFillModel.testTypeProp.value.fields["F"]?.value.toDoubleOrDefault(0.0)
-        MGRModel.specifiedScheme = PreFillModel.testTypeProp.value.fields["SCHEME"]?.value ?: "λ"
+        testModel.specifiedRPM = PreFillModel.testTypeProp.value.fields["RPM"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedF = PreFillModel.testTypeProp.value.fields["F"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedScheme = PreFillModel.testTypeProp.value.fields["SCHEME"]?.value ?: "λ"
 
-        MGRModel.specifiedUMGR = PreFillModel.testTypeProp.value.fields["U_MGR"]?.value.toDoubleOrDefault(0.0)
-        MGRModel.specifiedRMGR = PreFillModel.testTypeProp.value.fields["R_MGR_HV"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedUMGR = PreFillModel.testTypeProp.value.fields["U_MGR"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedRMGR = PreFillModel.testTypeProp.value.fields["R_MGR_HV"]?.value.toDoubleOrDefault(0.0)
     }
 
     override fun initView() {
@@ -46,13 +45,13 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
         runLater {
             testModel.progressProperty.value = -1.0
 
-            MGRModel.measuredData.U.value = ""
-            MGRModel.measuredData.R15.value = ""
-            MGRModel.measuredData.R60.value = ""
-            MGRModel.measuredData.K_ABS.value = ""
-            MGRModel.measuredData.tempAmb.value = ""
-            MGRModel.measuredData.tempTI.value = ""
-            MGRModel.measuredData.result.value = ""
+            testModel.measuredData.U.value = ""
+            testModel.measuredData.R15.value = ""
+            testModel.measuredData.R60.value = ""
+            testModel.measuredData.K_ABS.value = ""
+            testModel.measuredData.tempAmb.value = ""
+            testModel.measuredData.tempTI.value = ""
+            testModel.measuredData.result.value = ""
         }
     }
 
@@ -64,11 +63,11 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
             with(CM.device<TRM202>(PS81)) {
                 with(getRegisterById(TRM202Model.T_1)) {
                     readRegister(this)
-                    MGRModel.measuredData.tempAmb.value = value.toDouble().autoformat()
+                    testModel.measuredData.tempAmb.value = value.toDouble().autoformat()
                 }
                 with(getRegisterById(TRM202Model.T_2)) {
                     readRegister(this)
-                    MGRModel.measuredData.tempTI.value = value.toDouble().autoformat()
+                    testModel.measuredData.tempTI.value = value.toDouble().autoformat()
                 }
             }
         }
@@ -102,7 +101,7 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
 
         with(CM.device<CS02021>(PR65)) {
             if (isResponding) {
-                setVoltage(MGRModel.specifiedUMGR.toInt())
+                setVoltage(testModel.specifiedUMGR.toInt())
                 sleepWhileRun(90, progressProperty = testModel.progressProperty)
                 val measuredR60 = readData()[0].toDouble()
                 val measuredUr = readData()[1].toDouble()
@@ -112,16 +111,16 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
                 val measuredR60Mohm = (measuredR60 / 1_000_000)
                 val measuredR15Mohm = (measuredR15 / 1_000_000)
                 if (measuredR60Mohm > 200_000) {
-                    MGRModel.measuredData.U.value = measuredUr.autoformat()
-                    MGRModel.measuredData.R15.value = "обрыв"
-                    MGRModel.measuredData.R60.value = "обрыв"
-                    MGRModel.measuredData.K_ABS.value = "обрыв"
+                    testModel.measuredData.U.value = measuredUr.autoformat()
+                    testModel.measuredData.R15.value = "обрыв"
+                    testModel.measuredData.R60.value = "обрыв"
+                    testModel.measuredData.K_ABS.value = "обрыв"
                     cause = "обрыв"
                 } else {
-                    MGRModel.measuredData.U.value = measuredUr.autoformat()
-                    MGRModel.measuredData.R15.value = measuredR15Mohm.autoformat()
-                    MGRModel.measuredData.R60.value = measuredR60Mohm.autoformat()
-                    MGRModel.measuredData.K_ABS.value = measuredAbs.autoformat()
+                    testModel.measuredData.U.value = measuredUr.autoformat()
+                    testModel.measuredData.R15.value = measuredR15Mohm.autoformat()
+                    testModel.measuredData.R60.value = measuredR60Mohm.autoformat()
+                    testModel.measuredData.K_ABS.value = measuredAbs.autoformat()
                     CM.device<PR>(DD2).offPEQV3()
                     CM.device<PR>(DD2).offMGRQV2()
                     //TODO проверить заземление
@@ -141,19 +140,19 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
 
         when {
             !isSuccess -> {
-                MGRModel.measuredData.result.value = "Прервано"
+                testModel.measuredData.result.value = "Прервано"
                 appendMessageToLog(LogTag.ERROR, "Испытание прервано по причине: $cause")
             }
 //            testModel.measuredData.R60.value.toDouble() < testModel.specifiedData.R60.value.toDouble() -> { TODO
 //                testModel.measuredData.result.value = "Не соответствует"
 //                appendMessageToLog(LogTag.ERROR, "Измеренное сопротивление < ${testModel.specifiedData.R60.value} МОм")
 //            }
-            MGRModel.measuredData.K_ABS.value.toDouble() < 1.3 -> {
-                MGRModel.measuredData.result.value = "Не соответствует"
+            testModel.measuredData.K_ABS.value.toDouble() < 1.3 -> {
+                testModel.measuredData.result.value = "Не соответствует"
                 appendMessageToLog(LogTag.ERROR, "Измеренный kABS < 1.3")
             }
             else -> {
-                MGRModel.measuredData.result.value = "Соответствует"
+                testModel.measuredData.result.value = "Соответствует"
                 appendMessageToLog(LogTag.INFO, "Испытание завершено успешно")
             }
         }
@@ -169,24 +168,24 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
     override fun saveProtocol() {
         reportFields["TEST_NAME_MGR"] = name
 
-        reportFields["POWER"] = MGRModel.specifiedP.toString()
-        reportFields["VOLTAGE_LIN"] = MGRModel.specifiedU.toString()
-        reportFields["COS"] = MGRModel.specifiedCos.toString()
-        reportFields["EFFICIENCY"] = MGRModel.specifiedEfficiency.toString()
-        reportFields["AMPERAGE_PHASE"] = MGRModel.specifiedI.toString()
-        reportFields["RPM"] = MGRModel.specifiedRPM.toString()
-        reportFields["FREQ"] = MGRModel.specifiedF.toString()
-        reportFields["SCHEME"] = MGRModel.specifiedScheme
+        reportFields["POWER"] = testModel.specifiedP.toString()
+        reportFields["VOLTAGE_LIN"] = testModel.specifiedU.toString()
+        reportFields["COS"] = testModel.specifiedCos.toString()
+        reportFields["EFFICIENCY"] = testModel.specifiedEfficiency.toString()
+        reportFields["AMPERAGE_PHASE"] = testModel.specifiedI.toString()
+        reportFields["RPM"] = testModel.specifiedRPM.toString()
+        reportFields["FREQ"] = testModel.specifiedF.toString()
+        reportFields["SCHEME"] = testModel.specifiedScheme
 
-        reportFields["U_SPEC_MGR"] = MGRModel.specifiedData.U.value
-        reportFields["R_SPEC_MGR"] = MGRModel.specifiedData.R60.value
-        reportFields["U_MEAS_MGR"] = MGRModel.measuredData.U.value
-        reportFields["R15_MEAS_MGR"] = MGRModel.measuredData.R15.value
-        reportFields["R60_MEAS_MGR"] = MGRModel.measuredData.R60.value
-        reportFields["K_ABS_MEAS_MGR"] = MGRModel.measuredData.K_ABS.value
-        reportFields["TEMP_AMB_MGR"] = MGRModel.measuredData.tempAmb.value
-        reportFields["TEMP_TI_MGR"] = MGRModel.measuredData.tempTI.value
-        reportFields["RESULT_MGR"] = MGRModel.measuredData.result.value
+        reportFields["U_SPEC_MGR"] = testModel.specifiedData.U.value
+        reportFields["R_SPEC_MGR"] = testModel.specifiedData.R60.value
+        reportFields["U_MEAS_MGR"] = testModel.measuredData.U.value
+        reportFields["R15_MEAS_MGR"] = testModel.measuredData.R15.value
+        reportFields["R60_MEAS_MGR"] = testModel.measuredData.R60.value
+        reportFields["K_ABS_MEAS_MGR"] = testModel.measuredData.K_ABS.value
+        reportFields["TEMP_AMB_MGR"] = testModel.measuredData.tempAmb.value
+        reportFields["TEMP_TI_MGR"] = testModel.measuredData.tempTI.value
+        reportFields["RESULT_MGR"] = testModel.measuredData.result.value
 
         super.saveProtocol()
     }

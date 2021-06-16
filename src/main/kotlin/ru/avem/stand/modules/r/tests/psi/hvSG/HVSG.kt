@@ -67,7 +67,7 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hv.xlsx") {
             with(PV23) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredData.U.value = (value.toDouble() * COEF_SHUNT).autoformat()
+                    testModel.measuredData.U.value = (value.toDouble()).autoformat()
                     testModel.measuredU = testModel.measuredData.U.value.toDoubleOrDefault(0.0)
                 }
             }

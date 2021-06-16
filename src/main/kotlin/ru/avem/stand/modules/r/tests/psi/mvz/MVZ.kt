@@ -285,7 +285,7 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
         sleep(200)
     }
 
-    private fun startFI() {
+    fun startFi() {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
         testModel.lastFIP1U = (testModel.specifiedU / ((220.0 + 80.0) * sqrt(3.0) / 380.0)) * 0.95 //%
         CM.device<Danfoss>(UZ91).setObjectParams(

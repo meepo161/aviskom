@@ -37,16 +37,16 @@ val head = head {
 //            IKAS(),
             IKASSG(),
             Idle(),
-            MVZ(),
-            KZ(),
+//            MVZ(),
+//            KZ(),
             Load(),
-            OverM(),
-            OverI(),
-            VaryUF(),
-            IncN(),
-            StartMI(),
-            MaxM(),
-            MinM()
+//            OverM(),
+//            OverI(),
+//            VaryUF(),
+//            IncN(),
+//            StartMI(),
+//            MaxM(),
+//            MinM()
         )
     }
     views {

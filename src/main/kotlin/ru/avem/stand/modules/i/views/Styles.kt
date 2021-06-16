@@ -146,6 +146,10 @@ class Styles : Stylesheet() {
 
         paneBorders {
             borderColor += box(c("#777"))
+            fontSize = 25.px
+            tableColumn {
+                fontSize = 20.px
+            }
         }
 
         paneBoldBorders {

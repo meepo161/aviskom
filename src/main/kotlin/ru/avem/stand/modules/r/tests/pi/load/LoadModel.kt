@@ -23,10 +23,22 @@ object LoadModel : TestModel() {
     var specifiedLoadTestTime = 0.0
 
     @Volatile
+    var measuredUA = 0.0
+
+    @Volatile
+    var measuredUB = 0.0
+
+    @Volatile
     var measuredIA = 0.0
 
     @Volatile
     var measuredIB = 0.0
+
+    @Volatile
+    var measuredI2A = 0.0
+
+    @Volatile
+    var measuredI2B = 0.0
 
     @Volatile
     var measuredIC = 0.0

@@ -7,7 +7,6 @@ import ru.avem.kserialpooler.communication.utils.TypeByteOrder
 import ru.avem.kserialpooler.communication.utils.allocateOrderedByteBuffer
 import ru.avem.stand.modules.r.communication.model.DeviceController
 import ru.avem.stand.modules.r.communication.model.DeviceRegister
-import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.CONTROL_REGISTER
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.FREQ
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.FREQ_PERCENT
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.MAX_VOLTAGE
@@ -122,19 +121,26 @@ class Danfoss(
     }
 
     fun startObject() {
-        protocolAdapter.forceSingleCoil(id,getRegisterById(CONTROL_REGISTER).value.toShort(),true)
+        try {
+            protocolAdapter.forceSingleCoil(id, 0x0006, true)
+        } catch (e: Exception) {
+        }
     }
 
     fun stopObject() {
-        protocolAdapter.forceSingleCoil(id,getRegisterById(CONTROL_REGISTER).value.toShort(),false)
+        try {
+            protocolAdapter.forceSingleCoil(id, 0x0006, false)
+        } catch (e: Exception) {
+        }
     }
 
     fun setObjectParams(voltage: Number, percentF: Number) {
         try {
+//            protocolAdapter.presetSingleRegister(0x5B, 0x04C3, ModbusRegister(voltage.toShort()))
+//            protocolAdapter.presetSingleRegister(0x5B, 3099, ModbusRegister((percentF.toShort() * 100).toShort()))
             writeRegister(getRegisterById(MAX_VOLTAGE), (voltage).toShort())
-            writeRegister(getRegisterById(FREQ_PERCENT), (percentF.toInt()*100).toShort())
+            writeRegister(getRegisterById(FREQ_PERCENT), (percentF.toInt() * 100).toShort())
         } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

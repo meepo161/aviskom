@@ -8,7 +8,6 @@ class DanfossModel : IDeviceModel {
         const val MAX_VOLTAGE = "MAX_VOLTAGE"
         const val FREQ = "FREQ"
         const val FREQ_PERCENT = "FREQ_PERCENT"
-        const val CONTROL_REGISTER = "FREQ_PERCENT"
 
         const val NORMALLY_MASK = "NORMALLY_MASK" // 0 - NO, 1 - NC
         const val CLOSURE_MASK = "CLOSURE_MASK"
@@ -17,7 +16,7 @@ class DanfossModel : IDeviceModel {
     override val registers: Map<String, DeviceRegister> = mapOf(
         MAX_VOLTAGE to DeviceRegister(1219, DeviceRegister.RegisterValueType.SHORT),
         FREQ to DeviceRegister(1229, DeviceRegister.RegisterValueType.SHORT),
-        FREQ_PERCENT to DeviceRegister(0x0006, DeviceRegister.RegisterValueType.SHORT),
+        FREQ_PERCENT to DeviceRegister(3099, DeviceRegister.RegisterValueType.SHORT),
 
         NORMALLY_MASK to DeviceRegister(0x0409, DeviceRegister.RegisterValueType.SHORT),
         CLOSURE_MASK to DeviceRegister(0x041A, DeviceRegister.RegisterValueType.SHORT)

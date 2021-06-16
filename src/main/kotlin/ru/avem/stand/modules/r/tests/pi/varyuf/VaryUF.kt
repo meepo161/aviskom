@@ -166,7 +166,7 @@ class VaryUF : KSPADTest(view = VaryUFView::class, reportTemplate = "varyuf.xlsx
         sleep(200)
     }
 
-    private fun startFI() {
+    fun startFi() {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
 
         CM.device<Danfoss>(UZ91).setObjectParams(

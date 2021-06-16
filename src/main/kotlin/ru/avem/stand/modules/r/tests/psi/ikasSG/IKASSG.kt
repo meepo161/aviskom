@@ -120,6 +120,7 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
             }
             testModel.measuredData.R1.value =
                 if (testModel.measuredR != 1E9) testModel.measuredR.autoformat() else "Обрыв"
+            sleepWhileRun(2)
         }
 
         if (isRunning) {
@@ -132,6 +133,7 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
             }
             testModel.measuredData.R2.value =
                 if (testModel.measuredR != 1E9) testModel.measuredR.autoformat() else "Обрыв"
+            sleepWhileRun(2)
         }
 
         if (isRunning) {
@@ -144,6 +146,7 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
             }
             testModel.measuredData.R3.value =
                 if (testModel.measuredR != 1E9) testModel.measuredR.autoformat() else "Обрыв"
+            sleepWhileRun(2)
         }
     }
 

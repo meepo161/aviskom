@@ -191,7 +191,7 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
             voltage = 100,
             percentF = 100,
         )
-        startFI(CM.device(CM.DeviceID.UZ91), 5) // TODO остальные checkDir
+//        startFI(CM.device(CM.DeviceID.UZ91), 5) // TODO остальные checkDir
         testModel.isTIDirectionRight = testModel.measuredData.torque.value.toDouble() < 0.0
         stopFI(CM.device(CM.DeviceID.UZ91))
 
@@ -282,7 +282,7 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
             voltage = 100,
             percentF = 100,
         )
-        startFI(CM.device(CM.DeviceID.UZ91))
+//        startFI(CM.device(CM.DeviceID.UZ91))
     }
 
     private fun waiting() {

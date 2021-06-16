@@ -86,7 +86,6 @@ class MGRViewSG(title: String = "МГР", showOnStart: Boolean = true) : TestVie
                 mouseTransparentProperty().set(true)
 
                 alignment = Pos.BOTTOM_RIGHT
-
                 column("Результат", MGRDataSG::result.getter)
             }
         }

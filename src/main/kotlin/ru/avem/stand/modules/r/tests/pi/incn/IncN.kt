@@ -150,14 +150,6 @@ class IncN : KSPADTest(view = IncNView::class, reportTemplate = "incn.xlsx") {
         sleep(200)
     }
 
-    private fun startFI() {
-        appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
-        CM.device<Danfoss>(UZ91).setObjectParams(
-            voltage = 100,
-            percentF = 100,
-        )
-        CM.device<Danfoss>(UZ91).startObject()
-    }
 
     private fun selectAmperageStage() {
         appendMessageToLog(LogTag.INFO, "Подбор токовой ступени...")
