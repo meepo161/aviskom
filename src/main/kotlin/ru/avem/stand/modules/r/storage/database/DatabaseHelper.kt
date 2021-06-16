@@ -27,38 +27,10 @@ fun validateDB() {
 
         if (TestItem.all().count() == 0) {
             TestItem.new {
-                name = "АД 5АИ (30 кВт)"
+                name = "Объект испытания"
                 level = 1
             }.also { ti ->
                 createAsyncEngineTemplateBig().forEach {
-                    TestItemField.new {
-                        testItem = ti
-
-                        key = it.key
-                        title = it.title
-
-                        typeEnterRaw = it.typeEnterRaw
-                        typeFormatRaw = it.typeFormatRaw
-
-                        minValue = it.minValue
-                        value = it.value
-                        maxValue = it.maxValue
-                        unit = it.unit
-
-                        permittedValuesString = it.permittedValuesString
-                        permittedTitlesString = it.permittedTitlesString
-
-                        blockName = it.blockName
-
-                        isNotVoid = it.isNotVoid
-                    }
-                }
-            }
-            TestItem.new {
-                name = "АД 5АИ 132S4 У2 (7.6 кВт)"
-                level = 1
-            }.also { ti ->
-                createAsyncEngineTemplateSmall().forEach {
                     TestItemField.new {
                         testItem = ti
 
@@ -86,389 +58,27 @@ fun validateDB() {
     }
 }
 
-private fun createAsyncEngineTemplateSmall() = listOf(
-    TestItemFieldScheme(
-        key = "SCHEME",
-        title = "Схема соединения обмоток",
-        typeEnterRaw = TypeEnterField.RADIO.toString(),
-        permittedValuesString = "△;λ;",
-        permittedTitlesString = "Треугольник;Звезда;",
-        value = "λ",
-        blockName = "Номинальные параметры"
-    ),
-
-    TestItemFieldScheme(
-        key = "U",
-        title = "Напряжение",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "380",
-        maxValue = "400",
-        unit = "В",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "I",
-        title = "Ток",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "15.6",
-        maxValue = "130",
-        unit = "А",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "RPM",
-        title = "Частота вращения",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "1455",
-        maxValue = "3000",
-        unit = "об/мин",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "F",
-        title = "Частота питающей сети",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "50",
-        value = "50",
-        maxValue = "50",
-        unit = "Гц",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "COS",
-        title = "cos φ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0.1",
-        value = "0.83",
-        maxValue = "1",
-        unit = "о.е.",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "EFFICIENCY",
-        title = "КПД",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "88",
-        maxValue = "99",
-        unit = "%",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "P",
-        title = "Мощность",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1",
-        value = "7.6",
-        maxValue = "55",
-        unit = "кВт",
-        blockName = "Номинальные параметры"
-    ),
-
-    TestItemFieldScheme(
-        key = "IDLE_TIME",
-        title = "Время испытания ХХ",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "60",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "U_MGR",
-        title = "Напряжение испытания мегаомметром",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "100",
-        value = "1000",
-        maxValue = "2500",
-        unit = "В",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "U_HV",
-        title = "Напряжение ВИУ",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "1000",
-        maxValue = "10000",
-        unit = "В",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "I_HV",
-        title = "Допустимый ток утечки ВИУ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "0.5",
-        maxValue = "1",
-        unit = "А",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "T_HV",
-        title = "Время испытания ВИУ",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "60",
-        maxValue = "3600",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "R_IKAS",
-        title = "Сопротивление фазы статора при 20 °С",
-        typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
-        minValue = "0",
-        value = "1.2",
-        unit = "Ом",
-        blockName = "Ожидаемые параметры"
-    ),
-
-    TestItemFieldScheme(
-        key = "R_MGR",
-        title = "Сопротивление изоляции",
-        typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
-        minValue = "0",
-        value = "50",
-        unit = "МОм",
-        blockName = "Ожидаемые параметры"
-    ),
-
-    TestItemFieldScheme(
-        key = "U_KZ",
-        title = "Напряжение КЗ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "100",
-        maxValue = "200",
-        unit = "В",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "MVZ_TIME",
-        title = "Время испытания МВЗ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "15",
-        maxValue = "60",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "MVZ_TOLERANCE",
-        title = "Допустимое повышение тока при МВЗ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "2",
-        maxValue = "5",
-        unit = "%",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "LOAD_TIME",
-        title = "Время испытания НАГР",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "60",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "TORQUE",
-        title = "Момент силы вращения",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "48",
-        maxValue = "1000",
-        unit = "Н⋅м",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_M_RATIO",
-        title = "Мперег/Мн",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1.01",
-        value = "1.6",
-        maxValue = "1.6",
-        unit = "о.е.",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_M_TIME",
-        title = "Время Мперег/Мн",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "10",
-        maxValue = "15",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "OVER_I_RATIO",
-        title = "Iперег/Iн",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1.01",
-        value = "1.2",
-        maxValue = "1.5",
-        unit = "о.е.",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_I_TIME",
-        title = "Время Iперег/Iн",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "10",
-        maxValue = "120",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-)
-
 private fun createAsyncEngineTemplateBig() = listOf(
     TestItemFieldScheme(
-        key = "SCHEME",
-        title = "Схема соединения обмоток",
-        typeEnterRaw = TypeEnterField.RADIO.toString(),
-        permittedValuesString = "△;λ;",
-        permittedTitlesString = "Треугольник;Звезда;",
-        value = "λ",
-        blockName = "Номинальные параметры"
-    ),
-
-    TestItemFieldScheme(
         key = "U",
-        title = "Напряжение",
+        title = "Напряжение линейное",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
-        value = "380",
-        maxValue = "400",
+        value = "3000",
+        maxValue = "3000",
         unit = "В",
-        blockName = "Номинальные параметры"
+        blockName = "Номинальные параметры МПТ"
     ),
     TestItemFieldScheme(
         key = "I",
-        title = "Ток",
+        title = "Ток якоря",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
-        value = "63",
-        maxValue = "130",
+        value = "35.5",
+        maxValue = "40",
         unit = "А",
-        blockName = "Номинальные параметры"
+        blockName = "Номинальные параметры МПТ"
     ),
-    TestItemFieldScheme(
-        key = "RPM",
-        title = "Частота вращения",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "735",
-        maxValue = "3000",
-        unit = "об/мин",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "F",
-        title = "Частота питающей сети",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "50",
-        value = "50",
-        maxValue = "50",
-        unit = "Гц",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "COS",
-        title = "cos φ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0.1",
-        value = "0.8",
-        maxValue = "1",
-        unit = "о.е.",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "EFFICIENCY",
-        title = "КПД",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "90",
-        maxValue = "99",
-        unit = "%",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "P",
-        title = "Мощность",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1",
-        value = "30",
-        maxValue = "55",
-        unit = "кВт",
-        blockName = "Номинальные параметры"
-    ),
-
-    TestItemFieldScheme(
-        key = "IDLE_TIME",
-        title = "Время испытания ХХ",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "60",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "U_MGR",
-        title = "Напряжение испытания мегаомметром",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "100",
-        value = "1000",
-        maxValue = "2500",
-        unit = "В",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "U_HV",
-        title = "Напряжение ВИУ",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "1000",
-        maxValue = "10000",
-        unit = "В",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "I_HV",
-        title = "Допустимый ток утечки ВИУ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "0.5",
-        maxValue = "1",
-        unit = "А",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "T_HV",
-        title = "Время испытания ВИУ",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "60",
-        maxValue = "3600",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
     TestItemFieldScheme(
         key = "R_IKAS",
         title = "Сопротивление фазы статора при 20 °С",
@@ -476,9 +86,8 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "0.2",
         unit = "Ом",
-        blockName = "Ожидаемые параметры"
+        blockName = "Ожидаемые параметры МПТ"
     ),
-
     TestItemFieldScheme(
         key = "R_MGR",
         title = "Сопротивление изоляции",
@@ -486,41 +95,135 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "50",
         unit = "МОм",
-        blockName = "Ожидаемые параметры"
+        blockName = "Ожидаемые параметры МПТ"
     ),
-
     TestItemFieldScheme(
-        key = "U_KZ",
-        title = "Напряжение КЗ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
+        key = "U_HV",
+        title = "Напряжение ВИУ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
-        value = "100",
-        maxValue = "200",
+        value = "1000",
+        maxValue = "10000",
         unit = "В",
-        blockName = "Параметры испытания"
+        blockName = "Параметры испытания МПТ"
     ),
-
     TestItemFieldScheme(
-        key = "MVZ_TIME",
-        title = "Время испытания МВЗ",
+        key = "U_MGR",
+        title = "Напряжение испытания мегаомметром",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "100",
+        value = "1000",
+        maxValue = "2500",
+        unit = "В",
+        blockName = "Параметры испытания МПТ"
+    ),
+    TestItemFieldScheme(
+        key = "I_HV",
+        title = "Допустимый ток утечки ВИУ",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
-        value = "15",
-        maxValue = "60",
+        value = "0.5",
+        maxValue = "1",
+        unit = "А",
+        blockName = "Параметры испытания МПТ"
+    ),
+    TestItemFieldScheme(
+        key = "T_HV",
+        title = "Время испытания ВИУ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "60",
+        maxValue = "3600",
         unit = "с",
-        blockName = "Параметры испытания"
+        blockName = "Параметры испытания МПТ"
     ),
     TestItemFieldScheme(
-        key = "MVZ_TOLERANCE",
-        title = "Допустимое повышение тока при МВЗ",
+        key = "U_SG",
+        title = "Напряжение линейное",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "230",
+        maxValue = "230",
+        unit = "В",
+        blockName = "Номинальные параметры СГ"
+    ),
+    TestItemFieldScheme(
+        key = "U_OV_SG",
+        title = "Напряжение линейное ОВ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "230",
+        maxValue = "230",
+        unit = "В",
+        blockName = "Номинальные параметры СГ"
+    ),
+    TestItemFieldScheme(
+        key = "R_IKAS_SG",
+        title = "Сопротивление фазы статора при 20 °С",
+        typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
+        minValue = "0",
+        value = "0.2",
+        unit = "Ом",
+        blockName = "Ожидаемые параметры СГ"
+    ),
+    TestItemFieldScheme(
+        key = "R_MGR_SG",
+        title = "Сопротивление изоляции",
+        typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
+        minValue = "0",
+        value = "50",
+        unit = "МОм",
+        blockName = "Ожидаемые параметры СГ"
+    ),
+    TestItemFieldScheme(
+        key = "U_HV_SG",
+        title = "Напряжение ВИУ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "1600",
+        maxValue = "1600",
+        unit = "В",
+        blockName = "Параметры испытания СГ"
+    ),
+    TestItemFieldScheme(
+        key = "U_MGR_SG",
+        title = "Напряжение испытания мегаомметром",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "100",
+        value = "1000",
+        maxValue = "2500",
+        unit = "В",
+        blockName = "Параметры испытания СГ"
+    ),
+    TestItemFieldScheme(
+        key = "I_HV_SG",
+        title = "Допустимый ток утечки ВИУ",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
-        value = "2",
-        maxValue = "5",
-        unit = "%",
-        blockName = "Параметры испытания"
+        value = "0.5",
+        maxValue = "1",
+        unit = "А",
+        blockName = "Параметры испытания СГ"
     ),
-
+    TestItemFieldScheme(
+        key = "T_HV_SG",
+        title = "Время испытания ВИУ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "60",
+        maxValue = "3600",
+        unit = "с",
+        blockName = "Параметры испытания СГ"
+    ),
+    TestItemFieldScheme(
+        key = "IDLE_TIME",
+        title = "Время испытания ХХ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "60",
+        unit = "с",
+        blockName = "Параметры испытания общие"
+    ),
     TestItemFieldScheme(
         key = "LOAD_TIME",
         title = "Время испытания НАГР",
@@ -528,60 +231,8 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "60",
         unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "TORQUE",
-        title = "Момент силы вращения",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "380",
-        maxValue = "1000",
-        unit = "Н⋅м",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_M_RATIO",
-        title = "Мперег/Мн",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1.01",
-        value = "1.6",
-        maxValue = "1.6",
-        unit = "о.е.",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_M_TIME",
-        title = "Время Мперег/Мн",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "10",
-        maxValue = "15",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "OVER_I_RATIO",
-        title = "Iперег/Iн",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1.01",
-        value = "1.2",
-        maxValue = "1.5",
-        unit = "о.е.",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_I_TIME",
-        title = "Время Iперег/Iн",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "10",
-        maxValue = "120",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
+        blockName = "Параметры испытания общие"
+    )
 )
 
 fun saveProtocol(test: Test) = transaction {
@@ -713,107 +364,43 @@ fun createTestItem(name: String) = transaction {
 
 fun createAsyncEngineScheme() = listOf(
     TestItemFieldScheme(
-        key = "SCHEME",
-        title = "Схема соединения обмоток",
-        typeEnterRaw = TypeEnterField.RADIO.toString(),
-        permittedValuesString = "△;λ;",
-        permittedTitlesString = "Треугольник;Звезда;",
-        value = "λ",
-        blockName = "Номинальные параметры"
-    ),
-
-    TestItemFieldScheme(
         key = "U",
-        title = "Напряжение",
+        title = "Напряжение линейное",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
-        value = "380",
-        maxValue = "400",
+        value = "3000",
+        maxValue = "3000",
         unit = "В",
-        blockName = "Номинальные параметры"
+        blockName = "Номинальные параметры МПТ"
     ),
     TestItemFieldScheme(
         key = "I",
-        title = "Ток",
+        title = "Ток якоря",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
-        value = "",
-        maxValue = "130",
+        value = "35.5",
+        maxValue = "40",
         unit = "А",
-        blockName = "Номинальные параметры"
+        blockName = "Номинальные параметры МПТ"
     ),
     TestItemFieldScheme(
-        key = "RPM",
-        title = "Частота вращения",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
+        key = "R_IKAS",
+        title = "Сопротивление фазы статора при 20 °С",
+        typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
         minValue = "0",
-        value = "1499",
-        maxValue = "3000",
-        unit = "об/мин",
-        blockName = "Номинальные параметры"
+        value = "0.2",
+        unit = "Ом",
+        blockName = "Ожидаемые параметры МПТ"
     ),
     TestItemFieldScheme(
-        key = "F",
-        title = "Частота питающей сети",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "50",
+        key = "R_MGR",
+        title = "Сопротивление изоляции",
+        typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
+        minValue = "0",
         value = "50",
-        maxValue = "50",
-        unit = "Гц",
-        blockName = "Номинальные параметры"
+        unit = "МОм",
+        blockName = "Ожидаемые параметры МПТ"
     ),
-    TestItemFieldScheme(
-        key = "COS",
-        title = "cos φ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0.1",
-        value = "",
-        maxValue = "1",
-        unit = "о.е.",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "EFFICIENCY",
-        title = "КПД",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "",
-        maxValue = "99",
-        unit = "%",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "P",
-        title = "Мощность",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1",
-        value = "",
-        maxValue = "55",
-        unit = "кВт",
-        blockName = "Номинальные параметры"
-    ),
-
-    TestItemFieldScheme(
-        key = "IDLE_TIME",
-        title = "Время испытания ХХ",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "U_MGR",
-        title = "Напряжение испытания мегаомметром",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "100",
-        value = "1000",
-        maxValue = "2500",
-        unit = "В",
-        blockName = "Параметры испытания"
-    ),
-
     TestItemFieldScheme(
         key = "U_HV",
         title = "Напряжение ВИУ",
@@ -822,7 +409,17 @@ fun createAsyncEngineScheme() = listOf(
         value = "1000",
         maxValue = "10000",
         unit = "В",
-        blockName = "Параметры испытания"
+        blockName = "Параметры испытания МПТ"
+    ),
+    TestItemFieldScheme(
+        key = "U_MGR",
+        title = "Напряжение испытания мегаомметром",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "100",
+        value = "1000",
+        maxValue = "2500",
+        unit = "В",
+        blockName = "Параметры испытания МПТ"
     ),
     TestItemFieldScheme(
         key = "I_HV",
@@ -832,7 +429,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "0.5",
         maxValue = "1",
         unit = "А",
-        blockName = "Параметры испытания"
+        blockName = "Параметры испытания МПТ"
     ),
     TestItemFieldScheme(
         key = "T_HV",
@@ -842,61 +439,95 @@ fun createAsyncEngineScheme() = listOf(
         value = "60",
         maxValue = "3600",
         unit = "с",
-        blockName = "Параметры испытания"
+        blockName = "Параметры испытания МПТ"
     ),
-
     TestItemFieldScheme(
-        key = "R_IKAS",
+        key = "U_SG",
+        title = "Напряжение линейное",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "230",
+        maxValue = "230",
+        unit = "В",
+        blockName = "Номинальные параметры СГ"
+    ),
+    TestItemFieldScheme(
+        key = "U_OV_SG",
+        title = "Напряжение линейное ОВ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "230",
+        maxValue = "230",
+        unit = "В",
+        blockName = "Номинальные параметры СГ"
+    ),
+    TestItemFieldScheme(
+        key = "R_IKAS_SG",
         title = "Сопротивление фазы статора при 20 °С",
         typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
         minValue = "0",
-        value = "",
+        value = "0.2",
         unit = "Ом",
-        blockName = "Ожидаемые параметры"
+        blockName = "Ожидаемые параметры СГ"
     ),
-
     TestItemFieldScheme(
-        key = "R_MGR",
+        key = "R_MGR_SG",
         title = "Сопротивление изоляции",
         typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
         minValue = "0",
         value = "50",
         unit = "МОм",
-        blockName = "Ожидаемые параметры"
+        blockName = "Ожидаемые параметры СГ"
     ),
-
     TestItemFieldScheme(
-        key = "U_KZ",
-        title = "Напряжение КЗ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
+        key = "U_HV_SG",
+        title = "Напряжение ВИУ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
-        value = "100",
-        maxValue = "200",
+        value = "1600",
+        maxValue = "1600",
         unit = "В",
-        blockName = "Параметры испытания"
+        blockName = "Параметры испытания СГ"
     ),
-
     TestItemFieldScheme(
-        key = "MVZ_TIME",
-        title = "Время испытания МВЗ",
+        key = "U_MGR_SG",
+        title = "Напряжение испытания мегаомметром",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "100",
+        value = "1000",
+        maxValue = "2500",
+        unit = "В",
+        blockName = "Параметры испытания СГ"
+    ),
+    TestItemFieldScheme(
+        key = "I_HV_SG",
+        title = "Допустимый ток утечки ВИУ",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
-        value = "15",
-        maxValue = "60",
+        value = "0.5",
+        maxValue = "1",
+        unit = "А",
+        blockName = "Параметры испытания СГ"
+    ),
+    TestItemFieldScheme(
+        key = "T_HV_SG",
+        title = "Время испытания ВИУ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "60",
+        maxValue = "3600",
         unit = "с",
-        blockName = "Параметры испытания"
+        blockName = "Параметры испытания СГ"
     ),
     TestItemFieldScheme(
-        key = "MVZ_TOLERANCE",
-        title = "Допустимое повышение тока при МВЗ",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
+        key = "IDLE_TIME",
+        title = "Время испытания ХХ",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
-        value = "2",
-        maxValue = "5",
-        unit = "%",
-        blockName = "Параметры испытания"
+        value = "60",
+        unit = "с",
+        blockName = "Параметры испытания общие"
     ),
-
     TestItemFieldScheme(
         key = "LOAD_TIME",
         title = "Время испытания НАГР",
@@ -904,60 +535,8 @@ fun createAsyncEngineScheme() = listOf(
         minValue = "0",
         value = "60",
         unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "TORQUE",
-        title = "Момент силы вращения",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "0",
-        value = "",
-        maxValue = "1000",
-        unit = "Н⋅м",
-        blockName = "Номинальные параметры"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_M_RATIO",
-        title = "Мперег/Мн",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1.01",
-        value = "",
-        maxValue = "1.6",
-        unit = "о.е.",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_M_TIME",
-        title = "Время Мперег/Мн",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "",
-        maxValue = "15",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
-
-    TestItemFieldScheme(
-        key = "OVER_I_RATIO",
-        title = "Iперег/Iн",
-        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
-        minValue = "1.01",
-        value = "",
-        maxValue = "1.5",
-        unit = "о.е.",
-        blockName = "Параметры испытания"
-    ),
-    TestItemFieldScheme(
-        key = "OVER_I_TIME",
-        title = "Время Iперег/Iн",
-        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
-        minValue = "0",
-        value = "",
-        maxValue = "120",
-        unit = "с",
-        blockName = "Параметры испытания"
-    ),
+        blockName = "Параметры испытания общие"
+    )
 )
 
 fun deleteTestItemByEntity(ti: TestItem) {

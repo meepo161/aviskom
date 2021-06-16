@@ -15,11 +15,11 @@ class StandData {
     val textSize: Int = 14
     val exitConfirmation: Boolean = true
 
-    val customer: String = "ООО «ПРОММАШ ТЕСТ»"
-    val customerPlace: String = "г. Ростов-на-Дону"
+    val customer: String = "«АВИСКОМ»"
+    val customerPlace: String = "г. Омск"
 
-    val aiel: String = "АИЕЛ.441462.109"
-    val serialNumber: String = "210360136"
+    val aiel: String = "АИЕЛ. " //TODO
+    val serialNumber: String = "" //TODO
 
     val manufacture: String = "ООО «Авиаагрегат-Н»"
     val manufacturePlace: String = "г. Новочеркасск"
