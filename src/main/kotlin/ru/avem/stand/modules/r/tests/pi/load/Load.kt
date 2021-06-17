@@ -20,7 +20,7 @@ import kotlin.collections.set
 import kotlin.math.abs
 
 class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
-    override val name = "Нагр."
+    override val name = "Испытание с нагрузкой"
 
     override val testModel = LoadModel
 

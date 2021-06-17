@@ -55,7 +55,6 @@ class IKASView(title: String = "ИКАС", showOnStart: Boolean = true) : TestVi
 
                     alignment = Pos.CENTER
 
-                    column("", IKASData::descriptor.getter)
                     column("R12 | R1, Ом", IKASData::R1.getter)
                     column("R23 | R2, Ом", IKASData::R2.getter)
                     column("R31 | R3, Ом", IKASData::R3.getter)

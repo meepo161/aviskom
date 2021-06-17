@@ -12,7 +12,7 @@ class StandData {
     val splashPicture: Path = Paths.get("splash.png")
     val splashTime: Long = 0L
     val icon: Path = Paths.get("icon.png")
-    val textSize: Int = 14
+    val textSize: Int = 18
     val exitConfirmation: Boolean = true
 
     val customer: String = "ООО «ПРОММАШ ТЕСТ»"

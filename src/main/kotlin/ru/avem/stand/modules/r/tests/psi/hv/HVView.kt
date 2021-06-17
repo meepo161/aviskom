@@ -34,12 +34,12 @@ class HVView(title: String = "ВИУ", showOnStart: Boolean = true) : TestViewMo
             useMaxWidth = true
             isWrapText = true
         }
+        separator()
         hbox {
             tableview(observableList(test.testModel.measuredData)) {
-                minWidth = 600.0
-                prefWidth = 600.0
-                minHeight = 104.0
-                maxHeight = 104.0
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 150.0 * 3
                 columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
@@ -48,25 +48,25 @@ class HVView(title: String = "ВИУ", showOnStart: Boolean = true) : TestViewMo
                 column("U, В", HVData::U.getter)
                 column("I, А", HVData::I.getter)
                 column("f, Гц", HVData::F.getter)
-            }.addClass(Styles.measuringTable)
+            }
         }
         hbox {
             vboxConstraints {
                 vGrow = Priority.ALWAYS
             }
+            alignment = Pos.BOTTOM_CENTER
             tableview(observableList(test.testModel.measuredData)) {
-                minWidth = 600.0
-                prefWidth = 600.0
-                minHeight = 104.0
-                maxHeight = 104.0
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 200.0 *2
+                prefWidth = 200.0*2
                 columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
-                alignment = Pos.BOTTOM_RIGHT
 
                 column("Время, с", HVData::time.getter)
                 column("Результат", HVData::result.getter)
-            }.addClass(Styles.measuringTable)
+            }
         }
-    }.addClass(Styles.paneBorders)
+    }.addClass(Styles.paneBorders, Styles.measuringTable)
 }

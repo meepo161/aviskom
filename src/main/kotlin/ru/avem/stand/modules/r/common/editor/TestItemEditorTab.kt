@@ -68,8 +68,14 @@ class TestItemEditorTab : View("Редактор ОИ") {
                                             .forEach { blockName ->
                                                 if (blockName.isNotEmpty()) {
                                                     fieldsRootEditor.add(
-                                                        label(blockName) {
-                                                            paddingTop = 8
+                                                        vbox {
+                                                            alignment = Pos.CENTER
+                                                            if (blockName != editorFields.groupBy { it.blockName }.keys.sortedBy { it }.first()) {
+                                                                separator()
+                                                            }
+                                                            label(blockName) {
+                                                                paddingTop = 8
+                                                            }
                                                         }.addClass(Styles.headerLabels)
                                                     )
                                                 }
@@ -252,7 +258,7 @@ class TestItemEditorTab : View("Редактор ОИ") {
                 }
             }
             fieldsScrollPaneEditor = scrollpane {
-                minWidth = 625.0
+                minWidth = 675.0
                 isFitToWidth = true
                 anchorpane {
                     fieldsRootEditor = vbox(spacing = 8.0) {
@@ -268,7 +274,7 @@ class TestItemEditorTab : View("Редактор ОИ") {
             }
 
             hbox(spacing = 16.0) {
-                alignment = Pos.BOTTOM_RIGHT
+                alignment = Pos.CENTER_RIGHT
 
                 anchorpaneConstraints {
                     bottomAnchor = 16.0

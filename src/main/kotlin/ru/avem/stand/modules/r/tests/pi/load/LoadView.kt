@@ -34,13 +34,12 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             useMaxWidth = true
             isWrapText = true
         }
+        separator()
         vbox(spacing = 16) {
             tableview(observableList(test.testModel.measuredData)) {
-                minHeight = 64.0
-                maxHeight = 64.0
-                minWidth = 900.0
-                maxWidth = 900.0
-
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 150.0 * 9
                 columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
                 column("U AB, В", LoadData::UAB.getter)
@@ -54,11 +53,9 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
                 column("P2, кВт", LoadData::P2.getter)
             }
             tableview(observableList(test.testModel.specifiedData)) {
-                minHeight = 64.0
-                maxHeight = 64.0
-                minWidth = 900.0
-                maxWidth = 900.0
-
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 150.0 * 4
                 columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
                 column("U, В", LoadData::U.getter)
@@ -68,14 +65,11 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             }
         }
         tableview(observableList(test.testModel.measuredData)) {
-            minHeight = 64.0
-            maxHeight = 64.0
-            minWidth = 900.0
-            maxWidth = 900.0
-
+            minHeight = 60.0
+            maxHeight = 60.0
+            minWidth = 150.0 * 7
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
             mouseTransparentProperty().set(true)
-//            alignment = Pos.CENTER_LEFT // TODO
             column("Uср., В", LoadData::U.getter)
             column("Iср., А", LoadData::I.getter)
             column("PV23, В", LoadData::UA.getter)
@@ -85,10 +79,9 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             column("Результат", LoadData::result.getter)
         }
         tableview(observableList(test.testModel.measuredData)) {
-            minHeight = 64.0
-            maxHeight = 64.0
-            minWidth = 500.0
-
+            minHeight = 60.0
+            maxHeight = 60.0
+            minWidth = 150.0 * 6
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
             mouseTransparentProperty().set(true)
             column("tAmb, °C", LoadData::tempAmb.getter)
@@ -98,5 +91,5 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             column("КПД, о.е.", LoadData::efficiency.getter)
             column("Скольжение, %", LoadData::sk.getter)
         }
-    }.addClass(Styles.paneBorders)
+    }.addClass(Styles.paneBorders, Styles.measuringTable)
 }

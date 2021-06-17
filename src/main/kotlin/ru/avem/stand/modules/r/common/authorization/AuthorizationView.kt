@@ -53,7 +53,7 @@ class AuthorizationView(title: String = "Авторизация") : ViewModule(t
 
             label("Авторизация") {
                 style {
-                    fontSize = 18.px
+                    fontSize = 22.px
                     fontWeight = FontWeight.BOLD
                 }
             }
@@ -109,16 +109,31 @@ class AuthorizationView(title: String = "Авторизация") : ViewModule(t
                     }
                 }
             }
+            hbox(spacing = 32.0) {
+                alignment = Pos.CENTER
 
-            button("Вход") {
-                prefWidth = 100.0
+                button("Вход") {
+                    prefWidth = 100.0
 
-                isDefaultButton = true
+                    isDefaultButton = true
+                    style {
+                        fontSize = 20.px
+                    }
+                    action {
+                        controller.signIn()
+                    }
+                }
+                button("Выход") {
+                    prefWidth = 100.0
 
-                action {
-                    controller.signIn()
+                    style {
+                        fontSize = 20.px
+                    }
+                    action {
+                        exitProcess(0)
+                    }
                 }
             }
-        }.addClass(Styles.regularLabels)
+        }.addClass(Styles.regularLabels, Styles.hard)
     }
 }
