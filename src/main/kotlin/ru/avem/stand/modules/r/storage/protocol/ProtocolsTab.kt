@@ -64,7 +64,7 @@ class ProtocolsTab : View("Протоколы") {
                     vGrow = Priority.ALWAYS
                 }
 
-                columnResizePolicy = SmartResize.POLICY
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 placeholder = Text("Список пуст")
 
                 onDoubleClick {
@@ -111,7 +111,7 @@ class ProtocolsTab : View("Протоколы") {
     }
 
     private val serialNumbers = anchorpane {
-        vbox(spacing = 16.0) {
+        vbox(spacing = 32.0) {
             anchorpaneConstraints {
                 leftAnchor = 16.0
                 rightAnchor = 16.0
@@ -142,6 +142,9 @@ class ProtocolsTab : View("Протоколы") {
             }
 
             button("Открыть") {
+                style {
+                    fontSize = 22.px
+                }
                 action {
                     try {
                         serialNumbersToProtocols[comboBoxSN.selectionModel.selectedItem]?.let { protocols ->

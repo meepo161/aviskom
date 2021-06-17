@@ -2,6 +2,7 @@ package ru.avem.stand.modules.r.tests.psi.mgr
 
 import javafx.event.EventTarget
 import javafx.geometry.Pos
+import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
@@ -33,17 +34,15 @@ class MGRView(title: String = "МГР", showOnStart: Boolean = true) : TestViewM
             useMaxWidth = true
             isWrapText = true
         }
+        separator()
         hbox {
+            alignment = Pos.CENTER
             hbox {
-                hboxConstraints {
-                    hGrow = Priority.ALWAYS
-                }
                 tableview(observableList(test.testModel.measuredData)) {
-                    minHeight = 64.0
-                    maxHeight = 64.0
-                    minWidth = 310.0
-                    prefWidth = 310.0
-                    columnResizePolicy = SmartResize.POLICY
+                    minHeight = 60.0
+                    maxHeight = 60.0
+                    minWidth = 150.0 * 4
+                    columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
                     alignment = Pos.CENTER
@@ -53,17 +52,11 @@ class MGRView(title: String = "МГР", showOnStart: Boolean = true) : TestViewM
                     column("R60, МОм", MGRData::R60.getter)
                     column("kABS, о.е.", MGRData::K_ABS.getter)
                 }
-            }
-            hbox {
-                hboxConstraints {
-                    hGrow = Priority.ALWAYS
-                }
                 tableview(observableList(test.testModel.measuredData)) {
-                    minHeight = 64.0
-                    maxHeight = 64.0
-                    minWidth = 160.0
-                    prefWidth = 160.0
-                    columnResizePolicy = SmartResize.POLICY
+                    minHeight = 60.0
+                    maxHeight = 60.0
+                    minWidth = 150.0 * 2
+                    columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
                     alignment = Pos.CENTER
@@ -74,21 +67,21 @@ class MGRView(title: String = "МГР", showOnStart: Boolean = true) : TestViewM
             }
         }
         hbox {
-            vboxConstraints {
-                vGrow = Priority.ALWAYS
+            hboxConstraints {
+                vgrow = Priority.ALWAYS
             }
+            alignment = Pos.BOTTOM_CENTER
             tableview(observableList(test.testModel.measuredData)) {
-                minHeight = 64.0
-                maxHeight = 64.0
+                minHeight = 60.0
+                maxHeight = 60.0
                 minWidth = 200.0
                 prefWidth = 200.0
-                columnResizePolicy = SmartResize.POLICY
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
-                alignment = Pos.BOTTOM_RIGHT
 
                 column("Результат", MGRData::result.getter)
             }
         }
-    }.addClass(Styles.paneBorders)
+    }.addClass(Styles.paneBorders, Styles.measuringTable)
 }

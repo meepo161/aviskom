@@ -3,10 +3,7 @@ package ru.avem.stand.modules.r.common.prefill
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
 import javafx.geometry.Pos
-import javafx.scene.control.CheckBox
-import javafx.scene.control.ComboBox
-import javafx.scene.control.ContentDisplay
-import javafx.scene.control.ListView
+import javafx.scene.control.*
 import javafx.scene.input.MouseEvent.MOUSE_PRESSED
 import javafx.scene.layout.Priority
 import ru.avem.stand.modules.i.views.Styles
@@ -34,7 +31,10 @@ class PreFillTab : View("Испытания") {
 
             label("Заполните все поля и нажмите \"Начать испытания\"").addClass(Styles.headerLabels)
 
+            separator()
+
             hbox(spacing = 16.0) {
+                alignment = Pos.CENTER_LEFT
                 label("Заводской номер:") {
                     minWidth = 117.0
                 }
@@ -50,6 +50,7 @@ class PreFillTab : View("Испытания") {
             }
 
             hbox(spacing = 80.0) {
+                alignment = Pos.CENTER_LEFT
                 label("Тип ОИ:") {
                     minWidth = 52.0
                 }
@@ -65,15 +66,18 @@ class PreFillTab : View("Испытания") {
                 }
             }
 
+            separator()
+
 //            tabpane {
 //                tabClosingPolicyProperty().set(TabPane.TabClosingPolicy.UNAVAILABLE)
 //                tab("ПСИ") {
+            label("Выбор испытания:") {
+                minWidth = 75.0
+            }
             hbox(spacing = 58.0) {
                 paddingTop = 8
-                vbox {
-                    label("Испытание:") {
-                        minWidth = 75.0
-                    }
+                vbox(spacing = 16.0) {
+                    alignment = Pos.CENTER
                     button("Выбрать всё") {
                         minWidth = 150.0
                         maxWidth = 150.0
@@ -107,8 +111,8 @@ class PreFillTab : View("Испытания") {
                     hboxConstraints {
                         hGrow = Priority.ALWAYS
                     }
-                    minHeight = Properties.standData.height minusPercent 55.0
-                    maxHeight = Properties.standData.height minusPercent 55.0
+                    minHeight = Properties.standData.height minusPercent 52.0
+                    maxHeight = Properties.standData.height minusPercent 52.0
                     minWidth = Properties.standData.width minusPercent 50.0
 
                     items = Properties.tests.map {
@@ -127,6 +131,7 @@ class PreFillTab : View("Испытания") {
                         }
                     }.observable()
 
+                    fixedCellSize = 50.0
                     addEventFilter(MOUSE_PRESSED) { event ->
                         event.target.getChildList()?.getOrNull(0)?.let {
                             if (it is CheckBox) it.isSelected = !it.isSelected
@@ -141,9 +146,9 @@ class PreFillTab : View("Испытания") {
 //                }
 //            }
             button("Начать испытания") {
-                minWidth = 180.0
-                prefWidth = 180.0
-                maxWidth = 180.0
+                minWidth = 200.0
+                prefWidth = 200.0
+                maxWidth = 200.0
                 maxHeight = 120.0
                 prefHeight = 120.0
                 maxHeight = 120.0

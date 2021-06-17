@@ -58,8 +58,9 @@ class UserSettingsView : View("Пользователи") {
                     hGrow = Priority.ALWAYS
                 }
                 form {
-                    prefWidth = 500.0
-                    fieldset("Аттрибуты пользователя") {
+                    paddingLeft = 32.0
+                    prefWidth = 600.0
+                    fieldset("               Аттрибуты пользователя") {
                         field("Логин") {
                             textfield {
                                 promptText = "Введите логин"

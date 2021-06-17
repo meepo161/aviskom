@@ -1,10 +1,13 @@
 package ru.avem.stand.modules.i.views
 
 import javafx.geometry.Pos
+import javafx.scene.control.TableView
 import javafx.scene.paint.Paint
+import javafx.scene.text.FontPosture
 import javafx.scene.text.FontWeight
 import ru.avem.stand.modules.r.storage.Properties
 import tornadofx.*
+import java.awt.Font
 
 class Styles : Stylesheet() {
     companion object {
@@ -46,7 +49,7 @@ class Styles : Stylesheet() {
         fun initFonts() {
             regularFontSize = Properties.standData.textSize.toDouble()
             fontMultiplier = 18.0 / regularFontSize
-            titleFontSize = regularFontSize * fontMultiplier
+            titleFontSize = regularFontSize + 4
         }
     }
 
@@ -114,6 +117,7 @@ class Styles : Stylesheet() {
         regularLabels {
             fontSize = regularFontSize.px
             textFill = c("#404040")
+            font = loadFont("/font/GolosText.ttf", regularFontSize)!!
         }
 
         headerLabels {
@@ -146,10 +150,10 @@ class Styles : Stylesheet() {
 
         paneBorders {
             borderColor += box(c("#777"))
-            fontSize = 25.px
-            tableColumn {
-                fontSize = 20.px
-            }
+//            fontSize = 25.px
+//            tableColumn {
+//                fontSize = 20.px
+//            }
         }
 
         paneBoldBorders {
@@ -162,8 +166,9 @@ class Styles : Stylesheet() {
                 backgroundColor += c("transparent")
             }
             bar {
-                prefHeight = 15.px
+                prefHeight = 10.px
                 minHeight = prefHeight
+                maxHeight = prefHeight
                 backgroundColor += c("white")
             }
         }
@@ -256,7 +261,7 @@ class Styles : Stylesheet() {
         tableColumn {
             alignment = Pos.CENTER
             fontWeight = FontWeight.BOLD
-            fontSize = 22.px / 1.6
+            fontSize = 22.px
         }
 
         tableRowCell {
@@ -269,9 +274,11 @@ class Styles : Stylesheet() {
                 fontWeight = FontWeight.BOLD
                 fontSize = 22.px
             }
-
             tableRowCell {
                 cellSize = 50.px
+            }
+            tableView {
+                minHeight = 98.px
             }
         }
 

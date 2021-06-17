@@ -34,23 +34,17 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
             useMaxWidth = true
             isWrapText = true
         }
-
+        separator()
         hbox {
             hbox {
-                minWidth = 820.0
-                prefWidth = 820.0
-                hboxConstraints {
-                    hGrow = Priority.ALWAYS
-                }
                 tableview(observableList(test.testModel.measuredData)) {
-                    minHeight = 64.0
-                    maxHeight = 64.0
-                    minWidth = 400.0
-                    prefWidth = 400.0
+                    minHeight = 60.0
+                    maxHeight = 60.0
+                    minWidth = 150.0 * 4
                     columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
-                    alignment = Pos.CENTER_LEFT
+                    alignment = Pos.CENTER
 
                     column("PV23, В", IdleData::UA.getter)
                     column("PV25, В", IdleData::UB.getter)
@@ -58,44 +52,36 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
                     column("PV27, А", IdleData::IB.getter)
                 }
             }
-        }
-        hbox {
-            hbox {
-                hboxConstraints {
-                    hGrow = Priority.ALWAYS
-                }
                 tableview(observableList(test.testModel.measuredData)) {
-                    minHeight = 64.0
-                    maxHeight = 64.0
-                    minWidth = 220.0
-                    prefWidth = 220.0
+                    minHeight = 60.0
+                    maxHeight = 60.0
+                    minWidth = 150.0 * 2
                     columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
-                    alignment = Pos.CENTER_LEFT
+                    alignment = Pos.CENTER
 
                     column("t BK1, °C", IdleData::tempAmb.getter)
                     column("t BK2, °C", IdleData::tempTI.getter)
                 }
             }
-        }
         hbox {
             vboxConstraints {
                 vGrow = Priority.ALWAYS
             }
             tableview(observableList(test.testModel.measuredData)) {
-                minHeight = 64.0
-                maxHeight = 64.0
-                minWidth = 220.0
-                prefWidth = 220.0
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 200.0 * 2
+                prefWidth = 200.0 * 2
                 columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
-                alignment = Pos.BOTTOM_RIGHT
+                alignment = Pos.CENTER
 
                 column("Время", IdleData::time.getter)
                 column("Результат", IdleData::result.getter)
             }
         }
-    }.addClass(Styles.paneBorders)
+    }.addClass(Styles.paneBorders, Styles.measuringTable)
 }

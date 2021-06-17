@@ -2,6 +2,7 @@ package ru.avem.stand.modules.r.tests.psi.hvSG
 
 import javafx.event.EventTarget
 import javafx.geometry.Pos
+import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
@@ -33,13 +34,13 @@ class HVViewSG(title: String = "ВИУ", showOnStart: Boolean = true) : TestView
             useMaxWidth = true
             isWrapText = true
         }
+        separator()
         hbox {
             tableview(observableList(test.testModel.measuredData)) {
-                minHeight = 64.0
-                maxHeight = 64.0
-                minWidth = 150.0
-                prefWidth = 150.0
-                columnResizePolicy = SmartResize.POLICY
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 150.0 * 3
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
                 alignment = Pos.CENTER
@@ -53,19 +54,19 @@ class HVViewSG(title: String = "ВИУ", showOnStart: Boolean = true) : TestView
             vboxConstraints {
                 vGrow = Priority.ALWAYS
             }
+            alignment = Pos.BOTTOM_CENTER
             tableview(observableList(test.testModel.measuredData)) {
-                minHeight = 64.0
-                maxHeight = 64.0
-                minWidth = 200.0
-                prefWidth = 200.0
-                columnResizePolicy = SmartResize.POLICY
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 200.0 * 2
+                prefWidth = 200.0 * 2
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                 mouseTransparentProperty().set(true)
 
-                alignment = Pos.BOTTOM_RIGHT
 
                 column("Время, с", HVDataSG::time.getter)
                 column("Результат", HVDataSG::result.getter)
             }
         }
-    }.addClass(Styles.paneBorders)
+    }.addClass(Styles.paneBorders, Styles.measuringTable)
 }

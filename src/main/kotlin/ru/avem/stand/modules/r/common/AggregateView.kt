@@ -2,8 +2,6 @@ package ru.avem.stand.modules.r.common
 
 import javafx.scene.control.Tab
 import javafx.scene.control.TabPane
-import javafx.scene.image.Image
-import javafx.scene.layout.*
 import ru.avem.stand.modules.i.views.Styles
 import ru.avem.stand.modules.i.views.ViewModule
 import ru.avem.stand.modules.i.views.showExitConfirmation

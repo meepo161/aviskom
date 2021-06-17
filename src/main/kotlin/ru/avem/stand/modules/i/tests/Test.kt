@@ -144,7 +144,7 @@ abstract class Test(
 
             find(view).stopReloadButton.text = "Стоп"
             find(view).stopReloadButton.graphic = MaterialDesignIconView(MaterialDesignIcon.STOP).apply {
-                glyphSize = 65
+                glyphSize = 45
                 fill = c("red")
             }
 
@@ -233,7 +233,7 @@ abstract class Test(
 
             find(view).stopReloadButton.text = "Повторить"
             find(view).stopReloadButton.graphic = MaterialDesignIconView(MaterialDesignIcon.RELOAD).apply {
-                glyphSize = 65
+                glyphSize = 45
                 fill = c("black")
             }
 
