@@ -43,6 +43,7 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
         testModel.specifiedUHV = PreFillModel.testTypeProp.value.fields["U_HV"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedIHV = PreFillModel.testTypeProp.value.fields["I_HV"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedT = PreFillModel.testTypeProp.value.fields["T_HV"]?.value.toDoubleOrDefault(0.0)
+
     }
 
     override fun initView() {

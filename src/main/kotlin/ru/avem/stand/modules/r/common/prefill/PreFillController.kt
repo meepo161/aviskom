@@ -45,15 +45,6 @@ class PreFillController : Controller() {
             )
             return
         }
-        if (AuthorizationModel.user0.level < PreFillModel.testTypeProp.value.level) {
-            warningNotification(
-                "Недостаточно прав доступа",
-                "Авторизируйтесь как пользователь с более высоким уровнем доступа и повторите",
-                Pos.CENTER,
-                owner = aggregateView.currentWindow
-            )
-            return
-        }
 
         thread {
             PreFillModel.selectedTests.sortBy {

@@ -206,63 +206,63 @@ class MVZ : KSPADTest(view = MVZView::class, reportTemplate = "mvz.xlsx") {
     }
 
     override fun logic() {
-        if (isRunning) {
-            toStage(MVZModel.Stage.BEFORE)
-        }
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            waitUntilFIToLoad()
-            startFI()
-            waitUntilFIToRun()
-        }
-        if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Точная регулировка до ${testModel.specifiedU}В")
-            regulateVoltage(specifiedU = testModel.specifiedU, minPercent = 0.0, maxPercent = 1.0, step = 0.1)
-            testModel.beforeFIP1U = testModel.lastFIP1U
-        }
-        if (isRunning) {
-            selectAmperageStage()
-        }
-        if (isRunning) {
-            toStage(MVZModel.Stage.DURING)
-        }
-        if (isRunning) {
-            returnAmperageStage()
-        }
-        if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Грубая регулировка до ${testModel.specifiedU * 1.3}В")
-            regulateVoltage(specifiedU = testModel.specifiedU * 1.3, minPercent = 3.0, step = 1.0)
-            appendMessageToLog(LogTag.INFO, "Точная регулировка до ${testModel.specifiedU * 1.3}В")
-            regulateVoltage(specifiedU = testModel.specifiedU * 1.3, minPercent = 0.0, maxPercent = 1.0, step = 0.1)
-        }
-        if (isRunning) {
-            selectAmperageStage()
-        }
-        if (isRunning) {
-            waiting()
-        }
-        if (isRunning) {
-            toStage(MVZModel.Stage.AFTER)
-        }
-        if (isRunning) {
-            returnAmperageStage()
-        }
-        if (isRunning) {
-            testModel.lastFIP1U = testModel.beforeFIP1U
-            CM.device<Danfoss>(UZ91).setObjectUMax(testModel.lastFIP1U)
-            sleepWhileRun(3)
-        }
-        if (isRunning) {
-            selectAmperageStage()
-        }
-        if (isRunning) {
-            sleepWhileRun(2)
-            storeTestValues()
-            returnAmperageStage()
-            stopFI(CM.device(UZ91))
-        }
+//        if (isRunning) {
+//            toStage(MVZModel.Stage.BEFORE)
+//        }
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//            startFI()
+//            waitUntilFIToRun()
+//        }
+//        if (isRunning) {
+//            appendMessageToLog(LogTag.INFO, "Точная регулировка до ${testModel.specifiedU}В")
+//            regulateVoltage(specifiedU = testModel.specifiedU, minPercent = 0.0, maxPercent = 1.0, step = 0.1)
+//            testModel.beforeFIP1U = testModel.lastFIP1U
+//        }
+//        if (isRunning) {
+//            selectAmperageStage()
+//        }
+//        if (isRunning) {
+//            toStage(MVZModel.Stage.DURING)
+//        }
+//        if (isRunning) {
+//            returnAmperageStage()
+//        }
+//        if (isRunning) {
+//            appendMessageToLog(LogTag.INFO, "Грубая регулировка до ${testModel.specifiedU * 1.3}В")
+//            regulateVoltage(specifiedU = testModel.specifiedU * 1.3, minPercent = 3.0, step = 1.0)
+//            appendMessageToLog(LogTag.INFO, "Точная регулировка до ${testModel.specifiedU * 1.3}В")
+//            regulateVoltage(specifiedU = testModel.specifiedU * 1.3, minPercent = 0.0, maxPercent = 1.0, step = 0.1)
+//        }
+//        if (isRunning) {
+//            selectAmperageStage()
+//        }
+//        if (isRunning) {
+//            waiting()
+//        }
+//        if (isRunning) {
+//            toStage(MVZModel.Stage.AFTER)
+//        }
+//        if (isRunning) {
+//            returnAmperageStage()
+//        }
+//        if (isRunning) {
+//            testModel.lastFIP1U = testModel.beforeFIP1U
+//            CM.device<Danfoss>(UZ91).setObjectUMax(testModel.lastFIP1U)
+//            sleepWhileRun(3)
+//        }
+//        if (isRunning) {
+//            selectAmperageStage()
+//        }
+//        if (isRunning) {
+//            sleepWhileRun(2)
+//            storeTestValues()
+//            returnAmperageStage()
+//            stopFI(CM.device(UZ91))
+//        }
     }
 
     private fun toStage(stage: MVZModel.Stage) {

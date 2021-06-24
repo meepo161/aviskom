@@ -46,10 +46,10 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
 
                     alignment = Pos.CENTER
 
-                    column("PV23, В", IdleData::UA.getter)
-                    column("PV25, В", IdleData::UB.getter)
-                    column("PV24, А", IdleData::IA.getter)
-                    column("PV27, А", IdleData::IB.getter)
+                    column("Uя", IdleData::UA.getter)
+                    column("Iя, А", IdleData::IA.getter)
+                    column("Uов, В", IdleData::UB.getter)
+                    column("Iов, А", IdleData::IB.getter)
                 }
             }
                 tableview(observableList(test.testModel.measuredData)) {
@@ -61,8 +61,8 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
 
                     alignment = Pos.CENTER
 
-                    column("t BK1, °C", IdleData::tempAmb.getter)
-                    column("t BK2, °C", IdleData::tempTI.getter)
+                    column("t возд., °C", IdleData::tempAmb.getter)
+                    column("t ОИ, °C", IdleData::tempTI.getter)
                 }
             }
         hbox {

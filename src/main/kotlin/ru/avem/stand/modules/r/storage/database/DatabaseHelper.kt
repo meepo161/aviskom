@@ -25,6 +25,7 @@ fun validateDB() {
     transaction {
         SchemaUtils.create(TestItems, TestItemFields, Reports, ReportFields)
 
+
         if (TestItem.all().count() == 0) {
             TestItem.new {
                 name = "Объект испытания"
@@ -67,7 +68,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "3000",
         maxValue = "3000",
         unit = "В",
-        blockName = "Номинальные параметры МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "I",
@@ -77,7 +78,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "35.5",
         maxValue = "40",
         unit = "А",
-        blockName = "Номинальные параметры МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "R_IKAS",
@@ -86,7 +87,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "0.2",
         unit = "Ом",
-        blockName = "Ожидаемые параметры МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "R_MGR",
@@ -95,7 +96,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "50",
         unit = "МОм",
-        blockName = "Ожидаемые параметры МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "U_HV",
@@ -105,7 +106,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "1000",
         maxValue = "10000",
         unit = "В",
-        blockName = "Параметры испытания МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "U_MGR",
@@ -115,7 +116,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "1000",
         maxValue = "2500",
         unit = "В",
-        blockName = "Параметры испытания МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "I_HV",
@@ -125,7 +126,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "0.5",
         maxValue = "1",
         unit = "А",
-        blockName = "Параметры испытания МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "T_HV",
@@ -135,7 +136,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "60",
         maxValue = "3600",
         unit = "с",
-        blockName = "Параметры испытания МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "U_SG",
@@ -145,7 +146,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "230",
         maxValue = "230",
         unit = "В",
-        blockName = "Номинальные параметры СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "U_OV_SG",
@@ -155,7 +156,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "230",
         maxValue = "230",
         unit = "В",
-        blockName = "Номинальные параметры СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "R_IKAS_SG",
@@ -164,7 +165,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "0.2",
         unit = "Ом",
-        blockName = "Ожидаемые параметры СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "R_MGR_SG",
@@ -173,7 +174,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "50",
         unit = "МОм",
-        blockName = "Ожидаемые параметры СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "U_HV_SG",
@@ -183,7 +184,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "1600",
         maxValue = "1600",
         unit = "В",
-        blockName = "Параметры испытания СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "U_MGR_SG",
@@ -193,7 +194,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "1000",
         maxValue = "2500",
         unit = "В",
-        blockName = "Параметры испытания СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "I_HV_SG",
@@ -203,7 +204,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "0.5",
         maxValue = "1",
         unit = "А",
-        blockName = "Параметры испытания СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "T_HV_SG",
@@ -213,7 +214,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         value = "60",
         maxValue = "3600",
         unit = "с",
-        blockName = "Параметры испытания СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "IDLE_TIME",
@@ -222,7 +223,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "60",
         unit = "с",
-        blockName = "Параметры испытания общие"
+        blockName = "Общие"
     ),
     TestItemFieldScheme(
         key = "LOAD_TIME",
@@ -231,7 +232,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "60",
         unit = "с",
-        blockName = "Параметры испытания общие"
+        blockName = "Общие"
     )
 )
 
@@ -241,8 +242,8 @@ fun saveProtocol(test: Test) = transaction {
         testType = testTypeProp.value.toString()
         this.test = test.name
 
-        user1Name = AuthorizationModel.user0.fio
-        user2Name = AuthorizationModel.user1.fio
+        user1Name = AuthorizationModel.user0.login
+        user2Name = AuthorizationModel.user1.login
 
         val millis = System.currentTimeMillis()
         date = SimpleDateFormat("dd.MM.yyyy").format(millis)
@@ -371,7 +372,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "3000",
         maxValue = "3000",
         unit = "В",
-        blockName = "Номинальные параметры МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "I",
@@ -381,7 +382,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "35.5",
         maxValue = "40",
         unit = "А",
-        blockName = "Номинальные параметры МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "R_IKAS",
@@ -390,7 +391,7 @@ fun createAsyncEngineScheme() = listOf(
         minValue = "0",
         value = "0.2",
         unit = "Ом",
-        blockName = "Ожидаемые параметры МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "R_MGR",
@@ -399,7 +400,7 @@ fun createAsyncEngineScheme() = listOf(
         minValue = "0",
         value = "50",
         unit = "МОм",
-        blockName = "Ожидаемые параметры МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "U_HV",
@@ -409,7 +410,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "1000",
         maxValue = "10000",
         unit = "В",
-        blockName = "Параметры испытания МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "U_MGR",
@@ -419,7 +420,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "1000",
         maxValue = "2500",
         unit = "В",
-        blockName = "Параметры испытания МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "I_HV",
@@ -429,7 +430,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "0.5",
         maxValue = "1",
         unit = "А",
-        blockName = "Параметры испытания МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "T_HV",
@@ -439,7 +440,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "60",
         maxValue = "3600",
         unit = "с",
-        blockName = "Параметры испытания МПТ"
+        blockName = " МПТ"
     ),
     TestItemFieldScheme(
         key = "U_SG",
@@ -449,7 +450,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "230",
         maxValue = "230",
         unit = "В",
-        blockName = "Номинальные параметры СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "U_OV_SG",
@@ -459,7 +460,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "230",
         maxValue = "230",
         unit = "В",
-        blockName = "Номинальные параметры СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "R_IKAS_SG",
@@ -468,7 +469,7 @@ fun createAsyncEngineScheme() = listOf(
         minValue = "0",
         value = "0.2",
         unit = "Ом",
-        blockName = "Ожидаемые параметры СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "R_MGR_SG",
@@ -477,7 +478,7 @@ fun createAsyncEngineScheme() = listOf(
         minValue = "0",
         value = "50",
         unit = "МОм",
-        blockName = "Ожидаемые параметры СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "U_HV_SG",
@@ -487,7 +488,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "1600",
         maxValue = "1600",
         unit = "В",
-        blockName = "Параметры испытания СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "U_MGR_SG",
@@ -497,7 +498,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "1000",
         maxValue = "2500",
         unit = "В",
-        blockName = "Параметры испытания СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "I_HV_SG",
@@ -507,7 +508,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "0.5",
         maxValue = "1",
         unit = "А",
-        blockName = "Параметры испытания СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "T_HV_SG",
@@ -517,7 +518,7 @@ fun createAsyncEngineScheme() = listOf(
         value = "60",
         maxValue = "3600",
         unit = "с",
-        blockName = "Параметры испытания СГ"
+        blockName = " СГ"
     ),
     TestItemFieldScheme(
         key = "IDLE_TIME",
@@ -526,7 +527,7 @@ fun createAsyncEngineScheme() = listOf(
         minValue = "0",
         value = "60",
         unit = "с",
-        blockName = "Параметры испытания общие"
+        blockName = "Общие"
     ),
     TestItemFieldScheme(
         key = "LOAD_TIME",
@@ -535,7 +536,7 @@ fun createAsyncEngineScheme() = listOf(
         minValue = "0",
         value = "60",
         unit = "с",
-        blockName = "Параметры испытания общие"
+        blockName = "Общие"
     )
 )
 

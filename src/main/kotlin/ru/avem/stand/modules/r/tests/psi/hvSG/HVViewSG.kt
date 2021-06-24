@@ -7,6 +7,8 @@ import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
 import ru.avem.stand.modules.i.views.TestViewModule
+import ru.avem.stand.modules.r.common.prefill.PreFillModel
+import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.*
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -28,6 +30,27 @@ class HVViewSG(title: String = "ВИУ", showOnStart: Boolean = true) : TestView
             hGrow = Priority.ALWAYS
         }
 
+        label("Заданные значения") {
+            alignment = Pos.TOP_CENTER
+            textAlignment = TextAlignment.CENTER
+            useMaxWidth = true
+            isWrapText = true
+        }
+        hbox {
+            tableview(observableList(test.testModel.initData)) {
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 150.0 * 2
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
+                mouseTransparentProperty().set(true)
+
+                alignment = Pos.CENTER
+                HVModelSG.initData.U.set(PreFillModel.testTypeProp.value.fields["U_HV"]?.value.toDoubleOrDefault(0.0).toString())
+                HVModelSG.initData.I.set(PreFillModel.testTypeProp.value.fields["I_HV"]?.value.toDoubleOrDefault(0.0).toString())
+                column("U, В", HVDataSG::U.getter)
+                column("I, А", HVDataSG::I.getter)
+            }
+        }
         label("Измеренные значения") {
             alignment = Pos.TOP_CENTER
             textAlignment = TextAlignment.CENTER
@@ -47,7 +70,6 @@ class HVViewSG(title: String = "ВИУ", showOnStart: Boolean = true) : TestView
 
                 column("U, В", HVDataSG::U.getter)
                 column("I, А", HVDataSG::I.getter)
-                column("f, Гц", HVDataSG::F.getter)
             }
         }
         hbox {

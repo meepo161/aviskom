@@ -23,7 +23,7 @@ class UserSettingsView : View("Пользователи") {
                 bottomAnchor = 16.0
             }
             vbox(spacing = 16.0) {
-                listViewUsers = listview(model.users) {
+                listViewUsers = listview() {
                     vboxConstraints {
                         vGrow = Priority.ALWAYS
                     }
@@ -61,42 +61,13 @@ class UserSettingsView : View("Пользователи") {
                     paddingLeft = 32.0
                     prefWidth = 600.0
                     fieldset("               Аттрибуты пользователя") {
-                        field("Логин") {
-                            textfield {
-                                promptText = "Введите логин"
-                                validator.addValidator(this) {
-                                    if (it.isNullOrEmpty()) error("Обязательное поле") else null
-                                }
-                            }.bind(model.login)
-                        }
                         field("ФИО") {
                             textfield {
                                 promptText = "Введите ФИО"
                                 validator.addValidator(this) {
                                     if (it.isNullOrEmpty()) error("Обязательное поле") else null
                                 }
-                            }.bind(model.fullName)
-                        }
-                        field("Отдел") {
-                            textfield {
-                                promptText = "Введите отдел"
-                                validator.addValidator(this) {
-                                    if (it.isNullOrEmpty()) error("Обязательное поле") else null
-                                }
-                            }.bind(model.department)
-                        }
-                        field("Должность") {
-                            textfield {
-                                promptText = "Введите должность"
-                                validator.addValidator(this) {
-                                    if (it.isNullOrEmpty()) error("Обязательное поле") else null
-                                }
-                            }.bind(model.position)
-                        }
-                        field("Уровень доступа") {
-                            combobox(values = (0..7).toList()) {
-                                useMaxWidth = true
-                            }.bind(model.level)
+                            }.bind(model.login)
                         }
                         field("Пароль") {
                             passwordfield {

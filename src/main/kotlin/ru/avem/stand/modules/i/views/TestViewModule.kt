@@ -7,7 +7,6 @@ import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.control.ContentDisplay
 import javafx.scene.control.TableRow
-import javafx.scene.control.TableView
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.scene.text.TextAlignment
@@ -159,13 +158,14 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
             }
             hbox(16) {
                 vbox(16) {
-                    tableview(observableList(test.testModel.testItemData)) {
-                        minHeight = 88.0
-                        maxHeight = 88.0
-                        columnResizePolicy = SmartResize.POLICY
-                        mouseTransparentProperty().set(true)
-                        column("P1, кВт", TestItemData::P.getter)
-                    }
+                    maxWidth = 120.0
+//                    tableview(observableList(test.testModel.testItemData)) {
+//                        minHeight = 88.0
+//                        maxHeight = 88.0
+//                        columnResizePolicy = SmartResize.POLICY
+//                        mouseTransparentProperty().set(true)
+//                        column("P1, кВт", TestItemData::P.getter)
+//                    }
                     tableview(observableList(test.testModel.testItemData)) {
 
                         minHeight = 88.0
@@ -182,41 +182,41 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
                         mouseTransparentProperty().set(true)
                         column("I, А", TestItemData::I.getter)
                     }
-                    tableview(observableList(test.testModel.testItemData)) {
-
-                        minHeight = 88.0
-                        maxHeight = 88.0
-                        columnResizePolicy = SmartResize.POLICY
-                        mouseTransparentProperty().set(true)
-                        column("cos φ", TestItemData::cos.getter)
-                    }
+//                    tableview(observableList(test.testModel.testItemData)) {
+//
+//                        minHeight = 88.0
+//                        maxHeight = 88.0
+//                        columnResizePolicy = SmartResize.POLICY
+//                        mouseTransparentProperty().set(true)
+//                        column("cos φ", TestItemData::cos.getter)
+//                    }
                 }
-                vbox(16) {
-                    tableview(observableList(test.testModel.testItemData)) {
-
-                        minHeight = 88.0
-                        maxHeight = 88.0
-                        columnResizePolicy = SmartResize.POLICY
-                        mouseTransparentProperty().set(true)
-                        column("n, об/мин", TestItemData::RPM.getter)
-                    }
-                    tableview(observableList(test.testModel.testItemData)) {
-
-                        minHeight = 88.0
-                        maxHeight = 88.0
-                        columnResizePolicy = SmartResize.POLICY
-                        mouseTransparentProperty().set(true)
-                        column("f, Гц", TestItemData::F.getter)
-                    }
-                    tableview(observableList(test.testModel.testItemData)) {
-
-                        minHeight = 88.0
-                        maxHeight = 88.0
-                        columnResizePolicy = SmartResize.POLICY
-                        mouseTransparentProperty().set(true)
-                        column("КПД, %", TestItemData::efficiency.getter)
-                    }
-                }
+//                vbox(16) {
+//                    tableview(observableList(test.testModel.testItemData)) {
+//
+//                        minHeight = 88.0
+//                        maxHeight = 88.0
+//                        columnResizePolicy = SmartResize.POLICY
+//                        mouseTransparentProperty().set(true)
+//                        column("n, об/мин", TestItemData::RPM.getter)
+//                    }
+//                    tableview(observableList(test.testModel.testItemData)) {
+//
+//                        minHeight = 88.0
+//                        maxHeight = 88.0
+//                        columnResizePolicy = SmartResize.POLICY
+//                        mouseTransparentProperty().set(true)
+//                        column("f, Гц", TestItemData::F.getter)
+//                    }
+//                    tableview(observableList(test.testModel.testItemData)) {
+//
+//                        minHeight = 88.0
+//                        maxHeight = 88.0
+//                        columnResizePolicy = SmartResize.POLICY
+//                        mouseTransparentProperty().set(true)
+//                        column("КПД, %", TestItemData::efficiency.getter)
+//                    }
+//                }
             }
         }.addClass(Styles.paneBorders)
     }
@@ -410,20 +410,20 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
                 }
             }
 
-            children.filter { it is TableView<*> }.forEach {
-                (it as TableView<Protection>).setRowFactory {
-                    object : TableRow<Protection>() {
-                        override fun updateItem(item: Protection?, empty: Boolean) {
-                            super.updateItem(item, empty)
-                            item?.let {
-                                style {
-                                    baseColor = item.color()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+//            children.filter { it is TableView<*> }.forEach {
+//                (it as TableView<Protection>).setRowFactory {
+//                    object : TableRow<Protection>() {
+//                        override fun updateItem(item: Protection?, empty: Boolean) {
+//                            super.updateItem(item, empty)
+//                            item?.let {
+//                                style {
+//                                    baseColor = item.color()
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }.addClass(Styles.paneBorders)
     }
 }

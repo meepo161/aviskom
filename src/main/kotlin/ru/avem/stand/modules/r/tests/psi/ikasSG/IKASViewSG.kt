@@ -50,9 +50,9 @@ class IKASViewSG(title: String = "ИКАС", showOnStart: Boolean = true) : Test
 
                             alignment = Pos.CENTER
 
-                            column("R12 | R1, Ом", IKASDataSG::R1.getter)
-                            column("R23 | R2, Ом", IKASDataSG::R2.getter)
-                            column("R31 | R3, Ом", IKASDataSG::R3.getter)
+                            column("R AB, Ом", IKASDataSG::R1.getter)
+                            column("R BC, Ом", IKASDataSG::R2.getter)
+                            column("R AC, Ом", IKASDataSG::R3.getter)
                         }
                         tableview(observableList(test.testModel.measuredData)) {
                             minHeight = 60.0
@@ -63,12 +63,12 @@ class IKASViewSG(title: String = "ИКАС", showOnStart: Boolean = true) : Test
 
                             alignment = Pos.CENTER
 
-                            column("t BK1, °C", IKASDataSG::tempAmb.getter)
-                            column("t BK2, °C", IKASDataSG::tempTI.getter)
+                            column("t возд., °C", IKASDataSG::tempAmb.getter)
+                            column("t ОИ, °C", IKASDataSG::tempTI.getter)
                         }
                     }
                     separator()
-                    label("Приведенные к 20 градусам цельсия") {
+                    label("Приведенные к 20 °C") {
                         alignment = Pos.TOP_CENTER
                         textAlignment = TextAlignment.CENTER
                         useMaxWidth = true
@@ -85,9 +85,9 @@ class IKASViewSG(title: String = "ИКАС", showOnStart: Boolean = true) : Test
 
                         alignment = Pos.CENTER
 
-                        column("R12 | R1, Ом", IKASDataSG::R1.getter)
-                        column("R23 | R2, Ом", IKASDataSG::R2.getter)
-                        column("R31 | R3, Ом", IKASDataSG::R3.getter)
+                        column("R AB, Ом", IKASDataSG::R1.getter)
+                        column("R BC, Ом", IKASDataSG::R2.getter)
+                        column("R AC, Ом", IKASDataSG::R3.getter)
                     }
             }
         }

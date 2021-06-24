@@ -119,36 +119,36 @@ class VaryUF : KSPADTest(view = VaryUFView::class, reportTemplate = "varyuf.xlsx
     }
 
     override fun logic() {
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            waitUntilFIToLoad()
-            startFI()
-            waitUntilFIToRun()
-        }
-        if (isRunning) {
-            selectAmperageStage()
-        }
-        if (isRunning) {
-            waiting("0.8*Uн | 0.94*fН")
-            returnAmperageStage()
-        }
-        if (isRunning) {
-            CM.device<Danfoss>(UZ91).setObjectFOut(testModel.specifiedF * 1.03)
-            sleepWhileRun(7)
-        }
-        if (isRunning) {
-            selectAmperageStage()
-        }
-        if (isRunning) {
-            waiting("1.1*Uн | 1.03*fН")
-        }
-        storeTestValues()
-        if (isRunning) {
-            returnAmperageStage()
-            stopFI(CM.device(UZ91))
-        }
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//            startFI()
+//            waitUntilFIToRun()
+//        }
+//        if (isRunning) {
+//            selectAmperageStage()
+//        }
+//        if (isRunning) {
+//            waiting("0.8*Uн | 0.94*fН")
+//            returnAmperageStage()
+//        }
+//        if (isRunning) {
+//            CM.device<Danfoss>(UZ91).setObjectFOut(testModel.specifiedF * 1.03)
+//            sleepWhileRun(7)
+//        }
+//        if (isRunning) {
+//            selectAmperageStage()
+//        }
+//        if (isRunning) {
+//            waiting("1.1*Uн | 1.03*fН")
+//        }
+//        storeTestValues()
+//        if (isRunning) {
+//            returnAmperageStage()
+//            stopFI(CM.device(UZ91))
+//        }
     }
 
     private fun turnOnCircuit() {

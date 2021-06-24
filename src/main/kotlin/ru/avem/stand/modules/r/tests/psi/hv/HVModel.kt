@@ -4,6 +4,8 @@ import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleStringProperty
 import ru.avem.stand.modules.i.TestModel
+import ru.avem.stand.modules.r.common.prefill.PreFillModel
+import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.*
 import kotlin.math.abs
 
@@ -17,6 +19,7 @@ object HVModel : TestModel() {
     val specifiedData = HVData()
     val measuredData = HVData()
     val storedData = HVData()
+    val initData = HVData()
 
     var specifiedU = 0.0
     var specifiedI = 0.0

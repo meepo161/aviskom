@@ -2,7 +2,6 @@ package ru.avem.stand.modules.r.common.settings
 
 import javafx.geometry.Side
 import javafx.scene.control.TabPane
-import ru.avem.stand.modules.r.common.authorization.AuthorizationModel
 import ru.avem.stand.modules.r.common.settings.main.MainSettingsTab
 import ru.avem.stand.modules.r.common.settings.users.UserSettingsView
 import tornadofx.*
@@ -22,9 +21,7 @@ class StandSettingsTab : Workspace("Настройки", NavigationMode.Tabs) {
         tabContainer.tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
         tabContainer.side = Side.LEFT
 
-        if (AuthorizationModel.user0.level >= 9) {
-            dock<MainSettingsTab>()
-        }
+
         dock<UserSettingsView>()
 
         header.items.remove(refreshButton)

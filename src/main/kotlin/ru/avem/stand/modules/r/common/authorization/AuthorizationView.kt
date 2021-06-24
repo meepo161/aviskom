@@ -74,8 +74,7 @@ class AuthorizationView(title: String = "Авторизация") : ViewModule(t
                                 prefWidth = 200.0
                                 isEditable = true
                                 items =
-                                    Properties.users.filter { it.level >= Properties.standData.login1Level && it.level < 9 }
-                                        .map(Any::toString).observable()
+                                    Properties.users.map(Any::toString).observable()
                             }.bind(AuthorizationModel.user0Prop)
 
                             passwordfield {
@@ -98,8 +97,7 @@ class AuthorizationView(title: String = "Авторизация") : ViewModule(t
                                 prefWidth = 200.0
                                 isEditable = true
                                 items =
-                                    Properties.users.filter { it.level >= Properties.standData.login2Level && it.level < 9 }
-                                        .map(Any::toString).observable()
+                                    Properties.users.map(Any::toString).observable()
                             }.bind(AuthorizationModel.user1Prop)
 
                             passwordfield {

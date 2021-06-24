@@ -7,6 +7,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
 import ru.avem.stand.modules.i.views.TestViewModule
+import ru.avem.stand.modules.r.tests.psi.mgr.MGRData
 import tornadofx.*
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -36,38 +37,34 @@ class MGRViewSG(title: String = "МГР", showOnStart: Boolean = true) : TestVie
         }
         separator()
         hbox {
-            hbox {
-                hboxConstraints {
-                    hGrow = Priority.ALWAYS
-                }
+            alignment = Pos.CENTER
+            vbox(32.0) {
+                alignment = Pos.CENTER
                 tableview(observableList(test.testModel.measuredData)) {
                     minHeight = 60.0
                     maxHeight = 60.0
-                    minWidth = 150.0 * 4
+                    minWidth = 200.0 * 4
                     columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
                     alignment = Pos.CENTER
 
                     column("U, В", MGRDataSG::U.getter)
-                    column("R15, МОм", MGRDataSG::R15.getter)
-                    column("R60, МОм", MGRDataSG::R60.getter)
-                    column("kABS, о.е.", MGRDataSG::K_ABS.getter)
-                }
-                hboxConstraints {
-                    hGrow = Priority.ALWAYS
+                    column("R(за 15 с.),МОм", MGRDataSG::R15.getter)
+                    column("R(за 60 с.),МОм", MGRDataSG::R60.getter)
+                    column("kABS,о.е.", MGRDataSG::K_ABS.getter)
                 }
                 tableview(observableList(test.testModel.measuredData)) {
                     minHeight = 60.0
                     maxHeight = 60.0
-                    minWidth = 150.0 * 2
+                    minWidth = 200.0 * 2
                     columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
                     alignment = Pos.CENTER
 
-                    column("t BK1, °C", MGRDataSG::tempAmb.getter)
-                    column("t BK2, °C", MGRDataSG::tempTI.getter)
+                    column("t воздуха,°C", MGRDataSG::tempAmb.getter)
+                    column("t ОИ,°C", MGRDataSG::tempTI.getter)
                 }
             }
         }

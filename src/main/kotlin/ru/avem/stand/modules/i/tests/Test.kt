@@ -128,7 +128,7 @@ abstract class Test(
             initView()
             initDevices()
         }
-        createScreenShot(name)
+//        createScreenShot(name)
     }
 
     protected open fun initVars() {

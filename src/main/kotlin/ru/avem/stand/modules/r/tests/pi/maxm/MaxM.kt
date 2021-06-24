@@ -137,38 +137,38 @@ class MaxM : KSPADTest(view = MaxMView::class, reportTemplate = "maxm.xlsx") {
     }
 
     override fun logic() {
-        calcF()
-        if (isRunning) {
-//            CM.device<T42>(CM.DeviceID.BT100).setAveragingPoints(100)
-        }
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            waitUntilFIToLoad()
-        }
-        if (isRunning) {
-            checkLMDirection()
-        }
-        if (isRunning) {
-            startTIFI()
-            waitUntilFIToRun()
-        }
-        if (isRunning) {
-            startLMFI()
-        }
-        if (isRunning) {
-            findMaxTorque()
-        }
-        sleepWhileRun(1)
-        storeTestValues()
-        if (isRunning) {
-                CM.device<PR>(CM.DeviceID.DD2).offShuntirGB30()
-            stopFI(CM.device(CM.DeviceID.UZ91))
-        }
-        if (isRunning) {
-//            CM.device<T42>(CM.DeviceID.BT100).setAveragingPoints(5000)
-        }
+//        calcF()
+//        if (isRunning) {
+////            CM.device<T42>(CM.DeviceID.BT100).setAveragingPoints(100)
+//        }
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//        }
+//        if (isRunning) {
+//            checkLMDirection()
+//        }
+//        if (isRunning) {
+//            startTIFI()
+//            waitUntilFIToRun()
+//        }
+//        if (isRunning) {
+//            startLMFI()
+//        }
+//        if (isRunning) {
+//            findMaxTorque()
+//        }
+//        sleepWhileRun(1)
+//        storeTestValues()
+//        if (isRunning) {
+//                CM.device<PR>(CM.DeviceID.DD2).offShuntirGB30()
+//            stopFI(CM.device(CM.DeviceID.UZ91))
+//        }
+//        if (isRunning) {
+////            CM.device<T42>(CM.DeviceID.BT100).setAveragingPoints(5000)
+//        }
     }
 
     private fun calcF() {

@@ -16,6 +16,7 @@ object HVModelSG : TestModel() {
     val specifiedData = HVDataSG()
     val measuredData = HVDataSG()
     val storedData = HVDataSG()
+    val initData = HVDataSG()
 
     var specifiedU = 0.0
     var specifiedI = 0.0

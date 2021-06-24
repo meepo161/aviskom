@@ -134,11 +134,11 @@ abstract class KSPADTest(
         sleepWhileRun(8)
     }
 
-    fun startFI() {
+    fun startFI(volt: Int, percent: Int) {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
         CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
-            voltage = 200 / 1.4,
-            percentF = 100
+            voltage = volt / 8.42 / 1.4 * 1.2,
+            percentF = percent
         )
         sleep(1000)
         CM.device<Danfoss>(CM.DeviceID.UZ91).startObject()

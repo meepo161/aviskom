@@ -119,25 +119,25 @@ class IncN : KSPADTest(view = IncNView::class, reportTemplate = "incn.xlsx") {
     }
 
     override fun logic() {
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            waitUntilFIToLoad()
-            startFI()
-            waitUntilFIToRun()
-        }
-        if (isRunning) {
-            selectAmperageStage()
-        }
-        if (isRunning) {
-            waiting()
-        }
-        storeTestValues()
-        if (isRunning) {
-            returnAmperageStage()
-            stopFI(CM.device(UZ91))
-        }
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//            startFI()
+//            waitUntilFIToRun()
+//        }
+//        if (isRunning) {
+//            selectAmperageStage()
+//        }
+//        if (isRunning) {
+//            waiting()
+//        }
+//        storeTestValues()
+//        if (isRunning) {
+//            returnAmperageStage()
+//            stopFI(CM.device(UZ91))
+//        }
     }
 
     private fun turnOnCircuit() {

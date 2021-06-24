@@ -183,6 +183,24 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
                 }
             }
         }
+        if (isRunning) {
+            with(CM.DeviceID.PV26) {
+                addCheckableDevice(this)
+                CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
+                    testModel.measuredPV26 = value.toDouble()
+                    testModel.measuredData.PV26.value = testModel.measuredPV26.autoformat()
+                }
+            }
+        }
+        if (isRunning) {
+            with(CM.DeviceID.PV28) {
+                addCheckableDevice(this)
+                CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
+                    testModel.measuredPV28 = value.toDouble() * COEF_SHUNT_PV27_PV28
+                    testModel.measuredData.PV28.value = testModel.measuredPV28.autoformat()
+                }
+            }
+        }
 
         if (isRunning) {
             with(CM.DeviceID.PS81) {
@@ -205,20 +223,20 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             turnOffTM1()
             turnOffTM2()
             waitUntilFIToLoad()
-
-            CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
-                voltage = 200 / 1.4,
-                percentF = 100
+            regulateTM1(200) // 0.25f = 200 вольт
+            startFI(
+                testModel.specifiedU.toInt()/* запас 20% по напряжению для регулирования в функции */,
+                50 /* изменять также в regulateFI */
             )
-            turnOnTM1()
-            startFI()
+            regulateFI(200)
             waitUntilFIToRun()
+            // TODO поставить нужное каждому
         }
         if (isRunning) {
             turnOnLoad()
         }
         if (isRunning) {
-            load()
+            regulateTM2(10) // TODO поставить нужное
         }
         if (isRunning) {
             waiting()
@@ -228,6 +246,79 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             stopFI(CM.device(CM.DeviceID.UZ91))
             turnOffTM1()
             turnOffTM2()
+        }
+        // TODO опыт икаса
+        //    Температура обмотки по сопротивлению на момент измерения = (Rгорячей-Rхолодной)/(Rхолодной*0,004(для меди)) + ТемператураОбмоткиХолодной(ОИ или воздуха)
+        // TODO опыт мегера (в главном тз есть)
+    }
+
+    private fun regulateTM1(voltage: Int) {
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
+            var percent = 0
+            // TODO testModel.measuredU - поставить нужное
+            while (isRunning && (testModel.measuredU < voltage * 0.8
+                        || testModel.measuredU > voltage * 1.2)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                    percent += 1
+                    turnOnTM1(percent)
+                } else if (testModel.measuredU > voltage * 1.2) {
+                    percent -= 1
+                    turnOnTM1(percent)
+                }
+                sleep(500)
+            }
+            while (isRunning && (testModel.measuredU < voltage * 0.97
+                        || testModel.measuredU > voltage * 1.03)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.97) {
+                    percent += 1
+                    turnOnTM1(percent)
+                } else if (testModel.measuredU > voltage * 1.03) {
+                    percent -= 1
+                    turnOnTM1(percent)
+                }
+                sleep(1000)
+            }
+        }
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+        }
+    }
+
+    private fun regulateFI(voltage: Int) {
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОЯ")
+            var percent = 50
+            // TODO testModel.measuredU - поставить нужное
+            while (isRunning && (testModel.measuredU < voltage * 0.8
+                        || testModel.measuredU > voltage * 1.2)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                    percent += 1
+                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
+                } else if (testModel.measuredU > voltage * 1.2) {
+                    percent -= 1
+                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
+                }
+                sleep(500)
+            }
+            while (isRunning && (testModel.measuredU < voltage * 0.98
+                        || testModel.measuredU > voltage * 1.02)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.98) {
+                    percent += 1
+                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
+                } else if (testModel.measuredU > voltage * 1.02) {
+                    percent -= 1
+                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
+                }
+                sleep(1000)
+            }
+        }
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
         }
     }
 
@@ -247,16 +338,16 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         sleep(5000)
     }
 
-    private fun turnOnTM1() {
-        CM.device<PR>(CM.DeviceID.DD2).setUOnTM1(0.4f)
+    private fun turnOnTM1(percent: Int) {
+        CM.device<PR>(CM.DeviceID.DD2).setUOnTM1((percent * 96 / 100 + 2).toFloat() / 100) // 0.25f  = 196+- постоянки
     }
 
     private fun turnOffTM1() {
         CM.device<PR>(CM.DeviceID.DD2).setUOnTM1(0f)
     }
 
-    private fun turnOnTM2(voltage: Float) {
-        CM.device<PR>(CM.DeviceID.DD2).setUOnTM2(voltage)
+    private fun turnOnTM2(percent: Int) {
+        CM.device<PR>(CM.DeviceID.DD2).setUOnTM1((percent * 96 / 100 + 2).toFloat() / 100)
     }
 
     private fun turnOffTM2() {
@@ -281,39 +372,38 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         }
     }
 
-    private fun load() {
+    private fun regulateTM2(amperage: Int) {
         if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Нагрузка")
-            var voltageTM2 = 0.0f
-            while (isRunning && (testModel.measuredI2A < 10 * 0.8
-                        || testModel.measuredI2A > 10 * 1.2)
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
+            var percent = 0
+            // TODO testModel.measuredI2A - поставить нужное
+            while (isRunning && (testModel.measuredI2A < amperage * 0.6
+                        || testModel.measuredI2A > amperage * 1)
             ) {
-                if (isRunning && testModel.measuredI2A < 10 * 0.8) {
-                    voltageTM2 += 0.005f
-                    turnOnTM2(voltageTM2.autoformat().toFloat())
-                } else if (testModel.measuredI2A > 10 * 1.2) {
-                    voltageTM2 -= 0.005f
-                    turnOnTM2(voltageTM2.autoformat().toFloat())
+                if (isRunning && testModel.measuredI2A < amperage * 0.6) {
+                    percent += 1
+                    turnOnTM2(percent)
+                } else if (testModel.measuredI2A > amperage * 1) {
+                    percent -= 1
+                    turnOnTM2(percent)
                 }
                 sleep(500)
-                println(voltageTM2)
             }
-            while (isRunning && (testModel.measuredI2A < 10 * 0.98
-                        || testModel.measuredI2A > 10 * 1.02)
+            while (isRunning && (testModel.measuredI2A < amperage * 0.96
+                        || testModel.measuredI2A > amperage * 1)
             ) {
-                if (isRunning && testModel.measuredI2A < 10 * 0.98) {
-                    voltageTM2 += 0.0005f
-                    turnOnTM2(voltageTM2.autoformat().toFloat())
-                } else if (testModel.measuredI2A > 10 * 1.02) {
-                    voltageTM2 -= 0.0005f
-                    turnOnTM2(voltageTM2.autoformat().toFloat())
+                if (isRunning && testModel.measuredI2A < amperage * 0.96) {
+                    percent += 1
+                    turnOnTM2(percent)
+                } else if (testModel.measuredI2A > amperage * 1) {
+                    percent -= 1
+                    turnOnTM2(percent)
                 }
                 sleep(1000)
-                println(voltageTM2)
             }
         }
         if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Нагрузка выставлена")
+            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
         }
     }
 
@@ -340,6 +430,10 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
 
         testModel.storedData.cos.value = testModel.measuredData.cos.value
         testModel.storedData.P2.value = testModel.measuredData.P2.value
+
+
+        testModel.storedData.PV26.value = testModel.measuredData.PV26.value
+        testModel.storedData.PV28.value = testModel.measuredData.PV28.value
     }
 
     override fun result() {

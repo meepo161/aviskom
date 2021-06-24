@@ -90,15 +90,15 @@ class IKAS : KSPADTest(view = IKASView::class, reportTemplate = "ikas.xlsx") {
     }
 
     override fun logic() {
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            startMeasuring()
-        }
-        if (isRunning) {
-            calcRs()
-        }
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            startMeasuring()
+//        }
+//        if (isRunning) {
+//            calcRs()
+//        }
     }
 
     private fun turnOnCircuit() {

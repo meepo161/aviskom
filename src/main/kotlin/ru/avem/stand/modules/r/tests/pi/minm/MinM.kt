@@ -121,22 +121,22 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
     }
 
     override fun logic() {
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            waitUntilFIToLoad()
-        }
-        if (isRunning) {
-            checkLMDirectionsOfRotation()
-        }
-        if (isRunning) {
-            findMinM()
-        }
-        if (isRunning) {
-            CM.device<PR>(CM.DeviceID.DD2).offPEQV3()
-//            stopFI(CM.device(CM.DeviceID.UZ92))
-        }
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//        }
+//        if (isRunning) {
+//            checkLMDirectionsOfRotation()
+//        }
+//        if (isRunning) {
+//            findMinM()
+//        }
+//        if (isRunning) {
+//            CM.device<PR>(CM.DeviceID.DD2).offPEQV3()
+////            stopFI(CM.device(CM.DeviceID.UZ92))
+//        }
     }
 
     private fun turnOnCircuit() {

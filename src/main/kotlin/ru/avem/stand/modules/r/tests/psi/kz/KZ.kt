@@ -121,21 +121,21 @@ class KZ : KSPADTest(view = KZView::class, reportTemplate = "kz.xlsx") {
     }
 
     override fun logic() {
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            waitUntilFIToLoad()
-            startFI()
-            sleepWhileRun(3)
-        }
-        if (isRunning) {
-            selectAmperageStage()
-        }
-        if (isRunning) {
-            waiting()
-        }
-        storeTestValues()
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//            startFI()
+//            sleepWhileRun(3)
+//        }
+//        if (isRunning) {
+//            selectAmperageStage()
+//        }
+//        if (isRunning) {
+//            waiting()
+//        }
+//        storeTestValues()
     }
 
     private fun turnOnCircuit() {

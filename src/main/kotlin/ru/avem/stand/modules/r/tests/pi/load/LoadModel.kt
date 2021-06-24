@@ -53,6 +53,12 @@ object LoadModel : TestModel() {
     var measuredP1 = 0.0
 
     @Volatile
+    var measuredPV26 = 0.0
+
+    @Volatile
+    var measuredPV28 = 0.0
+
+    @Volatile
     var measuredP2 = 0.0
 
     @Volatile

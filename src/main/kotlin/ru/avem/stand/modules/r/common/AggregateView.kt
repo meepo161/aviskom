@@ -63,8 +63,8 @@ class AggregateView(title: String = Properties.standData.titleShort) :
             }
         }
 
-        tab("Пользователи") {
-            content = find(UserSettingsView::class).root
-        }
+//        tab("Пользователи") {
+//            content = find(UserSettingsView::class).root
+//        }
     }.addClass(Styles.regularLabels)
 }

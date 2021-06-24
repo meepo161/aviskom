@@ -7,6 +7,8 @@ import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
 import ru.avem.stand.modules.i.views.TestViewModule
+import ru.avem.stand.modules.r.common.prefill.PreFillModel
+import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.*
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -28,13 +30,33 @@ class HVView(title: String = "ВИУ", showOnStart: Boolean = true) : TestViewMo
             hGrow = Priority.ALWAYS
         }
 
+        label("Заданные значения") {
+            alignment = Pos.TOP_CENTER
+            textAlignment = TextAlignment.CENTER
+            useMaxWidth = true
+            isWrapText = true
+        }
+        hbox {
+            tableview(observableList(test.testModel.initData)) {
+                minHeight = 60.0
+                maxHeight = 60.0
+                minWidth = 150.0 * 2
+                columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
+                mouseTransparentProperty().set(true)
+
+                alignment = Pos.CENTER
+                HVModel.initData.U.set(PreFillModel.testTypeProp.value.fields["U_HV"]?.value.toDoubleOrDefault(0.0).toString())
+                HVModel.initData.I.set(PreFillModel.testTypeProp.value.fields["I_HV"]?.value.toDoubleOrDefault(0.0).toString())
+                column("U, В", HVData::U.getter)
+                column("I, А", HVData::I.getter)
+            }
+        }
         label("Измеренные значения") {
             alignment = Pos.TOP_CENTER
             textAlignment = TextAlignment.CENTER
             useMaxWidth = true
             isWrapText = true
         }
-        separator()
         hbox {
             tableview(observableList(test.testModel.measuredData)) {
                 minHeight = 60.0
@@ -47,7 +69,6 @@ class HVView(title: String = "ВИУ", showOnStart: Boolean = true) : TestViewMo
 
                 column("U, В", HVData::U.getter)
                 column("I, А", HVData::I.getter)
-                column("f, Гц", HVData::F.getter)
             }
         }
         hbox {

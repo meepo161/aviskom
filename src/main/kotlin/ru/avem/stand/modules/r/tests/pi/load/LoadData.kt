@@ -28,6 +28,9 @@ data class LoadData(
     val efficiency: StringProperty = SimpleStringProperty(""),
     val sk: StringProperty = SimpleStringProperty(""),
 
+    val PV26: StringProperty = SimpleStringProperty(""),
+    val PV28: StringProperty = SimpleStringProperty(""),
+
     val torque: StringProperty = SimpleStringProperty(""),
     val RPM: StringProperty = SimpleStringProperty(""),
 

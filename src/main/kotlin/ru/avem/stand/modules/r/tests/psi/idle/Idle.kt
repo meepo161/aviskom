@@ -6,19 +6,14 @@ import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.*
 import ru.avem.stand.modules.r.communication.model.devices.avem.avem3.AVEM3Model
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.Danfoss
-import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.FREQ_PERCENT
-import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.MAX_VOLTAGE
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202Model
-import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 import ru.avem.stand.modules.r.tests.KSPADTest
 import ru.avem.stand.utils.autoformat
 import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.runLater
 import java.lang.Thread.sleep
 import kotlin.collections.set
-import kotlin.concurrent.thread
-import kotlin.math.abs
 
 class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
     override val name = "Измерение потерь в ХХ.Правильность чередования фаз"
@@ -117,7 +112,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV27) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIB = value.toDouble()* COEF_SHUNT_PV27_PV28
+                    testModel.measuredIB = value.toDouble() * COEF_SHUNT_PV27_PV28
                     testModel.measuredData.IB.value = testModel.measuredIB.autoformat()
                 }
             }
@@ -144,22 +139,98 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         }
         if (isRunning) {
             waitUntilFIToLoad()
-
-            turnOnTM1()
-            startFI()
+            regulateTM1(200) // 0.25f = 200 вольт
+            startFI(
+                testModel.specifiedU.toInt()/* запас 20% по напряжению для регулирования в функции */,
+                50 /* изменять также в regulateFI */
+            )
+            regulateFI(200)
             waitUntilFIToRun()
+            // TODO поставить нужное каждому
         }
         if (isRunning) {
             waiting()
         }
+        appendMessageToLog(LogTag.ERROR, testModel.specifiedU.toString() + "")
         storeTestValues()
         stopFI(CM.device(UZ91))
         turnOffTM1()
     }
 
-    private fun turnOnTM1() {
-        CM.device<PR>(DD2).setUOnTM1(0.25f)
+    private fun turnOnTM1(percent: Int) {
+        CM.device<PR>(DD2).setUOnTM1((percent * 96 / 100 + 2).toFloat() / 100) // 0.25f  = 196+- постоянки
     }
+
+    private fun regulateTM1(voltage: Int) {
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
+            var percent = 0
+            // TODO testModel.measuredU - поставить нужное
+            while (isRunning && (testModel.measuredU < voltage * 0.8
+                        || testModel.measuredU > voltage * 1.2)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                    percent += 1
+                    turnOnTM1(percent)
+                } else if (testModel.measuredU > voltage * 1.2) {
+                    percent -= 1
+                    turnOnTM1(percent)
+                }
+                sleep(500)
+            }
+            while (isRunning && (testModel.measuredU < voltage * 0.97
+                        || testModel.measuredU > voltage * 1.03)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.97) {
+                    percent += 1
+                    turnOnTM1(percent)
+                } else if (testModel.measuredU > voltage * 1.03) {
+                    percent -= 1
+                    turnOnTM1(percent)
+                }
+                sleep(1000)
+            }
+        }
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+        }
+    }
+
+    private fun regulateFI(voltage: Int) {
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОЯ")
+            var percent = 50
+            // TODO testModel.measuredU - поставить нужное
+            while (isRunning && (testModel.measuredU < voltage * 0.8
+                        || testModel.measuredU > voltage * 1.2)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                    percent += 1
+                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
+                } else if (testModel.measuredU > voltage * 1.2) {
+                    percent -= 1
+                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
+                }
+                sleep(500)
+            }
+            while (isRunning && (testModel.measuredU < voltage * 0.98
+                        || testModel.measuredU > voltage * 1.02)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.98) {
+                    percent += 1
+                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
+                } else if (testModel.measuredU > voltage * 1.02) {
+                    percent -= 1
+                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
+                }
+                sleep(1000)
+            }
+        }
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+        }
+    }
+
 
     private fun turnOffTM1() {
         CM.device<PR>(DD2).setUOnTM1(0f)

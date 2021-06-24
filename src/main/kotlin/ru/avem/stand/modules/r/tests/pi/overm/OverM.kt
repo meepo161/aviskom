@@ -153,38 +153,38 @@ class OverM : KSPADTest(view = OverMView::class, reportTemplate = "overm.xlsx") 
     }
 
     override fun logic() {
-        calcF()
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            waitUntilFIToLoad()
-        }
-        if (isRunning) {
-            checkLMDirection()
-        }
-        if (isRunning) {
-            startTIFI()
-            waitUntilFIToRun()
-        }
-        if (isRunning) {
-            startLMFI()
-        }
-        if (isRunning) {
-            load()
-        }
-        if (isRunning) {
-            selectAmperageStage()
-        }
-        if (isRunning) {
-            waiting()
-        }
-        storeTestValues()
-        if (isRunning) {
-                CM.device<PR>(CM.DeviceID.DD2).offShuntirGB30()
-            returnAmperageStage()
-            stopFI(CM.device(CM.DeviceID.UZ91))
-        }
+//        calcF()
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//        }
+//        if (isRunning) {
+//            checkLMDirection()
+//        }
+//        if (isRunning) {
+//            startTIFI()
+//            waitUntilFIToRun()
+//        }
+//        if (isRunning) {
+//            startLMFI()
+//        }
+//        if (isRunning) {
+//            load()
+//        }
+//        if (isRunning) {
+//            selectAmperageStage()
+//        }
+//        if (isRunning) {
+//            waiting()
+//        }
+//        storeTestValues()
+//        if (isRunning) {
+//                CM.device<PR>(CM.DeviceID.DD2).offShuntirGB30()
+//            returnAmperageStage()
+//            stopFI(CM.device(CM.DeviceID.UZ91))
+//        }
     }
 
     private fun calcF() {

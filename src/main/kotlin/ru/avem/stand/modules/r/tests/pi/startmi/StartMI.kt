@@ -114,30 +114,30 @@ class StartMI : KSPADTest(view = StartMIView::class, reportTemplate = "startmi.x
     }
 
     override fun logic() {
-        if (isRunning) {
-//            CM.device<T42>(BT100).setAveragingPoints(100)
-        }
-        if (isRunning) {
-            turnOnCircuit()
-        }
-        if (isRunning) {
-            waitUntilFIToLoad()
-            startFI()
-            waitUntilFIToRun()
-        }
-
-        if (isRunning) {
-            var u = 2
-            while (isRunning && u <= 380) {
-                CM.device<Danfoss>(UZ91).setObjectUMax(u)
-                u += 63
-            }
-        }
-        sleepWhileRun(5)
-        storeTestValues()
-        if (isRunning) {
-//            CM.device<T42>(BT100).setAveragingPoints(5000)
-        }
+//        if (isRunning) {
+////            CM.device<T42>(BT100).setAveragingPoints(100)
+//        }
+//        if (isRunning) {
+//            turnOnCircuit()
+//        }
+//        if (isRunning) {
+//            waitUntilFIToLoad()
+//            startFI()
+//            waitUntilFIToRun()
+//        }
+//
+//        if (isRunning) {
+//            var u = 2
+//            while (isRunning && u <= 380) {
+//                CM.device<Danfoss>(UZ91).setObjectUMax(u)
+//                u += 63
+//            }
+//        }
+//        sleepWhileRun(5)
+//        storeTestValues()
+//        if (isRunning) {
+////            CM.device<T42>(BT100).setAveragingPoints(5000)
+//        }
     }
 
     private fun turnOnCircuit() {

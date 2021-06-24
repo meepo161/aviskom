@@ -37,32 +37,33 @@ class MGRView(title: String = "МГР", showOnStart: Boolean = true) : TestViewM
         separator()
         hbox {
             alignment = Pos.CENTER
-            hbox {
+            vbox(32.0) {
+                alignment = Pos.CENTER
                 tableview(observableList(test.testModel.measuredData)) {
                     minHeight = 60.0
                     maxHeight = 60.0
-                    minWidth = 150.0 * 4
+                    minWidth = 200.0 * 4
                     columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
                     alignment = Pos.CENTER
 
                     column("U, В", MGRData::U.getter)
-                    column("R15, МОм", MGRData::R15.getter)
-                    column("R60, МОм", MGRData::R60.getter)
-                    column("kABS, о.е.", MGRData::K_ABS.getter)
+                    column("R(за 15 с.),МОм", MGRData::R15.getter)
+                    column("R(за 60 с.),МОм", MGRData::R60.getter)
+                    column("kABS,о.е.", MGRData::K_ABS.getter)
                 }
                 tableview(observableList(test.testModel.measuredData)) {
                     minHeight = 60.0
                     maxHeight = 60.0
-                    minWidth = 150.0 * 2
+                    minWidth = 200.0 * 2
                     columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
                     mouseTransparentProperty().set(true)
 
                     alignment = Pos.CENTER
 
-                    column("t BK1, °C", MGRData::tempAmb.getter)
-                    column("t BK2, °C", MGRData::tempTI.getter)
+                    column("t воздуха,°C", MGRData::tempAmb.getter)
+                    column("t ОИ,°C", MGRData::tempTI.getter)
                 }
             }
         }
