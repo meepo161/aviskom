@@ -126,7 +126,7 @@ class ProtocolsTab : View("Протоколы") {
                 label("Заводской номер")
 
                 comboBoxSN = combobox {
-                    prefWidth = 200.0
+                    minWidth = 600.0
 
                     validationCtx.addValidator(this, selectionModel.selectedItemProperty()) { selected ->
                         val filteredItems = items.filter { it == selected }
@@ -192,9 +192,9 @@ class ProtocolsTab : View("Протоколы") {
         tab("По заводскому номеру") {
             content = serialNumbers
         }
-        tab("По испытаниям") {
-            content = tests
-        }
+//        tab("По испытаниям") {
+//            content = tests
+//        }
     }.addClass(Styles.regularLabels)
 
     override fun onDock() {

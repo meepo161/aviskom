@@ -7,7 +7,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.text.TextAlignment
 import ru.avem.stand.modules.i.views.Styles
 import ru.avem.stand.modules.i.views.TestViewModule
-import ru.avem.stand.modules.r.tests.psi.mgrSG.MGRDataSG
 import tornadofx.*
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -43,10 +42,10 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             mouseTransparentProperty().set(true)
 //            column("Uср., В", LoadData::U.getter)
 //            column("Iср., А", LoadData::I.getter)
-            column("Uя, В", LoadData::UA.getter)   //PV23
-            column("Iя, А", LoadData::I2A.getter)  //PV24
-            column("Uов, В", LoadData::UB.getter)   //PV25
-            column("Iов, А", LoadData::I2B.getter)  //PV27
+            column("Uя, В", LoadData::UMPTOY.getter)   //PV23
+            column("Iя, А", LoadData::IMPTOY.getter)  //PV24
+            column("Uов, В", LoadData::UMPTOV.getter)   //PV25
+            column("Iов, А", LoadData::IMPTOV.getter)  //PV27
             column("t возд., °C", LoadData::tempAmb.getter)
             column("t ОИ, °C", LoadData::tempTI.getter)
 //            column("Результат", LoadData::result.getter)
@@ -79,10 +78,9 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             minWidth = 150.0 * 5
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
             mouseTransparentProperty().set(true)
-            column("Uов, В", LoadData::PV26.getter)
-            column("Iов, А", LoadData::PV28.getter)
-            column("cos φ", LoadData::cos.getter)
-            column("P, кВт", LoadData::P2.getter)
+            column("Uов, В", LoadData::USGOV.getter)
+            column("Iов, А", LoadData::ISGOV.getter)
+//            column("P1, кВт", LoadData::P1.getter)
             column("Результат", LoadData::result.getter)
         }
 //        tableview(observableList(test.testModel.measuredData)) {

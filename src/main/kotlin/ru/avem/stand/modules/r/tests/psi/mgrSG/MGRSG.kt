@@ -23,20 +23,24 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
     override fun initVars() {
         super.initVars()
 
-        testModel.specifiedU = PreFillModel.testTypeProp.value.fields["U"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI = PreFillModel.testTypeProp.value.fields["I"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedCos = PreFillModel.testTypeProp.value.fields["COS"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedEfficiency =
-            PreFillModel.testTypeProp.value.fields["EFFICIENCY"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedP = PreFillModel.testTypeProp.value.fields["P"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedRPM = PreFillModel.testTypeProp.value.fields["RPM"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedF = PreFillModel.testTypeProp.value.fields["F"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedScheme = PreFillModel.testTypeProp.value.fields["SCHEME"]?.value ?: "λ"
-
-        testModel.specifiedUMGR = PreFillModel.testTypeProp.value.fields["U_MGR"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedRMGR = PreFillModel.testTypeProp.value.fields["R_MGR_HV"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_MPT =    PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_Y_MPT =    PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_MPT = PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_MPT =  PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_MPT =   PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_MPT =  PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_MPT =   PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_MPT =   PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_SG =     PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_SG =     PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_SG =  PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_SG =   PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_SG =    PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_SG =   PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_SG =    PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_SG =    PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedIDLE_TIME =  PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedLOAD_TIME =  PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
     }
 
     override fun initView() {
@@ -101,7 +105,7 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
 
         with(CM.device<CS02021>(PR65)) {
             if (isResponding) {
-                setVoltage(testModel.specifiedUMGR.toInt())
+                setVoltage(testModel.specifiedR_MGR_SG.toInt())
                 sleepWhileRun(90, progressProperty = testModel.progressProperty)
                 val measuredR60 = readData()[0].toDouble()
                 val measuredUr = readData()[1].toDouble()
@@ -168,24 +172,15 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
     override fun saveProtocol() {
         reportFields["TEST_NAME_MGR"] = name
 
-        reportFields["POWER"] = testModel.specifiedP.toString()
-        reportFields["VOLTAGE_LIN"] = testModel.specifiedU.toString()
-        reportFields["COS"] = testModel.specifiedCos.toString()
-        reportFields["EFFICIENCY"] = testModel.specifiedEfficiency.toString()
-        reportFields["AMPERAGE_PHASE"] = testModel.specifiedI.toString()
-        reportFields["RPM"] = testModel.specifiedRPM.toString()
-        reportFields["FREQ"] = testModel.specifiedF.toString()
-        reportFields["SCHEME"] = testModel.specifiedScheme
-
-        reportFields["U_SPEC_MGR"] = testModel.specifiedData.U.value
-        reportFields["R_SPEC_MGR"] = testModel.specifiedData.R60.value
-        reportFields["U_MEAS_MGR"] = testModel.measuredData.U.value
-        reportFields["R15_MEAS_MGR"] = testModel.measuredData.R15.value
-        reportFields["R60_MEAS_MGR"] = testModel.measuredData.R60.value
-        reportFields["K_ABS_MEAS_MGR"] = testModel.measuredData.K_ABS.value
-        reportFields["TEMP_AMB_MGR"] = testModel.measuredData.tempAmb.value
-        reportFields["TEMP_TI_MGR"] = testModel.measuredData.tempTI.value
-        reportFields["RESULT_MGR"] = testModel.measuredData.result.value
+        reportFields["U_SPEC_MGR_SG"] = testModel.specifiedData.U.value
+        reportFields["R_SPEC_MGR_SG"] = testModel.specifiedData.R60.value
+        reportFields["U_MEAS_MGR_SG"] = testModel.measuredData.U.value
+        reportFields["R15_MEAS_MGR_SG"] = testModel.measuredData.R15.value
+        reportFields["R60_MEAS_MGR_SG"] = testModel.measuredData.R60.value
+        reportFields["K_ABS_MEAS_MGR_SG"] = testModel.measuredData.K_ABS.value
+        reportFields["TEMP_AMB_MGR_SG"] = testModel.measuredData.tempAmb.value
+        reportFields["TEMP_TI_MGR_SG"] = testModel.measuredData.tempTI.value
+        reportFields["RESULT_MGR_SG"] = testModel.measuredData.result.value
 
         super.saveProtocol()
     }

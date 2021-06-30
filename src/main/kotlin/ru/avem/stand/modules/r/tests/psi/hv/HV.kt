@@ -28,21 +28,24 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
     override fun initVars() {
         super.initVars()
 
-        testModel.specifiedU = PreFillModel.testTypeProp.value.fields["U"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI = PreFillModel.testTypeProp.value.fields["I"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedCos = PreFillModel.testTypeProp.value.fields["COS"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedEfficiency =
-            PreFillModel.testTypeProp.value.fields["EFFICIENCY"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedP = PreFillModel.testTypeProp.value.fields["P"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedRPM = PreFillModel.testTypeProp.value.fields["RPM"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedF = PreFillModel.testTypeProp.value.fields["F"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedScheme = PreFillModel.testTypeProp.value.fields["SCHEME"]?.value ?: "λ"
-
-        testModel.specifiedUHV = PreFillModel.testTypeProp.value.fields["U_HV"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedIHV = PreFillModel.testTypeProp.value.fields["I_HV"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedT = PreFillModel.testTypeProp.value.fields["T_HV"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_MPT =    PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_Y_MPT =    PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_MPT = PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_MPT =  PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_MPT =   PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_MPT =  PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_MPT =   PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_MPT =   PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_SG =     PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_SG =     PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_SG =  PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_SG =   PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_SG =    PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_SG =   PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_SG =    PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_SG =    PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedIDLE_TIME =  PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedLOAD_TIME =  PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
 
     }
 
@@ -81,7 +84,7 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
                     testModel.measuredData.I.value =
                         "%.2f".format(Locale.ENGLISH, value.toDouble()/* * CURRENT_STAGE_PM130_VIU*/)
                     testModel.measuredI = testModel.measuredData.I.value.toDoubleOrDefault(0.0)
-                    if (testModel.measuredI > testModel.specifiedIHV) {
+                    if (testModel.measuredI > testModel.specifiedI_HV_MPT) {
                         cause = "ток утечки превысил заданный"
                     }
                 }
@@ -191,7 +194,7 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
 
     private fun regulateVoltage(latrDevice: AvemLatrController1) {
         appendMessageToLog(LogTag.INFO, "Грубое регулирование напряжения...")
-        while (isRunning && testModel.measuredU < testModel.specifiedUHV - 300) {
+        while (isRunning && testModel.measuredU < testModel.specifiedU_HV_MPT - 300) {
             latrDevice.start((220f))
             sleep(10)
         }
@@ -211,14 +214,14 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
             )
             appendMessageToLog(LogTag.INFO, "Точное регулирование напряжения...")
             while (isRunning &&
-                (testModel.measuredU <= testModel.specifiedUHV ||
-                        testModel.measuredU >= testModel.specifiedUHV * 1.03f)
+                (testModel.measuredU <= testModel.specifiedU_HV_MPT ||
+                        testModel.measuredU >= testModel.specifiedU_HV_MPT * 1.03f)
             ) {
-                if (testModel.measuredU <= testModel.specifiedUHV) {
+                if (testModel.measuredU <= testModel.specifiedU_HV_MPT) {
                     latrDevice.plusVoltage()
                     sleep(200)
                 }
-                if (testModel.measuredU >= testModel.specifiedUHV * 1.03f) {
+                if (testModel.measuredU >= testModel.specifiedU_HV_MPT * 1.03f) {
                     latrDevice.minusVoltage()
                     sleep(200)
                 }
@@ -231,7 +234,7 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
 
     private fun waiting() {
         appendMessageToLog(LogTag.INFO, "Ожидание...")
-        sleepWhileRun(testModel.specifiedT.toInt(), progressProperty = testModel.progressProperty)
+        sleepWhileRun(testModel.specifiedT_HV_MPT.toInt(), progressProperty = testModel.progressProperty)
     }
 
     private fun storeTestValues() {
@@ -268,27 +271,16 @@ class HV : KSPADTest(view = HVView::class, reportTemplate = "hv.xlsx") {
     private fun restoreTestValues() {
         testModel.measuredData.U.value = testModel.storedData.U.value
         testModel.measuredData.I.value = testModel.storedData.I.value
-        testModel.measuredData.F.value = testModel.storedData.F.value
+        testModel.measuredData.time.value = testModel.storedData.time.value
     }
 
     override fun saveProtocol() {
         reportFields["TEST_NAME_HV"] = name
 
-        reportFields["POWER"] = testModel.specifiedP.toString()
-        reportFields["VOLTAGE_LIN"] = testModel.specifiedU.toString()
-        reportFields["COS"] = testModel.specifiedCos.toString()
-        reportFields["EFFICIENCY"] = testModel.specifiedEfficiency.toString()
-        reportFields["AMPERAGE_PHASE"] = testModel.specifiedI.toString()
-        reportFields["RPM"] = testModel.specifiedRPM.toString()
-        reportFields["FREQ"] = testModel.specifiedF.toString()
-        reportFields["SCHEME"] = testModel.specifiedScheme
-
-        reportFields["U_SPEC_HV"] = testModel.specifiedData.U.value
-        reportFields["U_MEAS_HV"] = testModel.measuredData.U.value
-        reportFields["I_SPEC_HV"] = testModel.specifiedData.I.value
-        reportFields["I_MEAS_HV"] = testModel.measuredData.I.value
-        reportFields["FREQ_HV"] = testModel.measuredData.F.value
-        reportFields["RESULT_HV"] = testModel.measuredData.result.value
+        reportFields["U_MEAS_HV_MPT"] = testModel.measuredData.U.value
+        reportFields["I_MEAS_HV_MPT"] = testModel.measuredData.I.value
+        reportFields["TIME_MEAS_HV_MPT"] = testModel.measuredData.time.value
+        reportFields["RESULT_HV_MPT"] = testModel.measuredData.result.value
 
         super.saveProtocol()
     }

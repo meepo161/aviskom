@@ -8,12 +8,14 @@ import javafx.scene.image.WritableImage
 import javafx.scene.text.Text
 import ru.avem.stand.modules.i.Module
 import ru.avem.stand.modules.i.views.TestViewModule
+import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.device
 import ru.avem.stand.modules.r.communication.model.IDeviceController
 import ru.avem.stand.modules.r.storage.Properties
 import ru.avem.stand.modules.r.storage.database.saveProtocol
 import ru.avem.stand.utils.createScreenShot
+import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.*
 import java.io.File
 import java.lang.Thread.sleep
@@ -247,6 +249,31 @@ abstract class Test(
     }
 
     open fun saveProtocol() {
+        reportFields["VOLTAGE_MPT_Y"] = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["AMPERAGE_MPT_Y"] = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["VOLTAGE_SG_V"] = PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["VOLTAGE_SG_Y"] = PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0).toString()
+
+        reportFields["U_SPEC_MGR_MPT"] = PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["R_SPEC_MGR_MPT"] = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["U_SPEC_MGR_SG"] = PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["R_SPEC_MGR_SG"] = PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0).toString()
+
+
+        reportFields["U_SPEC_HV_MPT"]       = PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["I_SPEC_HV_MPT"]       = PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["TIME_SPEC_HV_MPT"]    = PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0).toString()
+
+        reportFields["U_SPEC_HV_SG"]    = PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["I_SPEC_HV_SG"]    = PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["TIME_SPEC_HV_SG"] = PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0).toString()
+
+        reportFields["R_SPEC_IKAS"] = PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0).toString()
+
+        reportFields["TIME_MEAS_IDLE"] = PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0).toString()
+        reportFields["TIME_MEAS_LOAD"] = PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0).toString()
+        //TODO может время реальное
+
         reportFields["CUSTOMER"] = Properties.standData.customer
         reportFields["CUSTOMER_PLACE"] = Properties.standData.customerPlace
         reportFields["STAND_AIEL"] = Properties.standData.aiel

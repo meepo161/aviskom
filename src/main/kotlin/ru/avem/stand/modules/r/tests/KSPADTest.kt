@@ -36,13 +36,24 @@ abstract class KSPADTest(
     override fun initVars() {
         super.initVars()
 
-        testModel.testItemData.P.value = PreFillModel.testTypeProp.value.fields["P"]?.value
-        testModel.testItemData.U.value = PreFillModel.testTypeProp.value.fields["U"]?.value
-        testModel.testItemData.I.value = PreFillModel.testTypeProp.value.fields["I"]?.value
-        testModel.testItemData.cos.value = PreFillModel.testTypeProp.value.fields["COS"]?.value
-        testModel.testItemData.RPM.value = PreFillModel.testTypeProp.value.fields["RPM"]?.value
-        testModel.testItemData.F.value = PreFillModel.testTypeProp.value.fields["F"]?.value
-        testModel.testItemData.efficiency.value = PreFillModel.testTypeProp.value.fields["EFFICIENCY"]?.value
+        testModel.testItemData.U_Y_MPT.value = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value
+        testModel.testItemData.I_Y_MPT.value = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value
+        testModel.testItemData.R_IKAS_MPT.value = PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value
+        testModel.testItemData.R_MGR_MPT.value = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value
+        testModel.testItemData.U_HV_MPT.value = PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value
+        testModel.testItemData.U_MGR_MPT.value = PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value
+        testModel.testItemData.I_HV_MPT.value = PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value
+        testModel.testItemData.T_HV_MPT.value = PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value
+        testModel.testItemData.U_Y_SG.value = PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value
+        testModel.testItemData.U_V_SG.value = PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value
+        testModel.testItemData.R_IKAS_SG.value = PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value
+        testModel.testItemData.R_MGR_SG.value = PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value
+        testModel.testItemData.U_HV_SG.value = PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value
+        testModel.testItemData.U_MGR_SG.value = PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value
+        testModel.testItemData.I_HV_SG.value = PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value
+        testModel.testItemData.T_HV_SG.value = PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value
+        testModel.testItemData.IDLE_TIME.value = PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value
+        testModel.testItemData.LOAD_TIME.value = PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value
 
         testModel.protections.resetAll()
     }

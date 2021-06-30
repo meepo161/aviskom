@@ -10,7 +10,6 @@ import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202Model
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 import ru.avem.stand.modules.r.tests.KSPADTest
-import ru.avem.stand.modules.r.tests.calcSyncRPM
 import ru.avem.stand.utils.autoformat
 import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.find
@@ -27,23 +26,25 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
     override fun initVars() {
         super.initVars()
 
-        testModel.specifiedU = PreFillModel.testTypeProp.value.fields["U"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI = PreFillModel.testTypeProp.value.fields["I"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedCos = PreFillModel.testTypeProp.value.fields["COS"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedEfficiency =
-            PreFillModel.testTypeProp.value.fields["EFFICIENCY"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedP = PreFillModel.testTypeProp.value.fields["P"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedRPM = PreFillModel.testTypeProp.value.fields["RPM"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedF = PreFillModel.testTypeProp.value.fields["F"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedScheme = PreFillModel.testTypeProp.value.fields["SCHEME"]?.value ?: "λ"
-
-        testModel.syncRPM = calcSyncRPM(testModel.specifiedF.toInt(), testModel.specifiedRPM.toInt())
-
-        testModel.specifiedLoadTestTime =
-            PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_MPT = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_Y_MPT = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_MPT =
+            PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_MPT = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_MPT = PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_MPT = PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_MPT = PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_MPT = PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_SG = PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_SG = PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_SG = PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_SG = PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_SG = PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_SG = PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_SG = PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_SG = PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedIDLE_TIME = PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedLOAD_TIME = PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
 
         testModel.isContinueAgree = false
 
@@ -59,6 +60,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             testModel.progressProperty.value = -1.0
 
             testModel.measuredData.U.value = ""
+            testModel.measuredData.UMPTOY.value = ""
+            testModel.measuredData.UMPTOV.value = ""
             testModel.measuredData.UAB.value = ""
             testModel.measuredData.UBC.value = ""
             testModel.measuredData.UCA.value = ""
@@ -68,13 +71,12 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             testModel.measuredData.IB.value = ""
             testModel.measuredData.IC.value = ""
 
-            testModel.measuredData.cos.value = ""
             testModel.measuredData.P1.value = ""
             testModel.measuredData.P2.value = ""
 
             testModel.measuredData.result.value = ""
 
-            testModel.measuredData.T.value = ""
+            testModel.measuredData.time.value = ""
             testModel.measuredData.torque.value = ""
             testModel.measuredData.RPM.value = ""
             testModel.measuredData.efficiency.value = ""
@@ -134,9 +136,6 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
 
-                CM.startPoll(this, PM130Model.COS_REGISTER) { value ->
-                    testModel.measuredData.cos.value = value.toDouble().autoformat()
-                }
                 CM.startPoll(this, PM130Model.P_REGISTER) { value ->
                     testModel.measuredP1 = abs(value.toDouble() * CURRENT_STAGE_PM130)
                     testModel.measuredData.P1.value = testModel.measuredP1.autoformat()
@@ -149,7 +148,7 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
                     testModel.measuredUA = value.toDouble()
-                    testModel.measuredData.UA.value = testModel.measuredUA.autoformat()
+                    testModel.measuredData.UMPTOY.value = testModel.measuredUA.autoformat()
                 }
             }
         }
@@ -159,7 +158,7 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
                     testModel.measuredUB = value.toDouble()
-                    testModel.measuredData.UB.value = testModel.measuredUB.autoformat()
+                    testModel.measuredData.UMPTOV.value = testModel.measuredUB.autoformat()
                 }
             }
         }
@@ -168,8 +167,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV24) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredI2A = value.toDouble() * COEF_SHUNT_PV24
-                    testModel.measuredData.I2A.value = testModel.measuredI2A.autoformat()
+                    testModel.measuredIMPTOY = value.toDouble() * COEF_SHUNT_PV24
+                    testModel.measuredData.IMPTOY.value = testModel.measuredIMPTOY.autoformat()
                 }
             }
         }
@@ -178,8 +177,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV27) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredI2B = value.toDouble() * COEF_SHUNT_PV27_PV28
-                    testModel.measuredData.I2B.value = testModel.measuredI2B.autoformat()
+                    testModel.measuredIMPTOV = value.toDouble() * COEF_SHUNT_PV27_PV28
+                    testModel.measuredData.IMPTOV.value = testModel.measuredIMPTOV.autoformat()
                 }
             }
         }
@@ -187,8 +186,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV26) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredPV26 = value.toDouble()
-                    testModel.measuredData.PV26.value = testModel.measuredPV26.autoformat()
+                    testModel.measuredUSGOV = value.toDouble()
+                    testModel.measuredData.USGOV.value = testModel.measuredUSGOV.autoformat()
                 }
             }
         }
@@ -196,8 +195,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV28) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredPV28 = value.toDouble() * COEF_SHUNT_PV27_PV28
-                    testModel.measuredData.PV28.value = testModel.measuredPV28.autoformat()
+                    testModel.measuredISGOV = value.toDouble() * COEF_SHUNT_PV27_PV28
+                    testModel.measuredData.ISGOV.value = testModel.measuredISGOV.autoformat()
                 }
             }
         }
@@ -225,18 +224,18 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             waitUntilFIToLoad()
             regulateTM1(200) // 0.25f = 200 вольт
             startFI(
-                testModel.specifiedU.toInt()/* запас 20% по напряжению для регулирования в функции */,
+                testModel.specifiedU_Y_MPT.toInt()/* запас 20% по напряжению для регулирования в функции */,
                 50 /* изменять также в regulateFI */
             )
             regulateFI(200)
             waitUntilFIToRun()
-            // TODO поставить нужное каждому
+            // TODO поставить нужное каждому +-
         }
         if (isRunning) {
             turnOnLoad()
         }
         if (isRunning) {
-            regulateTM2(10) // TODO поставить нужное
+            regulateTM2(testModel.specifiedI_Y_MPT.toInt()) // TODO поставить нужное +-
         }
         if (isRunning) {
             waiting()
@@ -256,26 +255,26 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
             var percent = 0
-            // TODO testModel.measuredU - поставить нужное
-            while (isRunning && (testModel.measuredU < voltage * 0.8
-                        || testModel.measuredU > voltage * 1.2)
+            // TODO testModel.measuredU - поставить нужное +-
+            while (isRunning && (testModel.measuredUB < voltage * 0.8
+                        || testModel.measuredUB > voltage * 1.2)
             ) {
-                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                if (isRunning && testModel.measuredUB < voltage * 0.8) {
                     percent += 1
                     turnOnTM1(percent)
-                } else if (testModel.measuredU > voltage * 1.2) {
+                } else if (testModel.measuredUB > voltage * 1.2) {
                     percent -= 1
                     turnOnTM1(percent)
                 }
                 sleep(500)
             }
-            while (isRunning && (testModel.measuredU < voltage * 0.97
-                        || testModel.measuredU > voltage * 1.03)
+            while (isRunning && (testModel.measuredUB < voltage * 0.97
+                        || testModel.measuredUB > voltage * 1.03)
             ) {
-                if (isRunning && testModel.measuredU < voltage * 0.97) {
+                if (isRunning && testModel.measuredUB < voltage * 0.97) {
                     percent += 1
                     turnOnTM1(percent)
-                } else if (testModel.measuredU > voltage * 1.03) {
+                } else if (testModel.measuredUB > voltage * 1.03) {
                     percent -= 1
                     turnOnTM1(percent)
                 }
@@ -291,26 +290,26 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОЯ")
             var percent = 50
-            // TODO testModel.measuredU - поставить нужное
-            while (isRunning && (testModel.measuredU < voltage * 0.8
-                        || testModel.measuredU > voltage * 1.2)
+            // TODO testModel.measuredU - поставить нужное +-
+            while (isRunning && (testModel.measuredUA < voltage * 0.8
+                        || testModel.measuredUA > voltage * 1.2)
             ) {
-                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                if (isRunning && testModel.measuredUA < voltage * 0.8) {
                     percent += 1
                     CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
-                } else if (testModel.measuredU > voltage * 1.2) {
+                } else if (testModel.measuredUA > voltage * 1.2) {
                     percent -= 1
                     CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
                 }
                 sleep(500)
             }
-            while (isRunning && (testModel.measuredU < voltage * 0.98
-                        || testModel.measuredU > voltage * 1.02)
+            while (isRunning && (testModel.measuredUA < voltage * 0.98
+                        || testModel.measuredUA > voltage * 1.02)
             ) {
-                if (isRunning && testModel.measuredU < voltage * 0.98) {
+                if (isRunning && testModel.measuredUA < voltage * 0.98) {
                     percent += 1
                     CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
-                } else if (testModel.measuredU > voltage * 1.02) {
+                } else if (testModel.measuredUA > voltage * 1.02) {
                     percent -= 1
                     CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
                 }
@@ -376,26 +375,26 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
             var percent = 0
-            // TODO testModel.measuredI2A - поставить нужное
-            while (isRunning && (testModel.measuredI2A < amperage * 0.6
-                        || testModel.measuredI2A > amperage * 1)
+            // TODO testModel.measuredI2A - поставить нужное +-
+            while (isRunning && (testModel.measuredIMPTOY < amperage * 0.6
+                        || testModel.measuredIMPTOY > amperage * 1)
             ) {
-                if (isRunning && testModel.measuredI2A < amperage * 0.6) {
+                if (isRunning && testModel.measuredIMPTOY < amperage * 0.6) {
                     percent += 1
                     turnOnTM2(percent)
-                } else if (testModel.measuredI2A > amperage * 1) {
+                } else if (testModel.measuredIMPTOY > amperage * 1) {
                     percent -= 1
                     turnOnTM2(percent)
                 }
                 sleep(500)
             }
-            while (isRunning && (testModel.measuredI2A < amperage * 0.96
-                        || testModel.measuredI2A > amperage * 1)
+            while (isRunning && (testModel.measuredIMPTOY < amperage * 0.96
+                        || testModel.measuredIMPTOY > amperage * 1)
             ) {
-                if (isRunning && testModel.measuredI2A < amperage * 0.96) {
+                if (isRunning && testModel.measuredIMPTOY < amperage * 0.96) {
                     percent += 1
                     turnOnTM2(percent)
-                } else if (testModel.measuredI2A > amperage * 1) {
+                } else if (testModel.measuredIMPTOY > amperage * 1) {
                     percent -= 1
                     turnOnTM2(percent)
                 }
@@ -409,14 +408,20 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
 
     private fun waiting() {
         appendMessageToLog(LogTag.INFO, "Ожидание...")
-        sleepWhileRun(testModel.specifiedLoadTestTime.toInt(), progressProperty = testModel.progressProperty)
+        sleepWhileRun(testModel.specifiedLOAD_TIME.toInt(), progressProperty = testModel.progressProperty)
     }
 
     private fun storeTestValues() {
+        testModel.storedData.UMPTOY.value = testModel.measuredData.UMPTOY.value
+        testModel.storedData.UMPTOV.value = testModel.measuredData.UMPTOV.value
+        testModel.storedData.IMPTOY.value = testModel.measuredData.IMPTOY.value
+        testModel.storedData.IMPTOV.value = testModel.measuredData.IMPTOV.value
+
+        testModel.storedData.USGOV.value = testModel.measuredData.USGOV.value
+        testModel.storedData.ISGOV.value = testModel.measuredData.ISGOV.value
+
         testModel.storedData.U.value = testModel.measuredData.U.value
         testModel.storedData.UAB.value = testModel.measuredData.UAB.value
-        testModel.storedData.UA.value = testModel.measuredData.UA.value
-        testModel.storedData.UB.value = testModel.measuredData.UB.value
         testModel.storedData.UBC.value = testModel.measuredData.UBC.value
         testModel.storedData.UCA.value = testModel.measuredData.UCA.value
 
@@ -425,15 +430,10 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         testModel.storedData.IB.value = testModel.measuredData.IB.value
         testModel.storedData.IC.value = testModel.measuredData.IC.value
 
-        testModel.storedData.I2A.value = testModel.measuredData.I2A.value
-        testModel.storedData.I2B.value = testModel.measuredData.I2B.value
-
-        testModel.storedData.cos.value = testModel.measuredData.cos.value
         testModel.storedData.P2.value = testModel.measuredData.P2.value
 
-
-        testModel.storedData.PV26.value = testModel.measuredData.PV26.value
-        testModel.storedData.PV28.value = testModel.measuredData.PV28.value
+        testModel.storedData.USGOV.value = testModel.measuredData.USGOV.value
+        testModel.storedData.ISGOV.value = testModel.measuredData.ISGOV.value
     }
 
     override fun result() {
@@ -458,43 +458,41 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
 
     private fun restoreTestValues() {
         testModel.measuredData.U.value = testModel.storedData.U.value
+        testModel.measuredData.UMPTOV.value = testModel.storedData.UMPTOV.value
+        testModel.measuredData.IMPTOV.value = testModel.storedData.IMPTOV.value
+        testModel.measuredData.UMPTOY.value = testModel.storedData.UMPTOY.value
+        testModel.measuredData.IMPTOY.value = testModel.storedData.IMPTOY.value
+
         testModel.measuredData.UAB.value = testModel.storedData.UAB.value
         testModel.measuredData.UBC.value = testModel.storedData.UBC.value
         testModel.measuredData.UCA.value = testModel.storedData.UCA.value
-
         testModel.measuredData.I.value = testModel.storedData.I.value
         testModel.measuredData.IA.value = testModel.storedData.IA.value
         testModel.measuredData.IB.value = testModel.storedData.IB.value
         testModel.measuredData.IC.value = testModel.storedData.IC.value
 
-        testModel.measuredData.cos.value = testModel.storedData.cos.value
         testModel.measuredData.P2.value = testModel.storedData.P2.value
     }
 
     override fun saveProtocol() {
         reportFields["TEST_NAME_LOAD"] = name
 
-        reportFields["POWER"] = testModel.specifiedP.toString()
-        reportFields["VOLTAGE_LIN"] = testModel.specifiedU.toString()
-        reportFields["COS"] = testModel.specifiedCos.toString()
-        reportFields["EFFICIENCY"] = testModel.specifiedEfficiency.toString()
-        reportFields["AMPERAGE_PHASE"] = testModel.specifiedI.toString()
-        reportFields["RPM"] = testModel.specifiedRPM.toString()
-        reportFields["FREQ"] = testModel.specifiedF.toString()
-        reportFields["SCHEME"] = testModel.specifiedScheme
-
-        reportFields["U_LOAD"] = testModel.measuredData.U.value
-        reportFields["L1_U_LOAD"] = testModel.measuredData.UAB.value
-        reportFields["L2_U_LOAD"] = testModel.measuredData.UBC.value
-        reportFields["L3_U_LOAD"] = testModel.measuredData.UCA.value
-        reportFields["I_LOAD"] = testModel.measuredData.I.value
-        reportFields["L1_I_LOAD"] = testModel.measuredData.IA.value
-        reportFields["L2_I_LOAD"] = testModel.measuredData.IB.value
-        reportFields["L3_I_LOAD"] = testModel.measuredData.IC.value
-        reportFields["TOTAL_P_LOAD"] = testModel.measuredData.P2.value
-        reportFields["TOTAL_PF_LOAD"] = testModel.measuredData.cos.value
-        reportFields["TEMP_LOAD"] = testModel.measuredData.T.value
-        reportFields["RESULT_LOAD"] = testModel.measuredData.result.value
+        reportFields["L1_U_LOAD"] =      testModel.measuredData.UAB.value
+        reportFields["L2_U_LOAD"] =      testModel.measuredData.UBC.value
+        reportFields["L3_U_LOAD"] =      testModel.measuredData.UCA.value
+        reportFields["L1_I_LOAD"] =      testModel.measuredData.IA.value
+        reportFields["L2_I_LOAD"] =      testModel.measuredData.IB.value
+        reportFields["L3_I_LOAD"] =      testModel.measuredData.IC.value
+        reportFields["U_V_SG_LOAD"] =    testModel.measuredData.USGOV.value
+        reportFields["I_V_SG_LOAD"] =    testModel.measuredData.ISGOV.value
+        reportFields["U_V_MEAS_LOAD"] =  testModel.measuredData.UMPTOV.value
+        reportFields["I_V_MEAS_LOAD"] =  testModel.measuredData.IMPTOV.value
+        reportFields["U_Y_MEAS_LOAD"] =  testModel.measuredData.UMPTOY.value
+        reportFields["I_Y_MEAS_LOAD"] =  testModel.measuredData.IMPTOY.value
+        reportFields["TIME_MEAS_LOAD"] = testModel.measuredData.time.value
+        reportFields["TEMP_AMB_LOAD"] =  testModel.measuredData.tempAmb.value
+        reportFields["TEMP_TI_LOAD"] =   testModel.measuredData.tempTI.value
+        reportFields["RESULT_LOAD"] =    testModel.measuredData.result.value
 
         super.saveProtocol()
     }

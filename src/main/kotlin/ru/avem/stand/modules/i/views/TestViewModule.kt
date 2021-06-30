@@ -172,7 +172,7 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
                         maxHeight = 88.0
                         columnResizePolicy = SmartResize.POLICY
                         mouseTransparentProperty().set(true)
-                        column("U, В", TestItemData::U.getter)
+                        column("Uя, В", TestItemData::U_Y_MPT.getter)
                     }
                     tableview(observableList(test.testModel.testItemData)) {
 
@@ -180,7 +180,7 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
                         maxHeight = 88.0
                         columnResizePolicy = SmartResize.POLICY
                         mouseTransparentProperty().set(true)
-                        column("I, А", TestItemData::I.getter)
+                        column("Iя, А", TestItemData::I_Y_MPT.getter)
                     }
 //                    tableview(observableList(test.testModel.testItemData)) {
 //

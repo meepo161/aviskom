@@ -24,19 +24,24 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
 
     override fun initVars() {
         super.initVars()
-        testModel.specifiedU = PreFillModel.testTypeProp.value.fields["U"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI = PreFillModel.testTypeProp.value.fields["I"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedCos = PreFillModel.testTypeProp.value.fields["COS"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedEfficiency =
-            PreFillModel.testTypeProp.value.fields["EFFICIENCY"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedP = PreFillModel.testTypeProp.value.fields["P"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedRPM = PreFillModel.testTypeProp.value.fields["RPM"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedF = PreFillModel.testTypeProp.value.fields["F"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedScheme = PreFillModel.testTypeProp.value.fields["SCHEME"]?.value ?: "λ"
-
-        testModel.specifiedR = PreFillModel.testTypeProp.value.fields["R_IKAS"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_MPT =    PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_Y_MPT =    PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_MPT = PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_MPT =  PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_MPT =   PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_MPT =  PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_MPT =   PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_MPT =   PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_SG =     PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_SG =     PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_SG =  PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_SG =   PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_SG =    PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_SG =   PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_SG =    PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_SG =    PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedIDLE_TIME =  PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedLOAD_TIME =  PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
     }
 
     override fun initView() {
@@ -167,18 +172,18 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
             val r23 = testModel.measuredData.R2.value.toDouble()
             val r31 = testModel.measuredData.R3.value.toDouble()
 
-            if (testModel.specifiedScheme == "λ") {
+//            if (testModel.specifiedScheme == "λ") {
                 testModel.calculatedData.R1.value = ((r31 + r12 - r23) / 2.0).autoformat()
                 testModel.calculatedData.R2.value = ((r12 + r23 - r31) / 2.0).autoformat()
                 testModel.calculatedData.R3.value = ((r23 + r31 - r12) / 2.0).autoformat()
-            } else if (testModel.specifiedScheme == "△") {
-                testModel.calculatedData.R1.value =
-                    (2.0 * r23 * r31 / (r23 + r31 - r12) - (r23 + r31 - r12) / 2.0).autoformat()
-                testModel.calculatedData.R2.value =
-                    (2.0 * r31 * r12 / (r31 + r12 - r23) - (r31 + r12 - r23) / 2.0).autoformat()
-                testModel.calculatedData.R3.value =
-                    (2.0 * r12 * r23 / (r12 + r23 - r31) - (r12 + r23 - r31) / 2.0).autoformat()
-            }
+//            } else if (testModel.specifiedScheme == "△") {
+//                testModel.calculatedData.R1.value =
+//                    (2.0 * r23 * r31 / (r23 + r31 - r12) - (r23 + r31 - r12) / 2.0).autoformat()
+//                testModel.calculatedData.R2.value =
+//                    (2.0 * r31 * r12 / (r31 + r12 - r23) - (r31 + r12 - r23) / 2.0).autoformat()
+//                testModel.calculatedData.R3.value =
+//                    (2.0 * r12 * r23 / (r12 + r23 - r31) - (r12 + r23 - r31) / 2.0).autoformat()
+//            }
 
             val rA = testModel.calculatedData.R1.value.toDouble()
             val rB = testModel.calculatedData.R2.value.toDouble()
@@ -241,16 +246,6 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
     override fun saveProtocol() {
         reportFields["TEST_NAME_IKAS"] = name
 
-        reportFields["POWER"] = testModel.specifiedP.toString()
-        reportFields["VOLTAGE_LIN"] = testModel.specifiedU.toString()
-        reportFields["COS"] = testModel.specifiedCos.toString()
-        reportFields["EFFICIENCY"] = testModel.specifiedEfficiency.toString()
-        reportFields["AMPERAGE_PHASE"] = testModel.specifiedI.toString()
-        reportFields["RPM"] = testModel.specifiedRPM.toString()
-        reportFields["FREQ"] = testModel.specifiedF.toString()
-        reportFields["SCHEME"] = testModel.specifiedScheme
-
-        reportFields["R_SPEC_IKAS"] = testModel.specifiedData.R1.value
         reportFields["R_MEAS_12_IKAS"] = testModel.measuredData.R1.value
         reportFields["R_MEAS_23_IKAS"] = testModel.measuredData.R2.value
         reportFields["R_MEAS_31_IKAS"] = testModel.measuredData.R3.value

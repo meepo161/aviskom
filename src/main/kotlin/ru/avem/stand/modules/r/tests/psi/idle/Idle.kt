@@ -16,29 +16,32 @@ import java.lang.Thread.sleep
 import kotlin.collections.set
 
 class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
-    override val name = "Измерение потерь в ХХ.Правильность чередования фаз"
+    override val name = "Измерение потерь в ХХ"
 
     override val testModel = IdleModel
 
     override fun initVars() {
         super.initVars()
 
-        testModel.specifiedU = PreFillModel.testTypeProp.value.fields["U"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI = PreFillModel.testTypeProp.value.fields["I"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedCos = PreFillModel.testTypeProp.value.fields["COS"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedEfficiency =
-            PreFillModel.testTypeProp.value.fields["EFFICIENCY"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedP = PreFillModel.testTypeProp.value.fields["P"]?.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedRPM = PreFillModel.testTypeProp.value.fields["RPM"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedF = PreFillModel.testTypeProp.value.fields["F"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedScheme = PreFillModel.testTypeProp.value.fields["SCHEME"]?.value ?: "λ"
-
-        testModel.specifiedIdleI =
-            PreFillModel.testTypeProp.value.fields["IDLE_I"]?.value?.toDoubleOrDefault(0.0) ?: 0.0
-        testModel.specifiedIdleTestTime =
-            PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_MPT = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_Y_MPT = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_MPT =
+            PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_MPT = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_MPT = PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_MPT = PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_MPT = PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_MPT = PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_SG = PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_SG = PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_SG = PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_SG = PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_SG = PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_SG = PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_SG = PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_SG = PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedIDLE_TIME = PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedLOAD_TIME = PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
     }
 
     override fun initView() {
@@ -53,8 +56,8 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             testModel.measuredData.UCA.value = ""
 
             testModel.measuredData.I.value = ""
-            testModel.measuredData.IA.value = ""
-            testModel.measuredData.IB.value = ""
+            testModel.measuredData.I_Y_MPT.value = ""
+            testModel.measuredData.I_V_MPT.value = ""
             testModel.measuredData.IC.value = ""
 
             testModel.measuredData.P1.value = ""
@@ -83,7 +86,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
                     testModel.measuredUA = value.toDouble()
-                    testModel.measuredData.UA.value = testModel.measuredUA.autoformat()
+                    testModel.measuredData.U_Y_MPT.value = testModel.measuredUA.autoformat()
                 }
             }
         }
@@ -93,7 +96,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
                     testModel.measuredUB = value.toDouble()
-                    testModel.measuredData.UB.value = testModel.measuredUB.autoformat()
+                    testModel.measuredData.U_V_MPT.value = testModel.measuredUB.autoformat()
                 }
             }
         }
@@ -103,7 +106,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
                     testModel.measuredIA = value.toDouble() * COEF_SHUNT_PV24
-                    testModel.measuredData.IA.value = testModel.measuredIA.autoformat()
+                    testModel.measuredData.I_Y_MPT.value = testModel.measuredIA.autoformat()
                 }
             }
         }
@@ -113,7 +116,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
                     testModel.measuredIB = value.toDouble() * COEF_SHUNT_PV27_PV28
-                    testModel.measuredData.IB.value = testModel.measuredIB.autoformat()
+                    testModel.measuredData.I_V_MPT.value = testModel.measuredIB.autoformat()
                 }
             }
         }
@@ -138,10 +141,11 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
 //            turnOffTM1()
         }
         if (isRunning) {
+            turnOffTM1()
             waitUntilFIToLoad()
             regulateTM1(200) // 0.25f = 200 вольт
             startFI(
-                testModel.specifiedU.toInt()/* запас 20% по напряжению для регулирования в функции */,
+                testModel.specifiedU_Y_MPT.toInt()/* запас 20% по напряжению для регулирования в функции */,
                 50 /* изменять также в regulateFI */
             )
             regulateFI(200)
@@ -151,7 +155,6 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         if (isRunning) {
             waiting()
         }
-        appendMessageToLog(LogTag.ERROR, testModel.specifiedU.toString() + "")
         storeTestValues()
         stopFI(CM.device(UZ91))
         turnOffTM1()
@@ -165,26 +168,26 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
             var percent = 0
-            // TODO testModel.measuredU - поставить нужное
-            while (isRunning && (testModel.measuredU < voltage * 0.8
-                        || testModel.measuredU > voltage * 1.2)
+            // TODO testModel.measuredU - поставить нужное +-
+            while (isRunning && (testModel.measuredUB < voltage * 0.8
+                        || testModel.measuredUB > voltage * 1.2)
             ) {
-                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                if (isRunning && testModel.measuredUB < voltage * 0.8) {
                     percent += 1
                     turnOnTM1(percent)
-                } else if (testModel.measuredU > voltage * 1.2) {
+                } else if (testModel.measuredUB > voltage * 1.2) {
                     percent -= 1
                     turnOnTM1(percent)
                 }
                 sleep(500)
             }
-            while (isRunning && (testModel.measuredU < voltage * 0.97
-                        || testModel.measuredU > voltage * 1.03)
+            while (isRunning && (testModel.measuredUB < voltage * 0.97
+                        || testModel.measuredUB > voltage * 1.03)
             ) {
-                if (isRunning && testModel.measuredU < voltage * 0.97) {
+                if (isRunning && testModel.measuredUB < voltage * 0.97) {
                     percent += 1
                     turnOnTM1(percent)
-                } else if (testModel.measuredU > voltage * 1.03) {
+                } else if (testModel.measuredUB > voltage * 1.03) {
                     percent -= 1
                     turnOnTM1(percent)
                 }
@@ -200,28 +203,28 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОЯ")
             var percent = 50
-            // TODO testModel.measuredU - поставить нужное
-            while (isRunning && (testModel.measuredU < voltage * 0.8
-                        || testModel.measuredU > voltage * 1.2)
+            // TODO testModel.measuredU - поставить нужное +-
+            while (isRunning && (testModel.measuredUA < voltage * 0.8
+                        || testModel.measuredUA > voltage * 1.2)
             ) {
-                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                if (isRunning && testModel.measuredUA < voltage * 0.8) {
                     percent += 1
-                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
-                } else if (testModel.measuredU > voltage * 1.2) {
+                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
+                } else if (testModel.measuredUA > voltage * 1.2) {
                     percent -= 1
-                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
+                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
                 }
                 sleep(500)
             }
-            while (isRunning && (testModel.measuredU < voltage * 0.98
-                        || testModel.measuredU > voltage * 1.02)
+            while (isRunning && (testModel.measuredUA < voltage * 0.98
+                        || testModel.measuredUA > voltage * 1.02)
             ) {
-                if (isRunning && testModel.measuredU < voltage * 0.98) {
+                if (isRunning && testModel.measuredUA < voltage * 0.98) {
                     percent += 1
-                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
-                } else if (testModel.measuredU > voltage * 1.02) {
+                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
+                } else if (testModel.measuredUA > voltage * 1.02) {
                     percent -= 1
-                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
+                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
                 }
                 sleep(1000)
             }
@@ -244,21 +247,21 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
 
     private fun waiting() {
         appendMessageToLog(LogTag.INFO, "Ожидание...")
-        sleepWhileRun(testModel.specifiedIdleTestTime.toInt(), progressProperty = testModel.progressProperty)
+        sleepWhileRun(testModel.specifiedIDLE_TIME.toInt(), progressProperty = testModel.progressProperty)
     }
 
     private fun storeTestValues() {
         testModel.storedData.U.value =
             testModel.measuredData.U.value // TODO проверить здесь и в остальных местах всё ли я сохраняю
-        testModel.storedData.UA.value = testModel.measuredData.UA.value
-        testModel.storedData.UB.value = testModel.measuredData.UB.value
+        testModel.storedData.U_Y_MPT.value = testModel.measuredData.U_Y_MPT.value
+        testModel.storedData.U_V_MPT.value = testModel.measuredData.U_V_MPT.value
         testModel.storedData.UAB.value = testModel.measuredData.UAB.value
         testModel.storedData.UBC.value = testModel.measuredData.UBC.value
         testModel.storedData.UCA.value = testModel.measuredData.UCA.value
 
         testModel.storedData.I.value = testModel.measuredData.I.value
-        testModel.storedData.IA.value = testModel.measuredData.IA.value
-        testModel.storedData.IB.value = testModel.measuredData.IB.value
+        testModel.storedData.I_Y_MPT.value = testModel.measuredData.I_Y_MPT.value
+        testModel.storedData.I_V_MPT.value = testModel.measuredData.I_V_MPT.value
         testModel.storedData.IC.value = testModel.measuredData.IC.value
 
         testModel.storedData.P1.value = testModel.measuredData.P1.value
@@ -304,8 +307,8 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         testModel.measuredData.UCA.value = testModel.storedData.UCA.value
 
         testModel.measuredData.I.value = testModel.storedData.I.value
-        testModel.measuredData.IA.value = testModel.storedData.IA.value
-        testModel.measuredData.IB.value = testModel.storedData.IB.value
+        testModel.measuredData.I_Y_MPT.value = testModel.storedData.I_Y_MPT.value
+        testModel.measuredData.I_V_MPT.value = testModel.storedData.I_V_MPT.value
         testModel.measuredData.IC.value = testModel.storedData.IC.value
 
         testModel.measuredData.P1.value = testModel.storedData.P1.value
@@ -326,33 +329,14 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
     override fun saveProtocol() {
         reportFields["TEST_NAME_IDLE"] = name
 
-        reportFields["POWER"] = testModel.specifiedP.toString()
-        reportFields["VOLTAGE_LIN"] = testModel.specifiedU.toString()
-        reportFields["COS"] = testModel.specifiedCos.toString()
-        reportFields["EFFICIENCY"] = testModel.specifiedEfficiency.toString()
-        reportFields["AMPERAGE_PHASE"] = testModel.specifiedI.toString()
-        reportFields["RPM"] = testModel.specifiedRPM.toString()
-        reportFields["FREQ"] = testModel.specifiedF.toString()
-        reportFields["SCHEME"] = testModel.specifiedScheme
+        reportFields["U_V_MEAS_IDLE"] = testModel.measuredData.U_V_MPT.value
+        reportFields["I_V_MEAS_IDLE"] = testModel.measuredData.I_V_MPT.value
+        reportFields["U_Y_MEAS_IDLE"] = testModel.measuredData.U_Y_MPT.value
+        reportFields["I_Y_MEAS_IDLE"] = testModel.measuredData.I_Y_MPT.value
+        reportFields["TIME_MEAS_IDLE"] = testModel.measuredData.time.value
+        reportFields["TEMP_AMB_IDLE"] = testModel.measuredData.tempAmb.value
+        reportFields["TEMP_TI_IDLE"] = testModel.measuredData.tempTI.value
 
-        reportFields["U_IDLE"] = testModel.measuredData.U.value
-        reportFields["L1_U_IDLE"] = testModel.measuredData.UAB.value
-        reportFields["L2_U_IDLE"] = testModel.measuredData.UBC.value
-        reportFields["L3_U_IDLE"] = testModel.measuredData.UCA.value
-        reportFields["I_IDLE"] = testModel.measuredData.I.value
-        reportFields["L1_I_IDLE"] = testModel.measuredData.IA.value
-        reportFields["L2_I_IDLE"] = testModel.measuredData.IB.value
-        reportFields["L3_I_IDLE"] = testModel.measuredData.IC.value
-        reportFields["TOTAL_P_IDLE"] = testModel.measuredData.P1.value
-        reportFields["TOTAL_PF_IDLE"] = testModel.measuredData.cos.value
-        reportFields["F_IDLE"] = testModel.measuredData.F.value
-        reportFields["X_31_IDLE"] = testModel.measuredData.v1x.value
-        reportFields["Y_31_IDLE"] = testModel.measuredData.v1y.value
-        reportFields["Z_31_IDLE"] = testModel.measuredData.v1z.value
-        reportFields["X_32_IDLE"] = testModel.measuredData.v2x.value
-        reportFields["Y_32_IDLE"] = testModel.measuredData.v2y.value
-        reportFields["Z_32_IDLE"] = testModel.measuredData.v2z.value
-        reportFields["TEMP_IDLE"] = testModel.measuredData.tempAmb.value
         reportFields["RESULT_IDLE"] = testModel.measuredData.result.value
 
         super.saveProtocol()

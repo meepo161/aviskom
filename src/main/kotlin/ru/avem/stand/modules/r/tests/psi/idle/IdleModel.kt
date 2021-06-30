@@ -8,19 +8,24 @@ object IdleModel : TestModel() {
     val measuredData = IdleData(descriptor = SimpleStringProperty("Измеренные"))
     val storedData = IdleData(descriptor = SimpleStringProperty("Сохранённые"))
 
-    var specifiedU = 0.0
-    var specifiedI = 0.0
-
-    var specifiedCos = 0.0
-    var specifiedEfficiency = 0.0
-    var specifiedP = 0.0
-
-    var specifiedRPM = 0.0
-    var specifiedF = 0.0
-    var specifiedScheme = ""
-
-    var specifiedIdleI = 0.0
-    var specifiedIdleTestTime = 0.0
+    var specifiedU_Y_MPT = 0.0
+    var specifiedI_Y_MPT = 0.0
+    var specifiedR_IKAS_MPT = 0.0
+    var specifiedR_MGR_MPT = 0.0
+    var specifiedU_HV_MPT = 0.0
+    var specifiedU_MGR_MPT = 0.0
+    var specifiedI_HV_MPT = 0.0
+    var specifiedT_HV_MPT = 0.0
+    var specifiedU_Y_SG = 0.0
+    var specifiedU_V_SG = 0.0
+    var specifiedR_IKAS_SG = 0.0
+    var specifiedR_MGR_SG = 0.0
+    var specifiedU_HV_SG = 0.0
+    var specifiedU_MGR_SG = 0.0
+    var specifiedI_HV_SG = 0.0
+    var specifiedT_HV_SG = 0.0
+    var specifiedIDLE_TIME = 0.0
+    var specifiedLOAD_TIME = 0.0
 
     @Volatile
     var measuredUA = 0.0

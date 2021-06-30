@@ -24,17 +24,6 @@ class VaryUF : KSPADTest(view = VaryUFView::class, reportTemplate = "varyuf.xlsx
     override fun initVars() {
         super.initVars()
 
-        testModel.specifiedU =
-            testModel.testItemData.U.value.toDoubleOrDefault(0.0) // TODO так же везде? вынести в общий?
-        testModel.specifiedI = testModel.testItemData.I.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedCos = testModel.testItemData.cos.value.toDoubleOrDefault(0.0)
-        testModel.specifiedEfficiency = testModel.testItemData.efficiency.value.toDoubleOrDefault(0.0)
-        testModel.specifiedP = testModel.testItemData.P.value.toDoubleOrDefault(0.0)
-
-        testModel.specifiedRPM = testModel.testItemData.RPM.value.toDoubleOrDefault(0.0)
-        testModel.specifiedF = testModel.testItemData.F.value.toDoubleOrDefault(0.0)
-        testModel.specifiedScheme = PreFillModel.testTypeProp.value.fields["SCHEME"]?.value ?: "λ"
     }
 
     override fun initView() {

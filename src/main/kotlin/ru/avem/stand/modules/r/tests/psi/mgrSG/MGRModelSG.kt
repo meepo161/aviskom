@@ -6,17 +6,22 @@ object MGRModelSG : TestModel() {
     val specifiedData = MGRDataSG()
     val measuredData = MGRDataSG()
 
-    var specifiedU = 0.0
-    var specifiedI = 0.0
-
-    var specifiedCos = 0.0
-    var specifiedEfficiency = 0.0
-    var specifiedP = 0.0
-
-    var specifiedRPM = 0.0
-    var specifiedF = 0.0
-    var specifiedScheme = ""
-
-    var specifiedUMGR = 0.0
-    var specifiedRMGR = 0.0
+    var specifiedU_Y_MPT = 0.0
+    var specifiedI_Y_MPT = 0.0
+    var specifiedR_IKAS_MPT = 0.0
+    var specifiedR_MGR_MPT = 0.0
+    var specifiedU_HV_MPT = 0.0
+    var specifiedU_MGR_MPT = 0.0
+    var specifiedI_HV_MPT = 0.0
+    var specifiedT_HV_MPT = 0.0
+    var specifiedU_Y_SG = 0.0
+    var specifiedU_V_SG = 0.0
+    var specifiedR_IKAS_SG = 0.0
+    var specifiedR_MGR_SG = 0.0
+    var specifiedU_HV_SG = 0.0
+    var specifiedU_MGR_SG = 0.0
+    var specifiedI_HV_SG = 0.0
+    var specifiedT_HV_SG = 0.0
+    var specifiedIDLE_TIME = 0.0
+    var specifiedLOAD_TIME = 0.0
 }

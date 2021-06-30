@@ -46,10 +46,10 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
 
                     alignment = Pos.CENTER
 
-                    column("Uя", IdleData::UA.getter)
-                    column("Iя, А", IdleData::IA.getter)
-                    column("Uов, В", IdleData::UB.getter)
-                    column("Iов, А", IdleData::IB.getter)
+                    column("Uя, В", IdleData::U_Y_MPT.getter)
+                    column("Iя, А", IdleData::I_Y_MPT.getter)
+                    column("Uов, В", IdleData::U_V_MPT.getter)
+                    column("Iов, А", IdleData::I_V_MPT.getter)
                 }
             }
                 tableview(observableList(test.testModel.measuredData)) {

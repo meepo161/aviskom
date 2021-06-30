@@ -13,7 +13,6 @@ import ru.avem.stand.modules.r.common.prefill.PreFillModel.serialNumberProp
 import ru.avem.stand.modules.r.common.prefill.PreFillModel.testTypeProp
 import ru.avem.stand.modules.r.storage.database.entities.*
 import ru.avem.stand.modules.r.storage.testitemfields.TestItemFieldScheme
-import ru.avem.stand.modules.r.storage.testitemfields.TypeEnterField
 import ru.avem.stand.modules.r.storage.testitemfields.TypeFormatTestItemField
 import java.sql.Connection
 import java.text.SimpleDateFormat
@@ -61,8 +60,8 @@ fun validateDB() {
 
 private fun createAsyncEngineTemplateBig() = listOf(
     TestItemFieldScheme(
-        key = "U",
-        title = "Напряжение линейное",
+        key = "U_Y_MPT",
+        title = "Напряжение якоря",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "3000",
@@ -71,7 +70,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "I",
+        key = "I_Y_MPT",
         title = "Ток якоря",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
@@ -81,7 +80,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "R_IKAS",
+        key = "R_IKAS_MPT",
         title = "Сопротивление фазы статора при 20 °С",
         typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
         minValue = "0",
@@ -90,7 +89,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "R_MGR",
+        key = "R_MGR_MPT",
         title = "Сопротивление изоляции",
         typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
         minValue = "0",
@@ -99,7 +98,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "U_HV",
+        key = "U_HV_MPT",
         title = "Напряжение ВИУ",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
@@ -109,7 +108,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "U_MGR",
+        key = "U_MGR_MPT",
         title = "Напряжение испытания мегаомметром",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "100",
@@ -119,7 +118,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "I_HV",
+        key = "I_HV_MPT",
         title = "Допустимый ток утечки ВИУ",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
@@ -129,7 +128,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "T_HV",
+        key = "T_HV_MPT",
         title = "Время испытания ВИУ",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
@@ -139,8 +138,8 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "U_SG",
-        title = "Напряжение линейное",
+        key = "U_Y_SG",
+        title = "Напряжение обмотки якоря",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "230",
@@ -149,8 +148,8 @@ private fun createAsyncEngineTemplateBig() = listOf(
         blockName = " СГ"
     ),
     TestItemFieldScheme(
-        key = "U_OV_SG",
-        title = "Напряжение линейное ОВ",
+        key = "U_V_SG",
+        title = "Напряжение обмотки возбуждения",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "230",
@@ -273,13 +272,6 @@ fun saveProtocol(test: Test) = transaction {
             key = "\$TEST_NAME\$"
             value = it.test
         }
-        test.reportFields.forEach { register ->
-            ReportField.new {
-                protocol = it
-                key = "\$${register.key}\$"
-                value = register.value
-            }
-        }
         ReportField.new {
             protocol = it
             key = "\$OPERATOR_NAME_1\$"
@@ -299,6 +291,13 @@ fun saveProtocol(test: Test) = transaction {
             protocol = it
             key = "\$TIME\$"
             value = it.time
+        }
+        test.reportFields.forEach { register ->
+            ReportField.new {
+                protocol = it
+                key = "\$${register.key}\$"
+                value = register.value
+            }
         }
     }
 }

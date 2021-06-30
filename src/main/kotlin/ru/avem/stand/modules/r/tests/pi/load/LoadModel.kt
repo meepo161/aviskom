@@ -8,19 +8,24 @@ object LoadModel : TestModel() {
     val measuredData = LoadData(descriptor = SimpleStringProperty("Измеренные"))
     val storedData = LoadData(descriptor = SimpleStringProperty("Сохранённые"))
 
-    var specifiedU = 0.0
-    var specifiedI = 0.0
-
-    var specifiedCos = 0.0
-    var specifiedEfficiency = 0.0
-    var specifiedP = 0.0
-
-    var specifiedRPM = 0.0
-    var syncRPM = 0.0
-    var specifiedF = 0.0
-    var specifiedScheme = ""
-
-    var specifiedLoadTestTime = 0.0
+    var specifiedU_Y_MPT = 0.0
+    var specifiedI_Y_MPT = 0.0
+    var specifiedR_IKAS_MPT = 0.0
+    var specifiedR_MGR_MPT = 0.0
+    var specifiedU_HV_MPT = 0.0
+    var specifiedU_MGR_MPT = 0.0
+    var specifiedI_HV_MPT = 0.0
+    var specifiedT_HV_MPT = 0.0
+    var specifiedU_Y_SG = 0.0
+    var specifiedU_V_SG = 0.0
+    var specifiedR_IKAS_SG = 0.0
+    var specifiedR_MGR_SG = 0.0
+    var specifiedU_HV_SG = 0.0
+    var specifiedU_MGR_SG = 0.0
+    var specifiedI_HV_SG = 0.0
+    var specifiedT_HV_SG = 0.0
+    var specifiedIDLE_TIME = 0.0
+    var specifiedLOAD_TIME = 0.0
 
     @Volatile
     var measuredUA = 0.0
@@ -35,10 +40,10 @@ object LoadModel : TestModel() {
     var measuredIB = 0.0
 
     @Volatile
-    var measuredI2A = 0.0
+    var measuredIMPTOY = 0.0
 
     @Volatile
-    var measuredI2B = 0.0
+    var measuredIMPTOV = 0.0
 
     @Volatile
     var measuredIC = 0.0
@@ -53,10 +58,10 @@ object LoadModel : TestModel() {
     var measuredP1 = 0.0
 
     @Volatile
-    var measuredPV26 = 0.0
+    var measuredUSGOV = 0.0
 
     @Volatile
-    var measuredPV28 = 0.0
+    var measuredISGOV = 0.0
 
     @Volatile
     var measuredP2 = 0.0

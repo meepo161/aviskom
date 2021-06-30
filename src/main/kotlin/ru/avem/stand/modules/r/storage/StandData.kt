@@ -18,15 +18,15 @@ class StandData {
     val customer: String = "«АВИСКОМ»"
     val customerPlace: String = "г. Омск"
 
-    val aiel: String = "АИЕЛ. " //TODO
-    val serialNumber: String = "" //TODO
+    val aiel: String = "АИЕЛ.441462" //TODO
+    val serialNumber: String = "210560138" //TODO
 
     val manufacture: String = "ООО «Авиаагрегат-Н»"
     val manufacturePlace: String = "г. Новочеркасск"
     val manufactureDate: String = "2021 г."
 
     val titleFull: String = "Комплексный стенд проверки электрических машин"
-    val titleShort: String = "КСПЭМ"
+    val titleShort: String = "Стенд для испытаний преобразователя 1ПВ7"
 
     val hardwareID: String = ""
     val softwareID: String = ""
