@@ -20,7 +20,7 @@ import java.util.*
 import kotlin.collections.set
 import ru.avem.stand.modules.r.communication.model.devices.avem.latr.AvemLatrController as AvemLatrController1
 
-class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hv.xlsx") {
+class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hvSG.xlsx") {
     override val name = "СГ. Проверка прочности изоляции"
 
     override val testModel = HVModelSG
@@ -28,24 +28,25 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hv.xlsx") {
     override fun initVars() {
         super.initVars()
 
-        testModel.specifiedU_Y_MPT =    PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI_Y_MPT =    PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedR_IKAS_MPT = PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedR_MGR_MPT =  PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_HV_MPT =   PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_MGR_MPT =  PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI_HV_MPT =   PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedT_HV_MPT =   PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_Y_SG =     PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_V_SG =     PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedR_IKAS_SG =  PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedR_MGR_SG =   PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_HV_SG =    PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_MGR_SG =   PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI_HV_SG =    PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedT_HV_SG =    PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedIDLE_TIME =  PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedLOAD_TIME =  PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_MPT = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_Y_MPT = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_MPT =
+            PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_MPT = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_MPT = PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_MPT = PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_MPT = PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_MPT = PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_SG = PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_SG = PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_SG = PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_SG = PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_SG = PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_SG = PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_SG = PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_SG = PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedIDLE_TIME = PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedLOAD_TIME = PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
 
     }
 
@@ -61,6 +62,7 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hv.xlsx") {
 
             testModel.measuredData.result.value = ""
         }
+        appendOneMessageToLog(LogTag.ERROR, "Подключите высоковольтные крокодилы к ОИ СГ!")
     }
 
     override fun startPollDevices() {
@@ -71,7 +73,11 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hv.xlsx") {
             with(PV25) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredData.U.value = (value.toDouble() * COEF_TR_AVEM).autoformat()
+                    if (value.toDouble() >= 0.0) {
+                        testModel.measuredData.U.value = (value.toDouble() * COEF_TR_AVEM).autoformat()
+                    } else {
+                        testModel.measuredData.U.value = "0.0"
+                    }
                     testModel.measuredU = testModel.measuredData.U.value.toDoubleOrDefault(0.0)
                 }
             }
@@ -266,6 +272,7 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hv.xlsx") {
         runLater {
             testModel.progressProperty.value = 0.0
         }
+        appendOneMessageToLog(LogTag.ERROR, "Отключите высоковольтные крокодилы")
     }
 
     private fun restoreTestValues() {

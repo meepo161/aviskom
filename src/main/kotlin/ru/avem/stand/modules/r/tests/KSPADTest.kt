@@ -3,6 +3,7 @@ package ru.avem.stand.modules.r.tests
 import ru.avem.stand.modules.i.tests.LogTag
 import ru.avem.stand.modules.i.tests.Test
 import ru.avem.stand.modules.i.views.TestViewModule
+import ru.avem.stand.modules.i.views.showOKDialog
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.DeviceID.DD2
@@ -121,9 +122,9 @@ abstract class KSPADTest(
         isStartPressed = false
         sleep(2000)
         if (isRunning && !isStartPressed) {
-            appendMessageToLog(LogTag.WARN, "Нажмите кнопку ПУСК")
+            appendMessageToLog(LogTag.WARN, "Убедитесь в правильности подключений крокодилов и нажмите кнопку ПУСК")
             runLater {
-                warningNotification("Внимание", "Нажмите кнопку ПУСК")
+                warningNotification("Внимание", "Убедитесь в правильности подключений крокодилов и нажмите кнопку ПУСК")
             }
         }
 

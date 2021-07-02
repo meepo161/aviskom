@@ -59,6 +59,7 @@ class MGR : KSPADTest(view = MGRView::class, reportTemplate = "mgr.xlsx") {
             testModel.measuredData.tempTI.value = ""
             testModel.measuredData.result.value = ""
         }
+        appendOneMessageToLog(LogTag.ERROR, "Подключите высоковольтные крокодилы к ОИ МПТ!")
     }
 
     override fun startPollDevices() {
@@ -169,6 +170,7 @@ class MGR : KSPADTest(view = MGRView::class, reportTemplate = "mgr.xlsx") {
         runLater {
             testModel.progressProperty.value = 0.0
         }
+        appendOneMessageToLog(LogTag.ERROR, "Отключите высоковольтные крокодилы")
     }
 
     override fun saveProtocol() {

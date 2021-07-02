@@ -192,9 +192,9 @@ class ProtocolsTab : View("Протоколы") {
         tab("По заводскому номеру") {
             content = serialNumbers
         }
-//        tab("По испытаниям") {
-//            content = tests
-//        }
+        tab("По испытаниям") {
+            content = tests
+        }
     }.addClass(Styles.regularLabels)
 
     override fun onDock() {

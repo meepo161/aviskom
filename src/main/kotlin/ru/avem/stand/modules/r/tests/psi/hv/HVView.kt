@@ -45,12 +45,13 @@ class HVView(title: String = "ВИУ", showOnStart: Boolean = true) : TestViewMo
                 mouseTransparentProperty().set(true)
 
                 alignment = Pos.CENTER
-                HVModel.initData.U.set(PreFillModel.testTypeProp.value.fields["U_HV"]?.value.toDoubleOrDefault(0.0).toString())
-                HVModel.initData.I.set(PreFillModel.testTypeProp.value.fields["I_HV"]?.value.toDoubleOrDefault(0.0).toString())
+                HVModel.initData.U.set(PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0).toString())
+                HVModel.initData.I.set(PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0).toString())
                 column("U, В", HVData::U.getter)
                 column("I, А", HVData::I.getter)
             }
         }
+        separator()
         label("Измеренные значения") {
             alignment = Pos.TOP_CENTER
             textAlignment = TextAlignment.CENTER

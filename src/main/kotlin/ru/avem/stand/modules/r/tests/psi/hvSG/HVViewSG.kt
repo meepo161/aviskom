@@ -45,19 +45,19 @@ class HVViewSG(title: String = "ВИУ", showOnStart: Boolean = true) : TestView
                 mouseTransparentProperty().set(true)
 
                 alignment = Pos.CENTER
-                HVModelSG.initData.U.set(PreFillModel.testTypeProp.value.fields["U_HV"]?.value.toDoubleOrDefault(0.0).toString())
-                HVModelSG.initData.I.set(PreFillModel.testTypeProp.value.fields["I_HV"]?.value.toDoubleOrDefault(0.0).toString())
+                HVModelSG.initData.U.set(PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0).toString())
+                HVModelSG.initData.I.set(PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0).toString())
                 column("U, В", HVDataSG::U.getter)
                 column("I, А", HVDataSG::I.getter)
             }
         }
+        separator()
         label("Измеренные значения") {
             alignment = Pos.TOP_CENTER
             textAlignment = TextAlignment.CENTER
             useMaxWidth = true
             isWrapText = true
         }
-        separator()
         hbox {
             tableview(observableList(test.testModel.measuredData)) {
                 minHeight = 60.0

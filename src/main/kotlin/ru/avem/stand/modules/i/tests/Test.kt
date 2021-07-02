@@ -8,13 +8,14 @@ import javafx.scene.image.WritableImage
 import javafx.scene.text.Text
 import ru.avem.stand.modules.i.Module
 import ru.avem.stand.modules.i.views.TestViewModule
+import ru.avem.stand.modules.i.views.showOKDialog
+import ru.avem.stand.modules.i.views.showTwoWayDialog
 import ru.avem.stand.modules.r.common.prefill.PreFillModel
 import ru.avem.stand.modules.r.communication.model.CM
 import ru.avem.stand.modules.r.communication.model.CM.device
 import ru.avem.stand.modules.r.communication.model.IDeviceController
 import ru.avem.stand.modules.r.storage.Properties
 import ru.avem.stand.modules.r.storage.database.saveProtocol
-import ru.avem.stand.utils.createScreenShot
 import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.*
 import java.io.File
@@ -126,6 +127,7 @@ abstract class Test(
 
     protected open fun init() {
         initVars()
+
         if (isRunning) {
             initView()
             initDevices()

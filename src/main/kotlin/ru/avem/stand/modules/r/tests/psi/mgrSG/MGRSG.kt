@@ -15,7 +15,7 @@ import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.*
 import java.lang.Thread.sleep
 
-class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
+class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgrSG.xlsx") {
     override val name = "СГ. Измерение сопротивления изоляции обмоток и встроенных термодатчиков относительно корпуса и " +
             "между обмотками в практически холодном состоянии"
     override val testModel = MGRModelSG
@@ -57,6 +57,7 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
             testModel.measuredData.tempTI.value = ""
             testModel.measuredData.result.value = ""
         }
+        appendOneMessageToLog(LogTag.ERROR, "Подключите высоковольтные крокодилы к ОИ СГ!")
     }
 
     override fun startPollDevices() {
@@ -105,7 +106,7 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
 
         with(CM.device<CS02021>(PR65)) {
             if (isResponding) {
-                setVoltage(testModel.specifiedR_MGR_SG.toInt())
+                setVoltage(testModel.specifiedU_MGR_SG.toInt())
                 sleepWhileRun(90, progressProperty = testModel.progressProperty)
                 val measuredR60 = readData()[0].toDouble()
                 val measuredUr = readData()[1].toDouble()
@@ -167,6 +168,7 @@ class MGRSG : KSPADTest(view = MGRViewSG::class, reportTemplate = "mgr.xlsx") {
         runLater {
             testModel.progressProperty.value = 0.0
         }
+        appendOneMessageToLog(LogTag.ERROR, "Отключите высоковольтные крокодилы")
     }
 
     override fun saveProtocol() {
