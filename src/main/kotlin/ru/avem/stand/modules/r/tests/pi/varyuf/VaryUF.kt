@@ -159,8 +159,8 @@ class VaryUF : KSPADTest(view = VaryUFView::class, reportTemplate = "varyuf.xlsx
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
 
         CM.device<Danfoss>(UZ91).setObjectParams(
-            voltage = 100,
-            percentF = 100,
+            volt = 100,
+            perc = 100,
         )
         CM.device<Danfoss>(UZ91).startObject()
     }

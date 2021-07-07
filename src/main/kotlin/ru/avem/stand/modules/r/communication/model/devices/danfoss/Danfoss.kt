@@ -7,6 +7,7 @@ import ru.avem.kserialpooler.communication.utils.TypeByteOrder
 import ru.avem.kserialpooler.communication.utils.allocateOrderedByteBuffer
 import ru.avem.stand.modules.r.communication.model.DeviceController
 import ru.avem.stand.modules.r.communication.model.DeviceRegister
+import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.CURRENT
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.FREQ
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.FREQ_PERCENT
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.DanfossModel.Companion.MAX_VOLTAGE
@@ -134,35 +135,39 @@ class Danfoss(
         }
     }
 
-    fun setObjectParams(voltage: Number, percentF: Number) {
-        var volt = voltage
-        var perc = percentF
+    fun setObjectParams(volt: Number, perc: Number) {
+        var voltage = volt
+        var percentF = perc
         try {
 //            protocolAdapter.presetSingleRegister(0x5B, 0x04C3, ModbusRegister(voltage.toShort()))
 //            protocolAdapter.presetSingleRegister(0x5B, 3099, ModbusRegister((percentF.toShort() * 100).toShort()))
-            if (voltage.toInt() < 50) {
-                volt = 50
-            } else if (voltage.toInt() > 400) {
-                volt = 400
+            if (volt.toInt() < 50) {
+                voltage = 50
+            } else if (volt.toInt() > 400) {
+                voltage = 400
             }
-            if (percentF.toInt() < 50) {
-                perc = 50
-            } else if (percentF.toInt() > 100) {
-                perc = 100
-            }
-            writeRegister(getRegisterById(MAX_VOLTAGE), (volt).toShort())
-            writeRegister(getRegisterById(FREQ_PERCENT), (perc.toInt() * 100).toShort())
+//            if (perc.toInt() < 50) {
+//                percentF = 50
+//            } else if (perc.toInt() > 100) {
+//                percentF = 100
+//            }
+            writeRegister(getRegisterById(MAX_VOLTAGE), (voltage).toShort())
+            writeRegister(getRegisterById(FREQ_PERCENT), (percentF.toInt() * 100).toShort())
         } catch (e: Exception) {
         }
     }
+
     fun setObjectPercent(percentF: Number) {
         var perc = percentF
         try {
 //            protocolAdapter.presetSingleRegister(0x5B, 0x04C3, ModbusRegister(voltage.toShort()))
 //            protocolAdapter.presetSingleRegister(0x5B, 3099, ModbusRegister((percentF.toShort() * 100).toShort()))
-            if (percentF.toInt() < 50) {
-                perc = 50
-            } else if (percentF.toInt() > 100) {
+//            if (percentF.toInt() < 50) {
+//                perc = 50
+//            } else if (percentF.toInt() > 100) {
+//                perc = 100
+//            }
+            if (percentF.toInt() > 100) {
                 perc = 100
             }
             writeRegister(getRegisterById(FREQ_PERCENT), (perc.toInt() * 100).toShort())
@@ -179,5 +184,9 @@ class Danfoss(
 
     fun setObjectFOut(fOut: Double) {
         writeRegister(getRegisterById(FREQ), fOut.hz())
+    }
+
+    fun getCurrent() {
+        return readRegister(getRegisterById(CURRENT))
     }
 }

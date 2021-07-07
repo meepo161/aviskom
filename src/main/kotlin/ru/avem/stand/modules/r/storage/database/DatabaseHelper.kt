@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import ru.avem.stand.modules.i.tests.Test
 import ru.avem.stand.modules.r.common.authorization.AuthorizationModel
 import ru.avem.stand.modules.r.common.prefill.PreFillModel.serialNumberProp
+import ru.avem.stand.modules.r.common.prefill.PreFillModel.serialNumberPropSG
 import ru.avem.stand.modules.r.common.prefill.PreFillModel.testTypeProp
 import ru.avem.stand.modules.r.storage.database.entities.*
 import ru.avem.stand.modules.r.storage.testitemfields.TestItemFieldScheme
@@ -76,6 +77,26 @@ private fun createAsyncEngineTemplateBig() = listOf(
         minValue = "0",
         value = "35.5",
         maxValue = "40",
+        unit = "А",
+        blockName = " МПТ"
+    ),
+    TestItemFieldScheme(
+        key = "U_V_MPT",
+        title = "Напряжение возбуждения",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "110",
+        maxValue = "230",
+        unit = "В",
+        blockName = " МПТ"
+    ),
+    TestItemFieldScheme(
+        key = "I_V_MPT",
+        title = "Ток возбуждения",
+        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
+        minValue = "0",
+        value = "5.1",
+        maxValue = "25",
         unit = "А",
         blockName = " МПТ"
     ),
@@ -238,6 +259,7 @@ private fun createAsyncEngineTemplateBig() = listOf(
 fun saveProtocol(test: Test) = transaction {
     Report.new {
         serialNumber = serialNumberProp.value
+        serialNumberSG = serialNumberPropSG.value
         testType = testTypeProp.value.toString()
         this.test = test.name
 
@@ -266,6 +288,11 @@ fun saveProtocol(test: Test) = transaction {
             protocol = it
             key = "\$SERIAL_NUMBER\$"
             value = it.serialNumber
+        }
+        ReportField.new {
+            protocol = it
+            key = "\$SERIAL_NUMBER_SG\$"
+            value = it.serialNumberSG
         }
         ReportField.new {
             protocol = it
@@ -364,8 +391,8 @@ fun createTestItem(name: String) = transaction {
 
 fun createAsyncEngineScheme() = listOf(
     TestItemFieldScheme(
-        key = "U",
-        title = "Напряжение линейное",
+        key = "U_Y_MPT",
+        title = "Напряжение якоря",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "3000",
@@ -374,7 +401,7 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "I",
+        key = "I_Y_MPT",
         title = "Ток якоря",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
@@ -384,7 +411,27 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "R_IKAS",
+        key = "U_V_MPT",
+        title = "Напряжение возбуждения",
+        typeFormatRaw = TypeFormatTestItemField.INT.toString(),
+        minValue = "0",
+        value = "110",
+        maxValue = "230",
+        unit = "В",
+        blockName = " МПТ"
+    ),
+    TestItemFieldScheme(
+        key = "I_V_MPT",
+        title = "Ток возбуждения",
+        typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
+        minValue = "0",
+        value = "5.1",
+        maxValue = "25",
+        unit = "А",
+        blockName = " МПТ"
+    ),
+    TestItemFieldScheme(
+        key = "R_IKAS_MPT",
         title = "Сопротивление фазы статора при 20 °С",
         typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
         minValue = "0",
@@ -393,7 +440,7 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "R_MGR",
+        key = "R_MGR_MPT",
         title = "Сопротивление изоляции",
         typeFormatRaw = TypeFormatTestItemField.DOUBLE.toString(),
         minValue = "0",
@@ -402,7 +449,7 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "U_HV",
+        key = "U_HV_MPT",
         title = "Напряжение ВИУ",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
@@ -412,7 +459,7 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "U_MGR",
+        key = "U_MGR_MPT",
         title = "Напряжение испытания мегаомметром",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "100",
@@ -422,7 +469,7 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "I_HV",
+        key = "I_HV_MPT",
         title = "Допустимый ток утечки ВИУ",
         typeFormatRaw = TypeFormatTestItemField.FLOAT.toString(),
         minValue = "0",
@@ -432,7 +479,7 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "T_HV",
+        key = "T_HV_MPT",
         title = "Время испытания ВИУ",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
@@ -442,8 +489,8 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " МПТ"
     ),
     TestItemFieldScheme(
-        key = "U_SG",
-        title = "Напряжение линейное",
+        key = "U_Y_SG",
+        title = "Напряжение обмотки якоря",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "230",
@@ -452,8 +499,8 @@ fun createAsyncEngineScheme() = listOf(
         blockName = " СГ"
     ),
     TestItemFieldScheme(
-        key = "U_OV_SG",
-        title = "Напряжение линейное ОВ",
+        key = "U_V_SG",
+        title = "Напряжение обмотки возбуждения",
         typeFormatRaw = TypeFormatTestItemField.INT.toString(),
         minValue = "0",
         value = "230",

@@ -8,15 +8,16 @@ import ru.avem.stand.modules.r.communication.model.devices.avem.avem3.AVEM3Model
 import ru.avem.stand.modules.r.communication.model.devices.danfoss.Danfoss
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.owen.trm202.TRM202Model
+import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 import ru.avem.stand.modules.r.tests.KSPADTest
 import ru.avem.stand.utils.autoformat
 import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.runLater
 import java.lang.Thread.sleep
-import kotlin.collections.set
+import kotlin.math.abs
 
 class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
-    override val name = "Измерение потерь в ХХ"
+    override val name = "Холостой ход"
 
     override val testModel = IdleModel
 
@@ -25,6 +26,8 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
 
         testModel.specifiedU_Y_MPT = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedI_Y_MPT = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_MPT = PreFillModel.testTypeProp.value.fields["U_V_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_V_MPT = PreFillModel.testTypeProp.value.fields["I_V_MPT"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedR_IKAS_MPT =
             PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedR_MGR_MPT = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
@@ -50,28 +53,16 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         runLater {
             testModel.progressProperty.value = -1.0
 
-            testModel.measuredData.U.value = ""
-            testModel.measuredData.UAB.value = ""
-            testModel.measuredData.UBC.value = ""
-            testModel.measuredData.UCA.value = ""
+            testModel.measuredData.U_Y_MPT.value = ""
+            testModel.measuredData.U_V_MPT.value = ""
 
-            testModel.measuredData.I.value = ""
             testModel.measuredData.I_Y_MPT.value = ""
             testModel.measuredData.I_V_MPT.value = ""
-            testModel.measuredData.IC.value = ""
 
-            testModel.measuredData.P1.value = ""
-            testModel.measuredData.F.value = ""
-            testModel.measuredData.cos.value = ""
+            testModel.measuredData.tempAmb.value = ""
+            testModel.measuredData.tempTI.value = ""
 
-            testModel.measuredData.v1x.value = ""
-            testModel.measuredData.v1y.value = ""
-            testModel.measuredData.v1z.value = ""
-
-            testModel.measuredData.v2x.value = ""
-            testModel.measuredData.v2y.value = ""
-            testModel.measuredData.v2z.value = ""
-
+            testModel.measuredData.time.value = ""
             testModel.measuredData.result.value = ""
         }
     }
@@ -85,8 +76,8 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV23) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredUA = value.toDouble()
-                    testModel.measuredData.U_Y_MPT.value = testModel.measuredUA.autoformat()
+                    testModel.measuredData.U_Y_MPT.value = abs(value.toDouble()).autoformat()
+                    testModel.measuredU_Y_MPT = testModel.measuredData.U_Y_MPT.value.toDoubleOrDefault(0.0)
                 }
             }
         }
@@ -95,8 +86,8 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV25) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredUB = value.toDouble()
-                    testModel.measuredData.U_V_MPT.value = testModel.measuredUB.autoformat()
+                    testModel.measuredData.U_V_MPT.value = abs(value.toDouble()).autoformat()
+                    testModel.measuredU_V_MPT = testModel.measuredData.U_V_MPT.value.toDoubleOrDefault(0.0)
                 }
             }
         }
@@ -105,8 +96,8 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV24) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIA = value.toDouble() * COEF_SHUNT_PV24
-                    testModel.measuredData.I_Y_MPT.value = testModel.measuredIA.autoformat()
+                    testModel.measuredData.I_Y_MPT.value = abs(value.toDouble() * COEF_SHUNT_PV24).autoformat()
+                    testModel.measuredI_Y_MPT = testModel.measuredData.I_Y_MPT.value.toDoubleOrDefault(0.0)
                 }
             }
         }
@@ -115,8 +106,8 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PV27) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIB = value.toDouble() * COEF_SHUNT_PV27_PV28
-                    testModel.measuredData.I_V_MPT.value = testModel.measuredIB.autoformat()
+                    testModel.measuredData.I_V_MPT.value = abs(value.toDouble() * COEF_SHUNT_PV27_PV28).autoformat()
+                    testModel.measuredI_V_MPT = testModel.measuredData.I_V_MPT.value.toDoubleOrDefault(0.0)
                 }
             }
         }
@@ -132,29 +123,55 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
                 }
             }
         }
+
+        if (isRunning) {
+            with(PAV41) {
+                addCheckableDevice(this)
+                CM.startPoll(this, PM130Model.F_REGISTER) { value ->
+                    testModel.measuredF = abs(value.toDouble() * 30)
+                    testModel.measuredData.F.value = testModel.measuredF.autoformat()
+                }
+            }
+        }
+
+//        if (isRunning) {
+//            with(PV26) {
+//                addCheckableDevice(this)
+//                CM.startPoll(this, AVEM3Model.FREQ) { value ->
+//                    testModel.measuredF = abs(value.toDouble() * 30)
+//                    testModel.measuredData.F.value = testModel.measuredF.autoformat()
+//                }
+//            }
+//        }
     }
 
     override fun logic() {
         if (isRunning) {
             turnOnCircuit()
-//            sleep(20000)
-//            turnOffTM1()
         }
         if (isRunning) {
             turnOffTM1()
+            turnOffTM2()
             waitUntilFIToLoad()
-            regulateTM1(200) // 0.25f = 200 вольт
-            startFI(
-                testModel.specifiedU_Y_MPT.toInt()/* запас 20% по напряжению для регулирования в функции */,
-                50 /* изменять также в regulateFI */
-            )
-            regulateFI(200)
-            waitUntilFIToRun()
-            // TODO поставить нужное каждому
+            turnOnTM2(10)
         }
+
+        if (isRunning) {
+            regulateTM1(testModel.specifiedU_V_MPT.toInt())
+        }
+
+        if (isRunning) {
+            startFI(300, 1)
+        }
+
+        if (isRunning) {
+            regulateFI(testModel.specifiedU_Y_MPT.toInt())
+        }
+
         if (isRunning) {
             waiting()
         }
+
         storeTestValues()
         stopFI(CM.device(UZ91))
         turnOffTM1()
@@ -164,73 +181,71 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         CM.device<PR>(DD2).setUOnTM1((percent * 96 / 100 + 2).toFloat() / 100) // 0.25f  = 196+- постоянки
     }
 
-    private fun regulateTM1(voltage: Int) {
+    private fun regulateTM1(voltage: Int, current: Double = 9999.0) {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
             var percent = 0
             // TODO testModel.measuredU - поставить нужное +-
-            while (isRunning && (testModel.measuredUB < voltage * 0.8
-                        || testModel.measuredUB > voltage * 1.2)
-            ) {
-                if (isRunning && testModel.measuredUB < voltage * 0.8) {
+            while (isRunning && (testModel.measuredU_V_MPT < voltage * 0.8 || testModel.measuredU_V_MPT > voltage * 1.2)) {
+
+                if (isRunning && testModel.measuredU_V_MPT < voltage * 0.8) {
                     percent += 1
                     turnOnTM1(percent)
-                } else if (testModel.measuredUB > voltage * 1.2) {
+                } else if (testModel.measuredU_V_MPT > voltage * 1.2) {
                     percent -= 1
                     turnOnTM1(percent)
                 }
-                sleep(500)
+                sleep(200)
             }
-            while (isRunning && (testModel.measuredUB < voltage * 0.97
-                        || testModel.measuredUB > voltage * 1.03)
-            ) {
-                if (isRunning && testModel.measuredUB < voltage * 0.97) {
+            while (isRunning && (testModel.measuredU_V_MPT < voltage * 1 || testModel.measuredU_V_MPT > voltage * 1.06)) {
+
+                if (isRunning && testModel.measuredU_V_MPT < voltage * 1) {
                     percent += 1
                     turnOnTM1(percent)
-                } else if (testModel.measuredUB > voltage * 1.03) {
+                } else if (testModel.measuredU_V_MPT > voltage * 1.06) {
                     percent -= 1
                     turnOnTM1(percent)
                 }
-                sleep(1000)
+                sleep(400)
             }
         }
         if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+            appendMessageToLog(LogTag.INFO, "Напряжение на ОВ выставлено")
         }
     }
 
     private fun regulateFI(voltage: Int) {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОЯ")
-            var percent = 50
+            var percent = 5
             // TODO testModel.measuredU - поставить нужное +-
-            while (isRunning && (testModel.measuredUA < voltage * 0.8
-                        || testModel.measuredUA > voltage * 1.2)
+            while (isRunning && (testModel.measuredU_Y_MPT < voltage * 0.8
+                        || testModel.measuredU_Y_MPT > voltage * 1.2)
             ) {
-                if (isRunning && testModel.measuredUA < voltage * 0.8) {
+                if (isRunning && testModel.measuredU_Y_MPT < voltage * 0.8) {
                     percent += 1
-                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
-                } else if (testModel.measuredUA > voltage * 1.2) {
+                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
+                } else if (testModel.measuredU_Y_MPT > voltage * 1.2) {
                     percent -= 1
-                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
+                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
                 }
                 sleep(500)
             }
-            while (isRunning && (testModel.measuredUA < voltage * 0.98
-                        || testModel.measuredUA > voltage * 1.02)
+            while (isRunning && (testModel.measuredU_Y_MPT < voltage * 0.98
+                        || testModel.measuredU_Y_MPT > voltage * 1.02)
             ) {
-                if (isRunning && testModel.measuredUA < voltage * 0.98) {
+                if (isRunning && testModel.measuredU_Y_MPT < voltage * 0.98) {
                     percent += 1
-                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
-                } else if (testModel.measuredUA > voltage * 1.02) {
+                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
+                } else if (testModel.measuredU_Y_MPT > voltage * 1.02) {
                     percent -= 1
-                    CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
+                    CM.device<Danfoss>(UZ91).setObjectPercent(percent)
                 }
-                sleep(1000)
+                sleep(500)
             }
         }
         if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+            appendMessageToLog(LogTag.INFO, "Напряжение на ОЯ выставлено")
         }
     }
 
@@ -239,46 +254,26 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         CM.device<PR>(DD2).setUOnTM1(0f)
     }
 
+    private fun turnOnTM2(percent: Int) {
+        CM.device<PR>(DD2).setUOnTM2((percent * 96 / 100 + 2).toFloat() / 100)
+    }
+
+    private fun turnOffTM2() {
+        CM.device<PR>(DD2).setUOnTM2(0f)
+    }
+
     private fun turnOnCircuit() {
         appendMessageToLog(LogTag.INFO, "Сбор схемы")
         CM.device<PR>(DD2).onKM1()
         sleep(200)
+        appendMessageToLog(LogTag.INFO, "Подключение генератора")
+        CM.device<PR>(DD2).onRotateKM2()
     }
 
     private fun waiting() {
         appendMessageToLog(LogTag.INFO, "Ожидание...")
         sleepWhileRun(testModel.specifiedIDLE_TIME.toInt(), progressProperty = testModel.progressProperty)
     }
-
-    private fun storeTestValues() {
-        testModel.storedData.U.value =
-            testModel.measuredData.U.value // TODO проверить здесь и в остальных местах всё ли я сохраняю
-        testModel.storedData.U_Y_MPT.value = testModel.measuredData.U_Y_MPT.value
-        testModel.storedData.U_V_MPT.value = testModel.measuredData.U_V_MPT.value
-        testModel.storedData.UAB.value = testModel.measuredData.UAB.value
-        testModel.storedData.UBC.value = testModel.measuredData.UBC.value
-        testModel.storedData.UCA.value = testModel.measuredData.UCA.value
-
-        testModel.storedData.I.value = testModel.measuredData.I.value
-        testModel.storedData.I_Y_MPT.value = testModel.measuredData.I_Y_MPT.value
-        testModel.storedData.I_V_MPT.value = testModel.measuredData.I_V_MPT.value
-        testModel.storedData.IC.value = testModel.measuredData.IC.value
-
-        testModel.storedData.P1.value = testModel.measuredData.P1.value
-        testModel.storedData.F.value = testModel.measuredData.F.value
-        testModel.storedData.cos.value = testModel.measuredData.cos.value
-
-        testModel.storedData.v1.value = testModel.measuredData.v1.value
-        testModel.storedData.v1x.value = testModel.measuredData.v1x.value
-        testModel.storedData.v1y.value = testModel.measuredData.v1y.value
-        testModel.storedData.v1z.value = testModel.measuredData.v1z.value
-
-        testModel.storedData.v2.value = testModel.measuredData.v2.value
-        testModel.storedData.v2x.value = testModel.measuredData.v2x.value
-        testModel.storedData.v2y.value = testModel.measuredData.v2y.value
-        testModel.storedData.v2z.value = testModel.measuredData.v2z.value
-    }
-
 
     override fun result() {
         super.result()
@@ -300,30 +295,28 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         }
     }
 
-    private fun restoreTestValues() {
-        testModel.measuredData.U.value = testModel.storedData.U.value
-        testModel.measuredData.UAB.value = testModel.storedData.UAB.value
-        testModel.measuredData.UBC.value = testModel.storedData.UBC.value
-        testModel.measuredData.UCA.value = testModel.storedData.UCA.value
+    private fun storeTestValues() {// TODO проверить здесь и в остальных местах всё ли я сохраняю
+        testModel.storedData.U_Y_MPT.value = testModel.measuredData.U_Y_MPT.value
+        testModel.storedData.U_V_MPT.value = testModel.measuredData.U_V_MPT.value
 
-        testModel.measuredData.I.value = testModel.storedData.I.value
+        testModel.storedData.I_Y_MPT.value = testModel.measuredData.I_Y_MPT.value
+        testModel.storedData.I_V_MPT.value = testModel.measuredData.I_V_MPT.value
+
+        testModel.storedData.tempAmb.value = testModel.measuredData.tempAmb.value
+        testModel.storedData.tempTI.value = testModel.measuredData.tempTI.value
+        testModel.storedData.F.value = testModel.measuredData.F.value
+    }
+
+    private fun restoreTestValues() {
+        testModel.measuredData.U_Y_MPT.value = testModel.storedData.U_Y_MPT.value
+        testModel.measuredData.U_V_MPT.value = testModel.storedData.U_V_MPT.value
+
         testModel.measuredData.I_Y_MPT.value = testModel.storedData.I_Y_MPT.value
         testModel.measuredData.I_V_MPT.value = testModel.storedData.I_V_MPT.value
-        testModel.measuredData.IC.value = testModel.storedData.IC.value
 
-        testModel.measuredData.P1.value = testModel.storedData.P1.value
+        testModel.measuredData.tempAmb.value = testModel.storedData.tempAmb.value
+        testModel.measuredData.tempTI.value = testModel.storedData.tempTI.value
         testModel.measuredData.F.value = testModel.storedData.F.value
-        testModel.measuredData.cos.value = testModel.storedData.cos.value
-
-        testModel.measuredData.v1.value = testModel.storedData.v1.value
-        testModel.measuredData.v1x.value = testModel.storedData.v1x.value
-        testModel.measuredData.v1y.value = testModel.storedData.v1y.value
-        testModel.measuredData.v1z.value = testModel.storedData.v1z.value
-
-        testModel.measuredData.v2.value = testModel.storedData.v2.value
-        testModel.measuredData.v2x.value = testModel.storedData.v2x.value
-        testModel.measuredData.v2y.value = testModel.storedData.v2y.value
-        testModel.measuredData.v2z.value = testModel.storedData.v2z.value
     }
 
     override fun saveProtocol() {
@@ -336,6 +329,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         reportFields["TIME_MEAS_IDLE"] = testModel.measuredData.time.value
         reportFields["TEMP_AMB_IDLE"] = testModel.measuredData.tempAmb.value
         reportFields["TEMP_TI_IDLE"] = testModel.measuredData.tempTI.value
+        reportFields["FREQ_IDLE"] = testModel.measuredData.F.value
 
         reportFields["RESULT_IDLE"] = testModel.measuredData.result.value
 

@@ -231,8 +231,8 @@ class MaxM : KSPADTest(view = MaxMView::class, reportTemplate = "maxm.xlsx") {
     private fun startTIFI() {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
         CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
-            voltage = 100,
-            percentF = 100,
+            volt = 100,
+            perc = 100,
         )
         CM.device<Danfoss>(CM.DeviceID.UZ91).startObject()
     }

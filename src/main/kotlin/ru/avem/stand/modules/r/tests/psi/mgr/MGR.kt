@@ -16,8 +16,7 @@ import java.lang.Thread.sleep
 import kotlin.collections.set
 
 class MGR : KSPADTest(view = MGRView::class, reportTemplate = "mgr.xlsx") {
-    override val name = "МПТ. Измерение сопротивления изоляции обмоток и встроенных термодатчиков относительно корпуса и " +
-            "между обмотками в практически холодном состоянии"
+    override val name = "МПТ. Измерение сопротивления изоляции обмоток"
 
     override val testModel = MGRModel
 
@@ -42,6 +41,8 @@ class MGR : KSPADTest(view = MGRView::class, reportTemplate = "mgr.xlsx") {
         testModel.specifiedT_HV_SG =    PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedIDLE_TIME =  PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedLOAD_TIME =  PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
+
+        testModel.specifiedData.R60.value = testModel.specifiedR_MGR_MPT.autoformat()
 
     }
 
@@ -150,14 +151,14 @@ class MGR : KSPADTest(view = MGRView::class, reportTemplate = "mgr.xlsx") {
                 testModel.measuredData.result.value = "Прервано"
                 appendMessageToLog(LogTag.ERROR, "Испытание прервано по причине: $cause")
             }
-//            testModel.measuredData.R60.value.toDouble() < testModel.specifiedData.R60.value.toDouble() -> { TODO
-//                testModel.measuredData.result.value = "Не соответствует"
-//                appendMessageToLog(LogTag.ERROR, "Измеренное сопротивление < ${testModel.specifiedData.R60.value} МОм")
-//            }
-            testModel.measuredData.K_ABS.value.toDouble() < 1.3 -> {
+            testModel.measuredData.R60.value.toDoubleOrDefault(0.0) < testModel.specifiedData.R60.value.toDoubleOrDefault(0.0) -> {
                 testModel.measuredData.result.value = "Не соответствует"
-                appendMessageToLog(LogTag.ERROR, "Измеренный kABS < 1.3")
+                appendMessageToLog(LogTag.ERROR, "Измеренное сопротивление < ${testModel.specifiedData.R60.value} МОм")
             }
+//            testModel.measuredData.K_ABS.value.toDouble() < 1.3 -> {
+//                testModel.measuredData.result.value = "Не соответствует"
+//                appendMessageToLog(LogTag.ERROR, "Измеренный kABS < 1.3")
+//            }
             else -> {
                 testModel.measuredData.result.value = "Соответствует"
                 appendMessageToLog(LogTag.INFO, "Испытание завершено успешно")

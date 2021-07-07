@@ -11,6 +11,7 @@ import ru.avem.stand.modules.r.communication.model.devices.avem.latr.LatrControl
 import ru.avem.stand.modules.r.communication.model.devices.owen.pr.PR
 import ru.avem.stand.modules.r.communication.model.devices.satec.pm130.PM130Model
 import ru.avem.stand.modules.r.tests.KSPADTest
+import ru.avem.stand.modules.r.tests.psi.hv.HVModel
 import ru.avem.stand.modules.r.tests.psi.mgr.MGRModel.latrStatus
 import ru.avem.stand.utils.autoformat
 import ru.avem.stand.utils.toDoubleOrDefault
@@ -18,6 +19,7 @@ import tornadofx.runLater
 import java.lang.Thread.sleep
 import java.util.*
 import kotlin.collections.set
+import kotlin.math.abs
 import ru.avem.stand.modules.r.communication.model.devices.avem.latr.AvemLatrController as AvemLatrController1
 
 class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hvSG.xlsx") {
@@ -48,6 +50,8 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hvSG.xlsx") {
         testModel.specifiedIDLE_TIME = PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedLOAD_TIME = PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
 
+        HVModel.initData.U.set(PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0).toString())
+        HVModel.initData.I.set(PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0).toString())
     }
 
     override fun initView() {
@@ -73,10 +77,10 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hvSG.xlsx") {
             with(PV25) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    if (value.toDouble() >= 0.0) {
-                        testModel.measuredData.U.value = (value.toDouble() * COEF_TR_AVEM).autoformat()
-                    } else {
+                    if (value.toDouble() < 0) {
                         testModel.measuredData.U.value = "0.0"
+                    } else {
+                        testModel.measuredData.U.value = abs(value.toDouble() * COEF_TR_AVEM).autoformat()
                     }
                     testModel.measuredU = testModel.measuredData.U.value.toDoubleOrDefault(0.0)
                 }
@@ -91,7 +95,9 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hvSG.xlsx") {
                         "%.2f".format(Locale.ENGLISH, value.toDouble()/* * CURRENT_STAGE_PM130_VIU*/)
                     testModel.measuredI = testModel.measuredData.I.value.toDoubleOrDefault(0.0)
                     if (testModel.measuredI > testModel.specifiedI_HV_SG) {
-                        cause = "ток утечки превысил заданный"
+                        cause = "Ток утечки превысил заданный"
+                        CM.device<PR>(DD2).offPEQV3()
+                        CM.device<PR>(DD2).offVIUQV1()
                     }
                 }
                 CM.startPoll(this, PM130Model.F_REGISTER) { value ->
@@ -134,6 +140,13 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hvSG.xlsx") {
             resetLatr(CM.device(GV240))
             configLatr(CM.device(GV240))
         }
+
+        if (isRunning && testModel.measuredU < 10) {
+            cause = "Крокодилы закорочены"
+            CM.device<PR>(DD2).offPEQV3()
+            CM.device<PR>(DD2).offVIUQV1()
+        }
+
         if (isRunning) {
             regulateVoltage(CM.device(GV240))
         }
@@ -232,7 +245,7 @@ class HVSG : KSPADTest(view = HVViewSG::class, reportTemplate = "hvSG.xlsx") {
                     sleep(200)
                 }
                 latrDevice.stop()
-                sleep(1000)
+                sleep(400)
             }
         }
         latrDevice.stop()

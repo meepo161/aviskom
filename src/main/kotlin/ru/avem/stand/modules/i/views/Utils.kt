@@ -12,6 +12,7 @@ import ru.avem.stand.modules.i.tests.Test
 import ru.avem.stand.modules.r.common.prefill.isTestRunning
 import tornadofx.*
 import tornadofx.FX.Companion.primaryStage
+import tornadofx.controlsfx.warningNotification
 import java.lang.Thread.sleep
 import java.nio.file.Paths
 import kotlin.system.exitProcess
@@ -230,6 +231,34 @@ fun showImageDialog(
 
         if (elapsedTime > timeout) {
             throw Exception("Время ожидания диалога превышено")
+        }
+    }
+}
+
+
+fun showConfirmationTestObject(currentWindow: Window?, way: () -> Unit) {
+    confirmation(
+        "Подтверждение",
+        "Соответствует качество сборки, габаритный, установочные размеры, маркировка с требованиями \n6ТР.161.006 СБ" +
+                "\nОТР.300.251 ГЧ" +
+                "\nОТР.470.043 ПМ ?",
+        ButtonType("Соответствует"),
+        ButtonType("Не соответствует"),
+        title = "Подтверждение",
+        owner = currentWindow
+    ) { buttonType ->
+        when (buttonType.text) {
+            "Соответствует" -> {
+                runLater {
+                    way()
+                    warningNotification("Соответствует", "")
+                }
+            }
+            "Не соответствует" -> {
+                runLater {
+                    warningNotification("Не соответствует", "")
+                }
+            }
         }
     }
 }

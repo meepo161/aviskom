@@ -50,6 +50,7 @@ class IdleView(title: String = "ХХ", showOnStart: Boolean = true) : TestViewMo
                     column("Iя, А", IdleData::I_Y_MPT.getter)
                     column("Uов, В", IdleData::U_V_MPT.getter)
                     column("Iов, А", IdleData::I_V_MPT.getter)
+                    column("об/мин", IdleData::F.getter)
                 }
             }
                 tableview(observableList(test.testModel.measuredData)) {

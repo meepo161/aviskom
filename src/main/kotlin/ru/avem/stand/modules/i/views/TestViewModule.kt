@@ -167,7 +167,6 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
 //                        column("P1, кВт", TestItemData::P.getter)
 //                    }
                     tableview(observableList(test.testModel.testItemData)) {
-
                         minHeight = 88.0
                         maxHeight = 88.0
                         columnResizePolicy = SmartResize.POLICY
@@ -175,12 +174,25 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
                         column("Uя, В", TestItemData::U_Y_MPT.getter)
                     }
                     tableview(observableList(test.testModel.testItemData)) {
-
                         minHeight = 88.0
                         maxHeight = 88.0
                         columnResizePolicy = SmartResize.POLICY
                         mouseTransparentProperty().set(true)
                         column("Iя, А", TestItemData::I_Y_MPT.getter)
+                    }
+                    tableview(observableList(test.testModel.testItemData)) {
+                        minHeight = 88.0
+                        maxHeight = 88.0
+                        columnResizePolicy = SmartResize.POLICY
+                        mouseTransparentProperty().set(true)
+                        column("Uв, В", TestItemData::U_V_MPT.getter)
+                    }
+                    tableview(observableList(test.testModel.testItemData)) {
+                        minHeight = 88.0
+                        maxHeight = 88.0
+                        columnResizePolicy = SmartResize.POLICY
+                        mouseTransparentProperty().set(true)
+                        column("Iв, А", TestItemData::I_V_MPT.getter)
                     }
 //                    tableview(observableList(test.testModel.testItemData)) {
 //

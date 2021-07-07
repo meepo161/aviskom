@@ -3,7 +3,7 @@ package ru.avem.stand.modules.r.tests.psi.hvSG
 import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleDoubleProperty
 import ru.avem.stand.modules.i.TestModel
-import tornadofx.*
+import tornadofx.onChange
 import kotlin.math.abs
 
 object HVModelSG : TestModel() {

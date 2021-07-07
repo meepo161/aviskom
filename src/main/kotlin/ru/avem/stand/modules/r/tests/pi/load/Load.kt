@@ -23,11 +23,16 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
 
     override val testModel = LoadModel
 
+    var percentFI = 1
+    var percentTM2 = 0
+
     override fun initVars() {
         super.initVars()
 
         testModel.specifiedU_Y_MPT = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedI_Y_MPT = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_MPT = PreFillModel.testTypeProp.value.fields["U_V_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_V_MPT = PreFillModel.testTypeProp.value.fields["I_V_MPT"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedR_IKAS_MPT =
             PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
         testModel.specifiedR_MGR_MPT = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
@@ -59,9 +64,16 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         runLater {
             testModel.progressProperty.value = -1.0
 
+            testModel.measuredData.U_Y_MPT.value = ""
+            testModel.measuredData.U_V_MPT.value = ""
+
+            testModel.measuredData.I_Y_MPT.value = ""
+            testModel.measuredData.I_V_MPT.value = ""
+
+            testModel.measuredData.U_V_SG.value = ""
+            testModel.measuredData.I_V_SG.value = ""
+
             testModel.measuredData.U.value = ""
-            testModel.measuredData.UMPTOY.value = ""
-            testModel.measuredData.UMPTOV.value = ""
             testModel.measuredData.UAB.value = ""
             testModel.measuredData.UBC.value = ""
             testModel.measuredData.UCA.value = ""
@@ -71,16 +83,14 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             testModel.measuredData.IB.value = ""
             testModel.measuredData.IC.value = ""
 
-            testModel.measuredData.P1.value = ""
-            testModel.measuredData.P2.value = ""
+            testModel.measuredData.F.value = ""
 
-            testModel.measuredData.result.value = ""
+            testModel.measuredData.tempAmb.value = ""
+            testModel.measuredData.tempTI.value = ""
 
             testModel.measuredData.time.value = ""
-            testModel.measuredData.torque.value = ""
-            testModel.measuredData.RPM.value = ""
-            testModel.measuredData.efficiency.value = ""
-            testModel.measuredData.sk.value = ""
+            testModel.measuredData.result.value = ""
+
         }
     }
 
@@ -135,10 +145,9 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
                     testModel.measuredI = (testModel.measuredIA + testModel.measuredIB + testModel.measuredIC) / 3
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
-
-                CM.startPoll(this, PM130Model.P_REGISTER) { value ->
-                    testModel.measuredP1 = abs(value.toDouble() * CURRENT_STAGE_PM130)
-                    testModel.measuredData.P1.value = testModel.measuredP1.autoformat()
+                CM.startPoll(this, PM130Model.F_REGISTER) { value ->
+                    testModel.measuredF = abs(value.toDouble() * 30)
+                    testModel.measuredData.F.value = testModel.measuredF.autoformat()
                 }
             }
         }
@@ -147,8 +156,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV23) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredUA = value.toDouble()
-                    testModel.measuredData.UMPTOY.value = testModel.measuredUA.autoformat()
+                    testModel.measuredU_Y_MPT = abs(value.toDouble())
+                    testModel.measuredData.U_Y_MPT.value = testModel.measuredU_Y_MPT.autoformat()
                 }
             }
         }
@@ -157,8 +166,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV25) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredUB = value.toDouble()
-                    testModel.measuredData.UMPTOV.value = testModel.measuredUB.autoformat()
+                    testModel.measuredData.U_V_MPT.value = abs(value.toDouble()).autoformat()
+                    testModel.measuredU_V_MPT = testModel.measuredData.U_V_MPT.value.toDoubleOrDefault(0.0)
                 }
             }
         }
@@ -167,8 +176,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV24) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIMPTOY = value.toDouble() * COEF_SHUNT_PV24
-                    testModel.measuredData.IMPTOY.value = testModel.measuredIMPTOY.autoformat()
+                    testModel.measuredI_Y_MPT = abs(value.toDouble() * COEF_SHUNT_PV24)
+                    testModel.measuredData.I_Y_MPT.value = testModel.measuredI_Y_MPT.autoformat()
                 }
             }
         }
@@ -177,8 +186,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV27) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredIMPTOV = value.toDouble() * COEF_SHUNT_PV27_PV28
-                    testModel.measuredData.IMPTOV.value = testModel.measuredIMPTOV.autoformat()
+                    testModel.measuredI_V_MPT = abs(value.toDouble() * COEF_SHUNT_PV27_PV28)
+                    testModel.measuredData.I_V_MPT.value = testModel.measuredI_V_MPT.autoformat()
                 }
             }
         }
@@ -186,8 +195,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV26) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredUSGOV = value.toDouble()
-                    testModel.measuredData.USGOV.value = testModel.measuredUSGOV.autoformat()
+                    testModel.measuredU_V_SG = abs(value.toDouble())
+                    testModel.measuredData.U_V_SG.value = testModel.measuredU_V_SG.autoformat()
                 }
             }
         }
@@ -195,8 +204,8 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             with(CM.DeviceID.PV28) {
                 addCheckableDevice(this)
                 CM.startPoll(this, AVEM3Model.U_TRMS) { value ->
-                    testModel.measuredISGOV = value.toDouble() * COEF_SHUNT_PV27_PV28
-                    testModel.measuredData.ISGOV.value = testModel.measuredISGOV.autoformat()
+                    testModel.measuredI_V_SG = abs(value.toDouble() * COEF_SHUNT_PV27_PV28)
+                    testModel.measuredData.I_V_SG.value = testModel.measuredI_V_SG.autoformat()
                 }
             }
         }
@@ -215,66 +224,84 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
     }
 
     override fun logic() {
+        percentTM2 = 0
+        percentFI = 1
         if (isRunning) {
             turnOnCircuit()
         }
         if (isRunning) {
             turnOffTM1()
             turnOffTM2()
+        }
+
+//        while (isRunning) {
+//            sleep(1000)
+//        }
+
+        if (isRunning) {
             waitUntilFIToLoad()
-            regulateTM1(200) // 0.25f = 200 вольт
-            startFI(
-                testModel.specifiedU_Y_MPT.toInt()/* запас 20% по напряжению для регулирования в функции */,
-                50 /* изменять также в regulateFI */
-            )
-            regulateFI(200)
-            waitUntilFIToRun()
-            // TODO поставить нужное каждому +-
+        }
+
+        if (isRunning) {
+            regulateTM1(testModel.specifiedU_V_MPT.toInt())
+        }
+
+        if (isRunning) {
+            startFI(300, 1)
+        }
+
+//        if (isRunning) {
+//            waitUntilFIToRun()
+//        }
+
+        if (isRunning) {
+            regulateFI(testModel.specifiedU_Y_MPT.toInt())
+        }
+
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Ожидание разгона МПТ")
+            sleepWhileRun(15)
         }
         if (isRunning) {
             turnOnLoad()
         }
         if (isRunning) {
-            regulateTM2(testModel.specifiedI_Y_MPT.toInt()) // TODO поставить нужное +-
+//            regulateTM2(testModel.specifiedI_Y_MPT.toInt())
+            regulateTM2ForVoltage(testModel.specifiedU_V_SG.toInt())
         }
         if (isRunning) {
             waiting()
         }
+        percentTM2 = 0
+        percentFI = 1
         storeTestValues()
-        if (isRunning) {
-            stopFI(CM.device(CM.DeviceID.UZ91))
-            turnOffTM1()
-            turnOffTM2()
-        }
-        // TODO опыт икаса
-        //    Температура обмотки по сопротивлению на момент измерения = (Rгорячей-Rхолодной)/(Rхолодной*0,004(для меди)) + ТемператураОбмоткиХолодной(ОИ или воздуха)
-        // TODO опыт мегера (в главном тз есть)
+        stopFI(CM.device(CM.DeviceID.UZ91))
+        turnOffTM1()
+        turnOffTM2()
     }
 
-    private fun regulateTM1(voltage: Int) {
+    private fun regulateTM1(voltage: Int, current: Double = 9999.0) {
         if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ МПТ")
             var percent = 0
             // TODO testModel.measuredU - поставить нужное +-
-            while (isRunning && (testModel.measuredUB < voltage * 0.8
-                        || testModel.measuredUB > voltage * 1.2)
-            ) {
-                if (isRunning && testModel.measuredUB < voltage * 0.8) {
+            while (isRunning && (testModel.measuredU_V_MPT < voltage * 0.8 || testModel.measuredU_V_MPT > voltage * 1.2)) {
+
+                if (isRunning && testModel.measuredU_V_MPT < voltage * 0.8) {
                     percent += 1
                     turnOnTM1(percent)
-                } else if (testModel.measuredUB > voltage * 1.2) {
+                } else if (testModel.measuredU_V_MPT > voltage * 1.2) {
                     percent -= 1
                     turnOnTM1(percent)
                 }
-                sleep(500)
+                sleep(1000)
             }
-            while (isRunning && (testModel.measuredUB < voltage * 0.97
-                        || testModel.measuredUB > voltage * 1.03)
-            ) {
-                if (isRunning && testModel.measuredUB < voltage * 0.97) {
+            while (isRunning && (testModel.measuredU_V_MPT < voltage * 1 || testModel.measuredU_V_MPT > voltage * 1.06)) {
+
+                if (isRunning && testModel.measuredU_V_MPT < voltage * 1) {
                     percent += 1
                     turnOnTM1(percent)
-                } else if (testModel.measuredUB > voltage * 1.03) {
+                } else if (testModel.measuredU_V_MPT > voltage * 1.06) {
                     percent -= 1
                     turnOnTM1(percent)
                 }
@@ -282,42 +309,42 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
             }
         }
         if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+            appendMessageToLog(LogTag.INFO, "Напряжение на ОВ МПТ выставлено")
         }
     }
 
     private fun regulateFI(voltage: Int) {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОЯ")
-            var percent = 50
-            // TODO testModel.measuredU - поставить нужное +-
-            while (isRunning && (testModel.measuredUA < voltage * 0.8
-                        || testModel.measuredUA > voltage * 1.2)
+            var percent = percentFI
+            while (isRunning && (testModel.measuredU_Y_MPT < voltage * 0.8
+                        || testModel.measuredU_Y_MPT > voltage * 1.2)
             ) {
-                if (isRunning && testModel.measuredUA < voltage * 0.8) {
+                if (isRunning && testModel.measuredU_Y_MPT < voltage * 0.8) {
                     percent += 1
                     CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
-                } else if (testModel.measuredUA > voltage * 1.2) {
+                } else if (testModel.measuredU_Y_MPT > voltage * 1.2) {
                     percent -= 1
                     CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
                 }
                 sleep(500)
             }
-            while (isRunning && (testModel.measuredUA < voltage * 0.98
-                        || testModel.measuredUA > voltage * 1.02)
+            while (isRunning && (testModel.measuredU_Y_MPT < voltage * 0.98
+                        || testModel.measuredU_Y_MPT > voltage * 1.02)
             ) {
-                if (isRunning && testModel.measuredUA < voltage * 0.98) {
+                if (isRunning && testModel.measuredU_Y_MPT < voltage * 0.98) {
                     percent += 1
                     CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
-                } else if (testModel.measuredUA > voltage * 1.02) {
+                } else if (testModel.measuredU_Y_MPT > voltage * 1.02) {
                     percent -= 1
                     CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectPercent(percent)
                 }
                 sleep(1000)
             }
+            percentFI = percent
         }
         if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+            appendMessageToLog(LogTag.INFO, "Напряжение на ОЯ выставлено")
         }
     }
 
@@ -331,9 +358,13 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         appendMessageToLog(LogTag.INFO, "Сбор схемы нагрузки")
         CM.device<PR>(CM.DeviceID.DD2).onRotateKM2()
         sleep(200)
-        CM.device<PR>(CM.DeviceID.DD2).onUNM15KM82()
+//        if (testModel.specifiedI_Y_MPT > 10) {
+//        CM.device<PR>(CM.DeviceID.DD2).onUNM55KM81()
+//        } else {
+            CM.device<PR>(CM.DeviceID.DD2).onUNM15KM82()
+//        }
         sleep(200)
-        CM.device<PR>(CM.DeviceID.DD2).onRotateUNMKKM81()
+        CM.device<PR>(CM.DeviceID.DD2).onVentilyatorUNMKKM81()
         sleep(5000)
     }
 
@@ -346,7 +377,7 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
     }
 
     private fun turnOnTM2(percent: Int) {
-        CM.device<PR>(CM.DeviceID.DD2).setUOnTM1((percent * 96 / 100 + 2).toFloat() / 100)
+        CM.device<PR>(CM.DeviceID.DD2).setUOnTM2((percent * 96 / 100 + 2).toFloat() / 100)
     }
 
     private fun turnOffTM2() {
@@ -373,33 +404,70 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
 
     private fun regulateTM2(amperage: Int) {
         if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
-            var percent = 0
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ СГ")
+            var percent = percentTM2
             // TODO testModel.measuredI2A - поставить нужное +-
-            while (isRunning && (testModel.measuredIMPTOY < amperage * 0.6
-                        || testModel.measuredIMPTOY > amperage * 1)
+            while (isRunning && (testModel.measuredI_Y_MPT < amperage * 0.8
+                        || testModel.measuredI_Y_MPT > amperage * 1.2)
             ) {
-                if (isRunning && testModel.measuredIMPTOY < amperage * 0.6) {
+                if (isRunning && testModel.measuredI_Y_MPT < amperage * 0.8) {
                     percent += 1
                     turnOnTM2(percent)
-                } else if (testModel.measuredIMPTOY > amperage * 1) {
+                } else if (testModel.measuredI_Y_MPT > amperage * 1.2) {
                     percent -= 1
                     turnOnTM2(percent)
                 }
-                sleep(500)
+                sleep(2500)
             }
-            while (isRunning && (testModel.measuredIMPTOY < amperage * 0.96
-                        || testModel.measuredIMPTOY > amperage * 1)
+            while (isRunning && (testModel.measuredI_Y_MPT < amperage * 1
+                        || testModel.measuredI_Y_MPT > amperage * 1.1)
             ) {
-                if (isRunning && testModel.measuredIMPTOY < amperage * 0.96) {
+                if (isRunning && testModel.measuredI_Y_MPT < amperage * 1) {
                     percent += 1
                     turnOnTM2(percent)
-                } else if (testModel.measuredIMPTOY > amperage * 1) {
+                } else if (testModel.measuredI_Y_MPT > amperage * 1.1) {
                     percent -= 1
                     turnOnTM2(percent)
                 }
-                sleep(1000)
+                sleep(4000)
             }
+            percentTM2 = percent
+        }
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+        }
+    }
+
+    private fun regulateTM2ForVoltage(voltage: Int) {
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ СГ")
+            var percent = percentTM2
+            // TODO testModel.measuredI2A - поставить нужное +-
+            while (isRunning && (testModel.measuredU < voltage * 0.8
+                        || testModel.measuredU > voltage * 1.2)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.8) {
+                    percent += 1
+                    turnOnTM2(percent)
+                } else if (testModel.measuredU > voltage * 1.2) {
+                    percent -= 1
+                    turnOnTM2(percent)
+                }
+                sleep(2500)
+            }
+            while (isRunning && (testModel.measuredU < voltage * 0.95
+                        || testModel.measuredU > voltage * 1.05)
+            ) {
+                if (isRunning && testModel.measuredU < voltage * 0.95) {
+                    percent += 1
+                    turnOnTM2(percent)
+                } else if (testModel.measuredU > voltage * 1.05) {
+                    percent -= 1
+                    turnOnTM2(percent)
+                }
+                sleep(4000)
+            }
+            percentTM2 = percent
         }
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
@@ -411,40 +479,29 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         sleepWhileRun(testModel.specifiedLOAD_TIME.toInt(), progressProperty = testModel.progressProperty)
     }
 
-    private fun storeTestValues() {
-        testModel.storedData.UMPTOY.value = testModel.measuredData.UMPTOY.value
-        testModel.storedData.UMPTOV.value = testModel.measuredData.UMPTOV.value
-        testModel.storedData.IMPTOY.value = testModel.measuredData.IMPTOY.value
-        testModel.storedData.IMPTOV.value = testModel.measuredData.IMPTOV.value
-
-        testModel.storedData.USGOV.value = testModel.measuredData.USGOV.value
-        testModel.storedData.ISGOV.value = testModel.measuredData.ISGOV.value
-
-        testModel.storedData.U.value = testModel.measuredData.U.value
-        testModel.storedData.UAB.value = testModel.measuredData.UAB.value
-        testModel.storedData.UBC.value = testModel.measuredData.UBC.value
-        testModel.storedData.UCA.value = testModel.measuredData.UCA.value
-
-        testModel.storedData.I.value = testModel.measuredData.I.value
-        testModel.storedData.IA.value = testModel.measuredData.IA.value
-        testModel.storedData.IB.value = testModel.measuredData.IB.value
-        testModel.storedData.IC.value = testModel.measuredData.IC.value
-
-        testModel.storedData.P2.value = testModel.measuredData.P2.value
-
-        testModel.storedData.USGOV.value = testModel.measuredData.USGOV.value
-        testModel.storedData.ISGOV.value = testModel.measuredData.ISGOV.value
-    }
 
     override fun result() {
         super.result()
 
-        if (!isSuccess) {
-            testModel.measuredData.result.value = "Прервано"
-            appendMessageToLog(LogTag.ERROR, "Испытание прервано по причине: $cause")
-        } else {
-            testModel.measuredData.result.value = "Соответствует"
-            appendMessageToLog(LogTag.INFO, "Испытание завершено успешно")
+        when {
+            !isSuccess -> {
+                testModel.measuredData.result.value = "Прервано"
+                appendMessageToLog(LogTag.ERROR, "Испытание прервано по причине: $cause")
+            }
+            testModel.storedData.UAB.value.toDouble() > testModel.storedData.UBC.value.toDouble() * 1.03 ||
+                    testModel.storedData.UBC.value.toDouble() > testModel.storedData.UCA.value.toDouble() * 1.03 ||
+                    testModel.storedData.UAB.value.toDouble() > testModel.storedData.UCA.value.toDouble() * 1.03 ||
+                    testModel.storedData.UAB.value.toDouble() < testModel.storedData.UBC.value.toDouble() * 0.97 ||
+                    testModel.storedData.UBC.value.toDouble() < testModel.storedData.UCA.value.toDouble() * 0.97 ||
+                    testModel.storedData.UAB.value.toDouble() < testModel.storedData.UCA.value.toDouble() * 0.97
+            -> {
+                appendMessageToLog(LogTag.ERROR, "Испытание завершено. Асимметрия напряжений больше 3%")
+                testModel.measuredData.result.value = "Не соответствует"
+            }
+            else -> {
+                testModel.measuredData.result.value = "Соответствует"
+                appendMessageToLog(LogTag.INFO, "Испытание завершено успешно")
+            }
         }
     }
 
@@ -456,43 +513,75 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
         }
     }
 
-    private fun restoreTestValues() {
-        testModel.measuredData.U.value = testModel.storedData.U.value
-        testModel.measuredData.UMPTOV.value = testModel.storedData.UMPTOV.value
-        testModel.measuredData.IMPTOV.value = testModel.storedData.IMPTOV.value
-        testModel.measuredData.UMPTOY.value = testModel.storedData.UMPTOY.value
-        testModel.measuredData.IMPTOY.value = testModel.storedData.IMPTOY.value
+    private fun storeTestValues() {
+        testModel.storedData.U_Y_MPT.value = testModel.measuredData.U_Y_MPT.value
+        testModel.storedData.U_V_MPT.value = testModel.measuredData.U_V_MPT.value
 
+        testModel.storedData.I_Y_MPT.value = testModel.measuredData.I_Y_MPT.value
+        testModel.storedData.I_V_MPT.value = testModel.measuredData.I_V_MPT.value
+
+        testModel.storedData.U_V_SG.value = testModel.measuredData.U_V_SG.value
+        testModel.storedData.I_V_SG.value = testModel.measuredData.I_V_SG.value
+
+        testModel.storedData.U.value = testModel.measuredData.U.value
+        testModel.storedData.UAB.value = testModel.measuredData.UAB.value
+        testModel.storedData.UBC.value = testModel.measuredData.UBC.value
+        testModel.storedData.UCA.value = testModel.measuredData.UCA.value
+
+        testModel.storedData.I.value = testModel.measuredData.I.value
+        testModel.storedData.IA.value = testModel.measuredData.IA.value
+        testModel.storedData.IB.value = testModel.measuredData.IB.value
+        testModel.storedData.IC.value = testModel.measuredData.IC.value
+
+        testModel.storedData.P1.value = testModel.measuredData.P1.value
+        testModel.storedData.F.value = testModel.measuredData.F.value
+
+    }
+
+    private fun restoreTestValues() {
+        testModel.measuredData.U_Y_MPT.value = testModel.storedData.U_Y_MPT.value
+        testModel.measuredData.U_V_MPT.value = testModel.storedData.U_V_MPT.value
+
+        testModel.measuredData.I_Y_MPT.value = testModel.storedData.I_Y_MPT.value
+        testModel.measuredData.I_V_MPT.value = testModel.storedData.I_V_MPT.value
+
+        testModel.measuredData.U_V_SG.value = testModel.storedData.U_V_SG.value
+        testModel.measuredData.I_V_SG.value = testModel.storedData.I_V_SG.value
+
+        testModel.measuredData.U.value = testModel.storedData.U.value
         testModel.measuredData.UAB.value = testModel.storedData.UAB.value
         testModel.measuredData.UBC.value = testModel.storedData.UBC.value
         testModel.measuredData.UCA.value = testModel.storedData.UCA.value
+
         testModel.measuredData.I.value = testModel.storedData.I.value
         testModel.measuredData.IA.value = testModel.storedData.IA.value
         testModel.measuredData.IB.value = testModel.storedData.IB.value
         testModel.measuredData.IC.value = testModel.storedData.IC.value
 
-        testModel.measuredData.P2.value = testModel.storedData.P2.value
+        testModel.measuredData.P1.value = testModel.storedData.P1.value
+        testModel.measuredData.F.value = testModel.storedData.F.value
     }
 
     override fun saveProtocol() {
         reportFields["TEST_NAME_LOAD"] = name
 
-        reportFields["L1_U_LOAD"] =      testModel.measuredData.UAB.value
-        reportFields["L2_U_LOAD"] =      testModel.measuredData.UBC.value
-        reportFields["L3_U_LOAD"] =      testModel.measuredData.UCA.value
-        reportFields["L1_I_LOAD"] =      testModel.measuredData.IA.value
-        reportFields["L2_I_LOAD"] =      testModel.measuredData.IB.value
-        reportFields["L3_I_LOAD"] =      testModel.measuredData.IC.value
-        reportFields["U_V_SG_LOAD"] =    testModel.measuredData.USGOV.value
-        reportFields["I_V_SG_LOAD"] =    testModel.measuredData.ISGOV.value
-        reportFields["U_V_MEAS_LOAD"] =  testModel.measuredData.UMPTOV.value
-        reportFields["I_V_MEAS_LOAD"] =  testModel.measuredData.IMPTOV.value
-        reportFields["U_Y_MEAS_LOAD"] =  testModel.measuredData.UMPTOY.value
-        reportFields["I_Y_MEAS_LOAD"] =  testModel.measuredData.IMPTOY.value
+        reportFields["L1_U_LOAD"] = testModel.measuredData.UAB.value
+        reportFields["L2_U_LOAD"] = testModel.measuredData.UBC.value
+        reportFields["L3_U_LOAD"] = testModel.measuredData.UCA.value
+        reportFields["L1_I_LOAD"] = testModel.measuredData.IA.value
+        reportFields["L2_I_LOAD"] = testModel.measuredData.IB.value
+        reportFields["L3_I_LOAD"] = testModel.measuredData.IC.value
+        reportFields["U_V_SG_LOAD"] = testModel.measuredData.U_V_SG.value
+        reportFields["I_V_SG_LOAD"] = testModel.measuredData.I_V_SG.value
+        reportFields["U_V_MEAS_LOAD"] = testModel.measuredData.U_V_MPT.value
+        reportFields["I_V_MEAS_LOAD"] = testModel.measuredData.I_V_MPT.value
+        reportFields["U_Y_MEAS_LOAD"] = testModel.measuredData.U_Y_MPT.value
+        reportFields["I_Y_MEAS_LOAD"] = testModel.measuredData.I_Y_MPT.value
         reportFields["TIME_MEAS_LOAD"] = testModel.measuredData.time.value
-        reportFields["TEMP_AMB_LOAD"] =  testModel.measuredData.tempAmb.value
-        reportFields["TEMP_TI_LOAD"] =   testModel.measuredData.tempTI.value
-        reportFields["RESULT_LOAD"] =    testModel.measuredData.result.value
+        reportFields["TEMP_AMB_LOAD"] = testModel.measuredData.tempAmb.value
+        reportFields["TEMP_TI_LOAD"] = testModel.measuredData.tempTI.value
+        reportFields["FREQ_LOAD"] = testModel.measuredData.F.value
+        reportFields["RESULT_LOAD"] = testModel.measuredData.result.value
 
         super.saveProtocol()
     }

@@ -16,26 +16,16 @@ import ru.avem.stand.modules.r.tests.psi.mgr.MGR
 import ru.avem.stand.modules.r.tests.psi.mgrSG.MGRSG
 
 val head = head {
-    validateDB() // TODO вынести в модуль СУБД и перенести валидацию туда
+    validateDB() //TODO вынести в модуль СУБД и перенести валидацию туда
     tests {
         it.addModules(
             MGR(),
-            MGRSG(),
             HV(),
+            MGRSG(),
             HVSG(),
             IKASSG(),
             Idle(),
             Load()
-//            IKAS(),
-//            MVZ(),
-//            KZ(),
-//            OverM(),
-//            OverI(),
-//            VaryUF(),
-//            IncN(),
-//            StartMI(),
-//            MaxM(),
-//            MinM()
         )
     }
     views {

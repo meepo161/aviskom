@@ -175,7 +175,7 @@ class PR(
         onOutput01To16(7)
     }
 
-    fun onRotateUNMKKM81() {
+    fun onVentilyatorUNMKKM81() {
         onOutput01To16(8)
     }
 

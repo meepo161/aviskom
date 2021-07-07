@@ -39,6 +39,8 @@ abstract class KSPADTest(
 
         testModel.testItemData.U_Y_MPT.value = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value
         testModel.testItemData.I_Y_MPT.value = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value
+        testModel.testItemData.U_V_MPT.value = PreFillModel.testTypeProp.value.fields["U_V_MPT"]?.value
+        testModel.testItemData.I_V_MPT.value = PreFillModel.testTypeProp.value.fields["I_V_MPT"]?.value
         testModel.testItemData.R_IKAS_MPT.value = PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value
         testModel.testItemData.R_MGR_MPT.value = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value
         testModel.testItemData.U_HV_MPT.value = PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value
@@ -91,6 +93,8 @@ abstract class KSPADTest(
                 if (value.toShort() and 0b10000 != 0.toShort()) {
                     cause = "сработала токовая защита ВИУ"
                     testModel.protections.overcurrentHV.set()
+                    CM.device<PR>(DD2).offPEQV3()
+                    CM.device<PR>(DD2).offVIUQV1()
                 }
                 if (value.toShort() and 0b100000 != 0.toShort()) {
 //                    cause = "открыта дверь зоны"
@@ -112,10 +116,10 @@ abstract class KSPADTest(
         if (isRunning) {
             initPushButtonPost()
         }
-        if (isRunning) {
-            appendMessageToLog(LogTag.INFO, "Сигнализация")
-            CM.device<PR>(DD2).signalize()
-        }
+//        if (isRunning) {
+//            appendMessageToLog(LogTag.INFO, "Сигнализация")
+//            CM.device<PR>(DD2).signalize()
+//        }
     }
 
     private fun initPushButtonPost() {
@@ -149,8 +153,8 @@ abstract class KSPADTest(
     fun startFI(volt: Int, percent: Int) {
         appendMessageToLog(LogTag.INFO, "Разгон ЧП...")
         CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
-            voltage = volt / 8.42 / 1.4 * 1.2,
-            percentF = percent
+            volt = volt/*volt / 8.42 / 1.4 * 1.2*/,
+            perc = percent
         )
         sleep(1000)
         CM.device<Danfoss>(CM.DeviceID.UZ91).startObject()

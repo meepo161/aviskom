@@ -6,11 +6,16 @@ import ru.avem.stand.modules.r.communication.model.IDeviceModel
 class AVEM3Model : IDeviceModel {
     companion object {
         const val U_TRMS = "U_TRMS"
+        const val FREQ = "FREQ"
     }
 
     override val registers: Map<String, DeviceRegister> = mapOf(
         U_TRMS to DeviceRegister(
             0x1004,
+            DeviceRegister.RegisterValueType.FLOAT
+        ),
+        FREQ to DeviceRegister(
+            0x1006,
             DeviceRegister.RegisterValueType.FLOAT
         )
     )

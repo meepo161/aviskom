@@ -2,11 +2,16 @@ package ru.avem.stand.modules.r.common.prefill
 
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView
+import javafx.event.EventHandler
 import javafx.geometry.Pos
-import javafx.scene.control.*
+import javafx.scene.control.CheckBox
+import javafx.scene.control.ComboBox
+import javafx.scene.control.ContentDisplay
+import javafx.scene.control.ListView
 import javafx.scene.input.MouseEvent.MOUSE_PRESSED
 import javafx.scene.layout.Priority
 import ru.avem.stand.modules.i.views.Styles
+import ru.avem.stand.modules.i.views.showConfirmationTestObject
 import ru.avem.stand.modules.r.storage.Properties
 import ru.avem.stand.modules.r.storage.database.entities.TestItem
 import ru.avem.stand.utils.minusPercent
@@ -35,11 +40,27 @@ class PreFillTab : View("Испытания") {
 
             hbox(spacing = 16.0) {
                 alignment = Pos.CENTER_LEFT
-                label("Заводской номер:") {
+                label("Заводской номер МПТ:") {
                     minWidth = 117.0
                 }
 
                 textfield(property = PreFillModel.serialNumberProp) {
+                    hboxConstraints {
+                        hGrow = Priority.ALWAYS
+                    }
+                    minWidth = Properties.standData.width minusPercent 50.0
+
+                    text = ""
+                }
+            }
+
+            hbox(spacing = 16.0) {
+                alignment = Pos.CENTER_LEFT
+                label("Заводской номер СГ:") {
+                    minWidth = 117.0
+                }
+
+                textfield(property = PreFillModel.serialNumberPropSG) {
                     hboxConstraints {
                         hGrow = Priority.ALWAYS
                     }
@@ -63,6 +84,9 @@ class PreFillTab : View("Испытания") {
                     useMaxWidth = true
 
                     selectionModel.selectFirst()
+                    onAction = EventHandler {
+                        PreFillModel.testTypeProp.value = selectedItem
+                    }
                 }
             }
 
@@ -160,7 +184,7 @@ class PreFillTab : View("Испытания") {
                 contentDisplay = ContentDisplay.TOP
 
                 action {
-                    controller.toTests()
+                    showConfirmationTestObject(currentWindow, { controller.toTests() })
                 }
             }
         }

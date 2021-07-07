@@ -20,7 +20,16 @@ class PreFillController : Controller() {
     fun toTests() {
         if (PreFillModel.serialNumberProp.value.isEmpty()) {
             warningNotification(
-                "Не заполнено поля заводского номера",
+                "Не заполнено поля заводского номера МПТ",
+                "Заполните поле и повторите",
+                Pos.CENTER,
+                owner = aggregateView.currentWindow
+            )
+            return
+        }
+        if (PreFillModel.serialNumberPropSG.value.isEmpty()) {
+            warningNotification(
+                "Не заполнено поля заводского номера СГ",
                 "Заполните поле и повторите",
                 Pos.CENTER,
                 owner = aggregateView.currentWindow

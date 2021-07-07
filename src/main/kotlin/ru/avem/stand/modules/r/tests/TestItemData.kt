@@ -6,6 +6,8 @@ import javafx.beans.property.StringProperty
 data class TestItemData(
     val U_Y_MPT         : StringProperty = SimpleStringProperty(""),
     val I_Y_MPT         : StringProperty = SimpleStringProperty(""),
+    val U_V_MPT         : StringProperty = SimpleStringProperty(""),
+    val I_V_MPT         : StringProperty = SimpleStringProperty(""),
     val R_IKAS_MPT      : StringProperty = SimpleStringProperty(""),
     val R_MGR_MPT       : StringProperty = SimpleStringProperty(""),
     val U_HV_MPT        : StringProperty = SimpleStringProperty(""),

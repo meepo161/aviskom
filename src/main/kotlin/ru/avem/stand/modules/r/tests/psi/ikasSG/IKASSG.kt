@@ -17,8 +17,7 @@ import java.lang.Thread.sleep
 import kotlin.collections.set
 
 class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx") {
-    override val name = "СГ. Измерение сопротивления обмотки статора и встроенных термодатчиков при постоянном токе в " +
-            "практически холодном состоянии"
+    override val name = "СГ. Измерение сопротивления обмотки статора при постоянном токе"
 
     override val testModel = IKASModelSG
 
@@ -124,7 +123,7 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
                 sleep(100)
             }
             testModel.measuredData.R1.value =
-                if (testModel.measuredR != 1E9) testModel.measuredR.autoformat() else "Обрыв"
+                if (testModel.measuredR != 1E9) (testModel.measuredR - 0.01439).autoformat() else "Обрыв"
             sleepWhileRun(2)
         }
 
@@ -137,7 +136,7 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
                 sleep(100)
             }
             testModel.measuredData.R2.value =
-                if (testModel.measuredR != 1E9) testModel.measuredR.autoformat() else "Обрыв"
+                if (testModel.measuredR != 1E9) (testModel.measuredR - 0.01418).autoformat() else "Обрыв"
             sleepWhileRun(2)
         }
 
@@ -150,7 +149,7 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
                 sleep(100)
             }
             testModel.measuredData.R3.value =
-                if (testModel.measuredR != 1E9) testModel.measuredR.autoformat() else "Обрыв"
+                if (testModel.measuredR != 1E9) (testModel.measuredR - 0.01445).autoformat() else "Обрыв"
             sleepWhileRun(2)
         }
     }
@@ -223,10 +222,13 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
                 appendMessageToLog(LogTag.ERROR, "Обрыв")
                 testModel.measuredData.result.value = "Обрыв"
             }
-            testModel.percentData.R1.value.toDouble() > 2.0 ||
-                    testModel.percentData.R2.value.toDouble() > 2.0 ||
-                    testModel.percentData.R3.value.toDouble() > 2.0 -> {
-                appendMessageToLog(LogTag.ERROR, "Не соответствует. Отклонение превышает 2%")
+            testModel.calculatedR20Data.R1.value.toDouble() < 0.025 ||
+                    testModel.calculatedR20Data.R2.value.toDouble() < 0.025 ||
+                    testModel.calculatedR20Data.R3.value.toDouble() < 0.025 ||
+            testModel.calculatedR20Data.R1.value.toDouble() > 0.03 ||
+                    testModel.calculatedR20Data.R2.value.toDouble() > 0.03 ||
+                    testModel.calculatedR20Data.R3.value.toDouble() > 0.03 -> {
+                appendMessageToLog(LogTag.ERROR, "Не соответствует. Не входит в предел 0.025 - 0.03")
                 testModel.measuredData.result.value = "Не соответствует"
             }
             else -> {
@@ -255,6 +257,7 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
 
         reportFields["TEMP_AMB_IKAS"] = testModel.measuredData.tempAmb.value
         reportFields["TEMP_TI_IKAS"] = testModel.measuredData.tempTI.value
+        reportFields["RESULT_IKAS"] = testModel.measuredData.result.value
 
         super.saveProtocol()
     }

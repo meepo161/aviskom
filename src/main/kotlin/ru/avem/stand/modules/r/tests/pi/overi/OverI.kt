@@ -251,8 +251,8 @@ class OverI : KSPADTest(view = OverIView::class, reportTemplate = "overi.xlsx") 
     private fun startTIFI() {
         appendMessageToLog(LogTag.INFO, "Разгон ОИ...")
         CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
-            voltage = 100,
-            percentF = 100,
+            volt = 100,
+            perc= 100,
         )
         CM.device<Danfoss>(CM.DeviceID.UZ91).startObject()
     }

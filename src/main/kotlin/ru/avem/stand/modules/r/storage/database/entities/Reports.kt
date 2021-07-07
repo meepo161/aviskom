@@ -14,6 +14,7 @@ object Reports : IntIdTable() {
     val template = varchar("template", 64)
 
     val serialNumber = varchar("serialNumber", 128)
+    val serialNumberSG = varchar("serialNumberSG", 128)
     val testType = varchar("testType", 256)
     val test = varchar("test", 512)
 
@@ -31,6 +32,7 @@ class Report(id: EntityID<Int>) : IntEntity(id) {
     var template by Reports.template
 
     var serialNumber by Reports.serialNumber
+    var serialNumberSG by Reports.serialNumberSG
     var testType by Reports.testType
     var test by Reports.test
 

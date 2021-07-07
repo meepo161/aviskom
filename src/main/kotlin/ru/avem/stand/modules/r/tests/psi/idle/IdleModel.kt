@@ -10,6 +10,8 @@ object IdleModel : TestModel() {
 
     var specifiedU_Y_MPT = 0.0
     var specifiedI_Y_MPT = 0.0
+    var specifiedU_V_MPT = 0.0
+    var specifiedI_V_MPT = 0.0
     var specifiedR_IKAS_MPT = 0.0
     var specifiedR_MGR_MPT = 0.0
     var specifiedU_HV_MPT = 0.0
@@ -28,19 +30,22 @@ object IdleModel : TestModel() {
     var specifiedLOAD_TIME = 0.0
 
     @Volatile
-    var measuredUA = 0.0
+    var measuredU_Y_MPT = 0.0
 
     @Volatile
-    var measuredUB = 0.0
+    var measuredU_V_MPT = 0.0
+
+    @Volatile
+    var measuredI_Y_MPT = 0.0
+
+    @Volatile
+    var measuredI_V_MPT = 0.0
+
+    @Volatile
+    var measuredF = 0.0
 
     @Volatile
     var measuredUC = 0.0
-
-    @Volatile
-    var measuredIA = 0.0
-
-    @Volatile
-    var measuredIB = 0.0
 
     @Volatile
     var measuredIC = 0.0

@@ -42,10 +42,10 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             mouseTransparentProperty().set(true)
 //            column("Uср., В", LoadData::U.getter)
 //            column("Iср., А", LoadData::I.getter)
-            column("Uя, В", LoadData::UMPTOY.getter)   //PV23
-            column("Iя, А", LoadData::IMPTOY.getter)  //PV24
-            column("Uов, В", LoadData::UMPTOV.getter)   //PV25
-            column("Iов, А", LoadData::IMPTOV.getter)  //PV27
+            column("Uя, В", LoadData::U_Y_MPT.getter)   //PV23
+            column("Iя, А", LoadData::I_Y_MPT.getter)  //PV24
+            column("Uов, В", LoadData::U_V_MPT.getter)   //PV25
+            column("Iов, А", LoadData::I_V_MPT.getter)  //PV27
             column("t возд., °C", LoadData::tempAmb.getter)
             column("t ОИ, °C", LoadData::tempTI.getter)
 //            column("Результат", LoadData::result.getter)
@@ -78,9 +78,9 @@ class LoadView(title: String = "НАГР", showOnStart: Boolean = true) : TestVi
             minWidth = 150.0 * 5
             columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
             mouseTransparentProperty().set(true)
-            column("Uов, В", LoadData::USGOV.getter)
-            column("Iов, А", LoadData::ISGOV.getter)
-//            column("P1, кВт", LoadData::P1.getter)
+            column("Uов, В", LoadData::U_V_SG.getter)
+            column("Iов, А", LoadData::I_V_SG.getter)
+            column("n, об/мин", LoadData::F.getter)
             column("Результат", LoadData::result.getter)
         }
 //        tableview(observableList(test.testModel.measuredData)) {

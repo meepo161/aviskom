@@ -156,8 +156,8 @@ class KZ : KSPADTest(view = KZView::class, reportTemplate = "kz.xlsx") {
     fun startFi() {
         if (isRunning) {
             CM.device<Danfoss>(UZ91).setObjectParams(
-                voltage = 100,
-                percentF = 100,
+                volt = 100,
+                perc = 100,
             )
             CM.device<Danfoss>(UZ91).startObject()
             sleepWhileRun(5)

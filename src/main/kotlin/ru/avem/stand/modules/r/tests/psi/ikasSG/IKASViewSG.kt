@@ -85,9 +85,9 @@ class IKASViewSG(title: String = "ИКАС", showOnStart: Boolean = true) : Test
 
                         alignment = Pos.CENTER
 
-                        column("R AB, Ом", IKASDataSG::R1.getter)
-                        column("R BC, Ом", IKASDataSG::R2.getter)
-                        column("R AC, Ом", IKASDataSG::R3.getter)
+                        column("R A, Ом", IKASDataSG::R1.getter)
+                        column("R B, Ом", IKASDataSG::R2.getter)
+                        column("R C, Ом", IKASDataSG::R3.getter)
                     }
             }
         }

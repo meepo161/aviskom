@@ -188,8 +188,8 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
         CM.device<PR>(CM.DeviceID.DD2).onPEQV3()
 
         CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
-            voltage = 100,
-            percentF = 100,
+            volt = 100,
+            perc = 100,
         )
 //        startFI(CM.device(CM.DeviceID.UZ91), 5) // TODO остальные checkDir
         testModel.isTIDirectionRight = testModel.measuredData.torque.value.toDouble() < 0.0
@@ -279,8 +279,8 @@ class MinM : KSPADTest(view = MinMView::class, reportTemplate = "minm.xlsx") {
         appendMessageToLog(LogTag.INFO, "Разгон ОИ...")
 
         CM.device<Danfoss>(CM.DeviceID.UZ91).setObjectParams(
-            voltage = 100,
-            percentF = 100,
+            volt = 100,
+            perc =  100,
         )
 //        startFI(CM.device(CM.DeviceID.UZ91))
     }

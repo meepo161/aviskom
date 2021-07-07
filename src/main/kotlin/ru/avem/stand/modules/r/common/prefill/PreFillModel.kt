@@ -9,6 +9,7 @@ import ru.avem.stand.modules.r.storage.database.entities.TestItem
 
 object PreFillModel {
     val serialNumberProp: StringProperty = SimpleStringProperty("")
+    val serialNumberPropSG: StringProperty = SimpleStringProperty("")
     var testTypeProp: Property<TestItem> = SimpleObjectProperty()
     var selectedTests: MutableList<Test> = mutableListOf()
 }

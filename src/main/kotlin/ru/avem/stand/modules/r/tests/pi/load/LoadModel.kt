@@ -10,6 +10,8 @@ object LoadModel : TestModel() {
 
     var specifiedU_Y_MPT = 0.0
     var specifiedI_Y_MPT = 0.0
+    var specifiedU_V_MPT = 0.0
+    var specifiedI_V_MPT = 0.0
     var specifiedR_IKAS_MPT = 0.0
     var specifiedR_MGR_MPT = 0.0
     var specifiedU_HV_MPT = 0.0
@@ -28,10 +30,10 @@ object LoadModel : TestModel() {
     var specifiedLOAD_TIME = 0.0
 
     @Volatile
-    var measuredUA = 0.0
+    var measuredU_Y_MPT = 0.0
 
     @Volatile
-    var measuredUB = 0.0
+    var measuredU_V_MPT = 0.0
 
     @Volatile
     var measuredIA = 0.0
@@ -40,10 +42,10 @@ object LoadModel : TestModel() {
     var measuredIB = 0.0
 
     @Volatile
-    var measuredIMPTOY = 0.0
+    var measuredI_Y_MPT = 0.0
 
     @Volatile
-    var measuredIMPTOV = 0.0
+    var measuredI_V_MPT = 0.0
 
     @Volatile
     var measuredIC = 0.0
@@ -58,10 +60,13 @@ object LoadModel : TestModel() {
     var measuredP1 = 0.0
 
     @Volatile
-    var measuredUSGOV = 0.0
+    var measuredU_V_SG = 0.0
 
     @Volatile
-    var measuredISGOV = 0.0
+    var measuredI_V_SG = 0.0
+
+    @Volatile
+    var measuredF = 0.0
 
     @Volatile
     var measuredP2 = 0.0
