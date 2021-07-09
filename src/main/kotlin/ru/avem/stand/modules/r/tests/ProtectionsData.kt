@@ -19,6 +19,7 @@ data class ProtectionsData(
     ),
     val overheatingLM1: Protection = Protection(),
     val overheatingLM2: Protection = Protection(),
+    val contactPosts: Protection = Protection(),
 ) {
     fun resetAll() {
         overcurrentTI.reset()
@@ -30,6 +31,7 @@ data class ProtectionsData(
         earthingSwitch.reset()
         overheatingLM1.reset()
         overheatingLM2.reset()
+        contactPosts.set()
     }
 }
 

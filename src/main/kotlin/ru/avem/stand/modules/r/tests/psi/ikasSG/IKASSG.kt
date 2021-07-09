@@ -23,24 +23,25 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
 
     override fun initVars() {
         super.initVars()
-        testModel.specifiedU_Y_MPT =    PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI_Y_MPT =    PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedR_IKAS_MPT = PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedR_MGR_MPT =  PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_HV_MPT =   PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_MGR_MPT =  PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI_HV_MPT =   PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedT_HV_MPT =   PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_Y_SG =     PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_V_SG =     PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedR_IKAS_SG =  PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedR_MGR_SG =   PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_HV_SG =    PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedU_MGR_SG =   PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedI_HV_SG =    PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedT_HV_SG =    PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedIDLE_TIME =  PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
-        testModel.specifiedLOAD_TIME =  PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_MPT = PreFillModel.testTypeProp.value.fields["U_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_Y_MPT = PreFillModel.testTypeProp.value.fields["I_Y_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_MPT =
+            PreFillModel.testTypeProp.value.fields["R_IKAS_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_MPT = PreFillModel.testTypeProp.value.fields["R_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_MPT = PreFillModel.testTypeProp.value.fields["U_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_MPT = PreFillModel.testTypeProp.value.fields["U_MGR_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_MPT = PreFillModel.testTypeProp.value.fields["I_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_MPT = PreFillModel.testTypeProp.value.fields["T_HV_MPT"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_Y_SG = PreFillModel.testTypeProp.value.fields["U_Y_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_V_SG = PreFillModel.testTypeProp.value.fields["U_V_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_IKAS_SG = PreFillModel.testTypeProp.value.fields["R_IKAS_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedR_MGR_SG = PreFillModel.testTypeProp.value.fields["R_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_HV_SG = PreFillModel.testTypeProp.value.fields["U_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedU_MGR_SG = PreFillModel.testTypeProp.value.fields["U_MGR_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedI_HV_SG = PreFillModel.testTypeProp.value.fields["I_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedT_HV_SG = PreFillModel.testTypeProp.value.fields["T_HV_SG"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedIDLE_TIME = PreFillModel.testTypeProp.value.fields["IDLE_TIME"]?.value.toDoubleOrDefault(0.0)
+        testModel.specifiedLOAD_TIME = PreFillModel.testTypeProp.value.fields["LOAD_TIME"]?.value.toDoubleOrDefault(0.0)
     }
 
     override fun initView() {
@@ -94,6 +95,10 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
     }
 
     override fun logic() {
+
+        while (isRunning) {
+            sleep(1000)
+        }
         if (isRunning) {
             turnOnCircuit()
         }
@@ -172,9 +177,9 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
             val r31 = testModel.measuredData.R3.value.toDouble()
 
 //            if (testModel.specifiedScheme == "λ") {
-                testModel.calculatedData.R1.value = ((r31 + r12 - r23) / 2.0).autoformat()
-                testModel.calculatedData.R2.value = ((r12 + r23 - r31) / 2.0).autoformat()
-                testModel.calculatedData.R3.value = ((r23 + r31 - r12) / 2.0).autoformat()
+            testModel.calculatedData.R1.value = ((r31 + r12 - r23) / 2.0).autoformat()
+            testModel.calculatedData.R2.value = ((r12 + r23 - r31) / 2.0).autoformat()
+            testModel.calculatedData.R3.value = ((r23 + r31 - r12) / 2.0).autoformat()
 //            } else if (testModel.specifiedScheme == "△") {
 //                testModel.calculatedData.R1.value =
 //                    (2.0 * r23 * r31 / (r23 + r31 - r12) - (r23 + r31 - r12) / 2.0).autoformat()
@@ -225,7 +230,7 @@ class IKASSG : KSPADTest(view = IKASViewSG::class, reportTemplate = "ikas.xlsx")
             testModel.calculatedR20Data.R1.value.toDouble() < 0.025 ||
                     testModel.calculatedR20Data.R2.value.toDouble() < 0.025 ||
                     testModel.calculatedR20Data.R3.value.toDouble() < 0.025 ||
-            testModel.calculatedR20Data.R1.value.toDouble() > 0.03 ||
+                    testModel.calculatedR20Data.R1.value.toDouble() > 0.03 ||
                     testModel.calculatedR20Data.R2.value.toDouble() > 0.03 ||
                     testModel.calculatedR20Data.R3.value.toDouble() > 0.03 -> {
                 appendMessageToLog(LogTag.ERROR, "Не соответствует. Не входит в предел 0.025 - 0.03")

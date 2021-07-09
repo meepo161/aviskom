@@ -335,13 +335,13 @@ abstract class TestViewModule(title: String, showOnStart: Boolean = false) : Vie
                     }
                 }
                 vbox(16) {
-                    tableview(observableList(test.testModel.protections.notPE)) {
+                    tableview(observableList(test.testModel.protections.contactPosts)) {
 
                         minHeight = 88.0
                         maxHeight = 88.0
                         columnResizePolicy = SmartResize.POLICY
                         mouseTransparentProperty().set(true)
-                        column("Перегрев дросс.", Protection::prop.getter)
+                        column("Контакт. пост", Protection::prop.getter)
 
                         setRowFactory {
                             object : TableRow<Protection>() {

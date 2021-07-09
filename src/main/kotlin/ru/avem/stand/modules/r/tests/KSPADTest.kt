@@ -83,7 +83,7 @@ abstract class KSPADTest(
             }
             CM.startPoll(DD2, PRModel.DI_01_16_TRIG_INV) { value ->
                 if (value.toShort() and 0b100 != 0.toShort()) {
-//                    cause = "открыта дверь ШСО"
+                    cause = "открыта дверь ШСО"
                     testModel.protections.doorsPEC.set()
                 }
                 if (value.toShort() and 0b1000 != 0.toShort()) {
@@ -97,7 +97,7 @@ abstract class KSPADTest(
                     CM.device<PR>(DD2).offVIUQV1()
                 }
                 if (value.toShort() and 0b100000 != 0.toShort()) {
-//                    cause = "открыта дверь зоны"
+                    cause = "открыта дверь зоны"
                     testModel.protections.doorZone.set()
                 }
                 if (value.toShort() and 0b1000000 != 0.toShort()) {
@@ -107,6 +107,10 @@ abstract class KSPADTest(
                 if (value.toShort() and 0b10000000 == 0.toShort()) {
 //                    cause = "PE не снят"
                     testModel.protections.notPE.set()
+                }
+                if (value.toShort() and 0b100000000 == 0.toShort()) {
+//                    cause =  "открыт контактный пост"
+                    testModel.protections.contactPosts.reset() //TODO контактный пост
                 }
             }
         }

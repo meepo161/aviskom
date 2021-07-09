@@ -146,7 +146,11 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
                     testModel.measuredData.I.value = testModel.measuredI.autoformat()
                 }
                 CM.startPoll(this, PM130Model.F_REGISTER) { value ->
-                    testModel.measuredF = abs(value.toDouble() * 30)
+                    if (abs(value.toDouble() * 30) - 400 > 0) {
+                        testModel.measuredF = abs(value.toDouble() * 30) - 350
+                    } else {
+                        testModel.measuredF = 0.0
+                    }
                     testModel.measuredData.F.value = testModel.measuredF.autoformat()
                 }
             }
@@ -361,7 +365,7 @@ class Load : KSPADTest(view = LoadView::class, reportTemplate = "load.xlsx") {
 //        if (testModel.specifiedI_Y_MPT > 10) {
 //        CM.device<PR>(CM.DeviceID.DD2).onUNM55KM81()
 //        } else {
-            CM.device<PR>(CM.DeviceID.DD2).onUNM15KM82()
+        CM.device<PR>(CM.DeviceID.DD2).onUNM15KM82()
 //        }
         sleep(200)
         CM.device<PR>(CM.DeviceID.DD2).onVentilyatorUNMKKM81()

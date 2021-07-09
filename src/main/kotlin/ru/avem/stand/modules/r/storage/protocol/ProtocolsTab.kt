@@ -8,9 +8,11 @@ import javafx.scene.control.TableView
 import javafx.scene.control.TextField
 import javafx.scene.layout.Priority
 import javafx.scene.text.Text
+import org.jetbrains.exposed.sql.transactions.transaction
 import ru.avem.stand.modules.i.views.Styles
 import ru.avem.stand.modules.r.storage.Properties
 import ru.avem.stand.modules.r.storage.database.entities.Report
+import ru.avem.stand.modules.r.storage.database.entities.Reports
 import ru.avem.stand.modules.r.storage.database.getAllProtocols
 import tornadofx.*
 import tornadofx.controlsfx.warningNotification
@@ -23,10 +25,16 @@ class ProtocolsTab : View("Протоколы") {
     var filterField: TextField by singleAssign()
     var tableProtocols: TableView<Report> by singleAssign()
     var comboBoxSN: ComboBox<String> by singleAssign()
+    var comboBoxSNSG: TextField by singleAssign()
 
     private val validationCtx = ValidationContext()
 
     private lateinit var serialNumbersToProtocols: Map<String, List<Report>>
+    private lateinit var serialNumbersSGToProtocols: Map<String, List<Report>>
+
+    override fun onBeforeShow() {
+        super.onBeforeShow()
+    }
 
     private val tests = anchorpane {
         vbox(spacing = 16.0) {
@@ -47,6 +55,7 @@ class ProtocolsTab : View("Протоколы") {
                         tableProtocols.items = controller.sortedProtocols.filter {
                             it.stringId.toLowerCase().contains(textProperty().value.toLowerCase()) ||
                                     it.serialNumber.toLowerCase().contains(textProperty().value.toLowerCase()) ||
+                                    it.serialNumberSG.toLowerCase().contains(textProperty().value.toLowerCase()) ||
                                     it.test.toLowerCase().contains(textProperty().value.toLowerCase()) ||
                                     it.date.toLowerCase().contains(textProperty().value.toLowerCase()) ||
                                     it.time.toLowerCase().contains(textProperty().value.toLowerCase()) ||
@@ -76,7 +85,10 @@ class ProtocolsTab : View("Протоколы") {
 
                     setComparator { o1, o2 -> o1.toLong().compareTo(o2.toLong()) }
                 }
-                column("Зав. №", Report::serialNumber) {
+                column("Зав. МПТ №", Report::serialNumber) {
+                    minWidth = 100.0
+                }
+                column("Зав. СГ №", Report::serialNumberSG) {
                     minWidth = 100.0
                 }
                 column("Испытание", Report::test) {
@@ -123,20 +135,44 @@ class ProtocolsTab : View("Протоколы") {
             hbox(spacing = 16.0) {
                 alignment = Pos.CENTER
 
-                label("Заводской номер")
+                vbox(spacing = 16.0) {
+                    alignment = Pos.CENTER
+                    label("Заводской номер МПТ")
 
-                comboBoxSN = combobox {
-                    minWidth = 600.0
+                    comboBoxSN = combobox {
+                        minWidth = 600.0
+                        alignment = Pos.CENTER
 
-                    validationCtx.addValidator(this, selectionModel.selectedItemProperty()) { selected ->
-                        val filteredItems = items.filter { it == selected }
-                        if (filteredItems.isNullOrEmpty()) error("Невалидный заводской номер") else null
+//                        validationCtx.addValidator(this, selectionModel.selectedItemProperty()) { selected ->
+//                            val filteredItems = items.filter { it == selected }
+//                            if (filteredItems.isNullOrEmpty()) error("Невалидный заводской номер") else null
+//                        }
+                        setOnShowing {
+                            serialNumbersToProtocols = getAllProtocols().groupBy(Report::serialNumber)
+
+                            items = serialNumbersToProtocols.keys.toList().filter { it.isNotBlank() }.observable()
+                        }
+                        onAction = EventHandler {
+                            try {
+                                comboBoxSNSG.text = transaction {
+                                    Report.find {
+                                        Reports.serialNumber eq selectedItem.toString()
+                                    }.first().serialNumberSG
+                                }
+                            } catch (e: Exception) {
+
+                            }
+                        }
                     }
+                }
+                vbox(spacing = 16.0) {
+                    alignment = Pos.CENTER
+                    label("Заводской номер СГ")
 
-                    setOnShowing {
-                        serialNumbersToProtocols = getAllProtocols().groupBy(Report::serialNumber)
-
-                        items = serialNumbersToProtocols.keys.toList().filter { it.isNotBlank() }.observable()
+                    comboBoxSNSG = textfield {
+                        isEditable = false
+                        minWidth = 600.0
+                        alignment = Pos.CENTER
                     }
                 }
             }

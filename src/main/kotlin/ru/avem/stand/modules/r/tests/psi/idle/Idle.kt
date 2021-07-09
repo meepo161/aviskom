@@ -14,12 +14,18 @@ import ru.avem.stand.utils.autoformat
 import ru.avem.stand.utils.toDoubleOrDefault
 import tornadofx.runLater
 import java.lang.Thread.sleep
+import kotlin.concurrent.thread
 import kotlin.math.abs
 
 class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
-    override val name = "Холостой ход"
+    override val name = "Проверка частоты вращения"
 
     override val testModel = IdleModel
+
+    var percentTM1 = 0
+
+    var isNeedCorrectOVMPT = false
+
 
     override fun initVars() {
         super.initVars()
@@ -128,21 +134,15 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
             with(PAV41) {
                 addCheckableDevice(this)
                 CM.startPoll(this, PM130Model.F_REGISTER) { value ->
-                    testModel.measuredF = abs(value.toDouble() * 30)
+                    if (abs(value.toDouble() * 30) - 400 > 0) {
+                        testModel.measuredF = abs(value.toDouble() * 30) - 350
+                    } else {
+                        testModel.measuredF = 0.0
+                    }
                     testModel.measuredData.F.value = testModel.measuredF.autoformat()
                 }
             }
         }
-
-//        if (isRunning) {
-//            with(PV26) {
-//                addCheckableDevice(this)
-//                CM.startPoll(this, AVEM3Model.FREQ) { value ->
-//                    testModel.measuredF = abs(value.toDouble() * 30)
-//                    testModel.measuredData.F.value = testModel.measuredF.autoformat()
-//                }
-//            }
-//        }
     }
 
     override fun logic() {
@@ -167,24 +167,63 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
         if (isRunning) {
             regulateFI(testModel.specifiedU_Y_MPT.toInt())
         }
-
+        isNeedCorrectOVMPT = true
         if (isRunning) {
+            thread(isDaemon = true) {
+                regulateTM1(testModel.specifiedI_V_MPT)
+            }
             waiting()
         }
+        isNeedCorrectOVMPT = false
 
         storeTestValues()
         stopFI(CM.device(UZ91))
         turnOffTM1()
     }
 
+    private fun regulateTM2(amperage: Int) {
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ СГ")
+            var percent = 0
+            // TODO testModel.measuredI2A - поставить нужное +-
+            while (isRunning && (testModel.measuredI_Y_MPT < amperage * 0.7
+                        || testModel.measuredI_Y_MPT > amperage * 1.2)
+            ) {
+                if (isRunning && testModel.measuredI_Y_MPT < amperage * 0.7) {
+                    percent += 1
+                    turnOnTM2(percent)
+                } else if (testModel.measuredI_Y_MPT > amperage * 1.2) {
+                    percent -= 1
+                    turnOnTM2(percent)
+                }
+                sleep(2500)
+            }
+            while (isRunning && (testModel.measuredI_Y_MPT < amperage * 1
+                        || testModel.measuredI_Y_MPT > amperage * 1.1)
+            ) {
+                if (isRunning && testModel.measuredI_Y_MPT < amperage * 1) {
+                    percent += 1
+                    turnOnTM2(percent)
+                } else if (testModel.measuredI_Y_MPT > amperage * 1.1) {
+                    percent -= 1
+                    turnOnTM2(percent)
+                }
+                sleep(6000)
+            }
+        }
+        if (isRunning) {
+            appendMessageToLog(LogTag.INFO, "Напряжение выставлено")
+        }
+    }
+
     private fun turnOnTM1(percent: Int) {
         CM.device<PR>(DD2).setUOnTM1((percent * 96 / 100 + 2).toFloat() / 100) // 0.25f  = 196+- постоянки
     }
 
-    private fun regulateTM1(voltage: Int, current: Double = 9999.0) {
+    private fun regulateTM1(voltage: Int) {
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Выставление напряжения на ОВ")
-            var percent = 0
+            var percent = percentTM1
             // TODO testModel.measuredU - поставить нужное +-
             while (isRunning && (testModel.measuredU_V_MPT < voltage * 0.8 || testModel.measuredU_V_MPT > voltage * 1.2)) {
 
@@ -208,9 +247,27 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
                 }
                 sleep(400)
             }
+            percentTM1 = percent
         }
         if (isRunning) {
             appendMessageToLog(LogTag.INFO, "Напряжение на ОВ выставлено")
+        }
+    }
+
+    private fun regulateTM1(current: Double = 5.1) {
+        if (isRunning) {
+            var percent = percentTM1
+            while (isRunning && isNeedCorrectOVMPT) {
+                if (isRunning && testModel.measuredI_V_MPT < current * 1) {
+                    percent += 1
+                    turnOnTM1(percent)
+                } else if (testModel.measuredI_V_MPT > current * 1.07) {
+                    percent -= 1
+                    turnOnTM1(percent)
+                }
+                sleep(5000)
+            }
+            percentTM1 = percent
         }
     }
 
@@ -252,6 +309,7 @@ class Idle : KSPADTest(view = IdleView::class, reportTemplate = "idle.xlsx") {
 
     private fun turnOffTM1() {
         CM.device<PR>(DD2).setUOnTM1(0f)
+        percentTM1 = 0
     }
 
     private fun turnOnTM2(percent: Int) {
